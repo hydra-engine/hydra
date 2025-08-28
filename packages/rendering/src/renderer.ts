@@ -1,4 +1,4 @@
-import { ObjectStateTree, ROOT } from '@kiwiengine/core'
+import { ObjectStateTree, ROOT } from '@hydraengine/core'
 import { autoDetectRenderer, Container, DOMAdapter, ICanvas, Renderer as PixiRenderer, WebWorkerAdapter } from 'pixi.js'
 
 const SEEN_GEN = Symbol('seenGen')

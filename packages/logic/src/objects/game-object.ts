@@ -1,4 +1,4 @@
-import { ObjectStateTree, ObjectType, ROOT } from '@kiwiengine/core'
+import { ObjectStateTree, ObjectType, ROOT } from '@hydraengine/core'
 
 export type GameObjectOptions = {
   type: ObjectType
