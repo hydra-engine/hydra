@@ -1,0 +1,8 @@
+{
+  "name": "hydraengine",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "MIT"
+}
