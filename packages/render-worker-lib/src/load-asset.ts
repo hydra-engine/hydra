@@ -2,7 +2,7 @@ import { SpritesheetData } from 'pixi.js'
 import { binaryLoader } from './loaders/binary'
 import { bitmapFontLoader } from './loaders/bitmap-font'
 import { Loader } from './loaders/loader'
-import { getCachedAtlasId, spritesheetLoader } from './loaders/spritesheet'
+import { spritesheetLoader } from './loaders/spritesheet'
 import { textLoader } from './loaders/text'
 import { textureLoader } from './loaders/texture'
 
@@ -24,38 +24,33 @@ function getLoaderForPath(path: string): Loader<any> | undefined {
   return loaderForPathMap.find(({ check }) => check(path))?.loader
 }
 
-export async function loadAsset(asset: AssetSource): Promise<void> {
+const idToLoaderMap = new Map<number, Loader<any>>()
+
+export async function loadAsset(id: number, asset: AssetSource): Promise<void> {
   if (typeof asset === 'string') {
     const loader = getLoaderForPath(asset)
     if (!loader) {
       console.warn(`No loader found for asset: ${asset}`)
       return
     }
-    await loader.load(asset)
+    idToLoaderMap.set(id, loader)
+    await loader.load(id, asset)
   } else if ('atlas' in asset) {
-    const id = getCachedAtlasId(asset.src, asset.atlas)
+    idToLoaderMap.set(id, spritesheetLoader)
     await spritesheetLoader.load(id, asset.src, asset.atlas)
   } else if ('fnt' in asset) {
-    await bitmapFontLoader.load(asset.fnt, asset.src)
+    idToLoaderMap.set(id, bitmapFontLoader)
+    await bitmapFontLoader.load(id, asset.fnt, asset.src)
   } else {
     console.warn(`Unknown asset type: ${asset}`)
   }
 }
 
-export function releaseAsset(asset: AssetSource): void {
-  if (typeof asset === 'string') {
-    const loader = getLoaderForPath(asset)
-    if (!loader) {
-      console.warn(`No loader found for asset: ${asset}`)
-      return
-    }
-    loader.release(asset)
-  } else if ('atlas' in asset) {
-    const id = getCachedAtlasId(asset.src, asset.atlas)
-    spritesheetLoader.release(id)
-  } else if ('fnt' in asset) {
-    bitmapFontLoader.release(asset.fnt)
-  } else {
-    console.warn(`Unknown asset type: ${asset}`)
+export function releaseAsset(id: number): void {
+  const loader = idToLoaderMap.get(id)
+  if (!loader) {
+    console.warn(`No loader found for asset ID: ${id}`)
+    return
   }
+  loader.release(id)
 }

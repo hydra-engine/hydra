@@ -1,5 +1,5 @@
 export enum ObjectType {
-  Container,
+  GameObject,
   Sprite,
   AnimatedSprite,
   PhysicsWorld,

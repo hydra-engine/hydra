@@ -3,13 +3,9 @@ import { Loader } from './loader'
 import { textureLoader } from './texture'
 
 class BitmapFontLoader extends Loader<BitmapFont> {
-  #fntToSrc = new Map<string, string>()
-
-  protected override async doLoad(fnt: string, src: string) {
-    this.#fntToSrc.set(fnt, src)
-
+  protected override async doLoad(id: number, fnt: string, src: string) {
     const loadingPromise = (async () => {
-      const texture = await textureLoader.load(src)
+      const texture = await textureLoader.load(id, src)
       if (!texture) {
         console.error(`Failed to load texture: ${src}`)
         return
@@ -24,11 +20,11 @@ class BitmapFontLoader extends Loader<BitmapFont> {
       try {
         const text = await response.text()
 
-        this.loadingPromises.delete(fnt)
+        this.loadingPromises.delete(id)
 
-        if (this.hasActiveRef(fnt)) {
-          if (this.cachedAssets.has(fnt)) {
-            textureLoader.release(src)
+        if (this.hasActiveRef(id)) {
+          if (this.cachedAssets.has(id)) {
+            textureLoader.release(id)
             console.error(`Bitmap font already exists: ${fnt}`)
           } else {
 
@@ -61,26 +57,25 @@ class BitmapFontLoader extends Loader<BitmapFont> {
 
             const bitmapFont = { src, chars, texture, size, lineHeight }
 
-            this.cachedAssets.set(fnt, bitmapFont)
+            this.cachedAssets.set(id, bitmapFont)
             return bitmapFont
           }
         } else {
-          textureLoader.release(src)
+          textureLoader.release(id)
         }
 
       } catch (error) {
         console.error(`Failed to decode font xml: ${fnt}`, error)
-        this.loadingPromises.delete(fnt)
+        this.loadingPromises.delete(id)
       }
     })()
 
-    this.loadingPromises.set(fnt, loadingPromise)
+    this.loadingPromises.set(id, loadingPromise)
     return await loadingPromise
   }
 
-  protected override cleanup(fnt: string) {
-    const src = this.#fntToSrc.get(fnt)
-    if (src) textureLoader.release(src)
+  protected override cleanup(id: number) {
+    textureLoader.release(id)
   }
 }
 

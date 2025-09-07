@@ -2,7 +2,7 @@ import { Texture } from 'pixi.js'
 import { Loader } from './loader'
 
 class TextureLoader extends Loader<Texture> {
-  protected override async doLoad(src: string) {
+  protected override async doLoad(id: number, src: string) {
     const loadingPromise = (async () => {
       const response = await fetch(src)
       if (!response.ok) {
@@ -13,21 +13,21 @@ class TextureLoader extends Loader<Texture> {
       const blob = await response.blob()
       const bitmap = await createImageBitmap(blob, { premultiplyAlpha: 'premultiply' })
 
-      this.loadingPromises.delete(src)
+      this.loadingPromises.delete(id)
 
-      if (this.hasActiveRef(src)) {
-        if (this.cachedAssets.has(src)) {
+      if (this.hasActiveRef(id)) {
+        if (this.cachedAssets.has(id)) {
           console.error(`Texture already exists: ${src}`)
         } else {
           const texture = Texture.from(bitmap)
           texture.source.scaleMode = 'nearest'
-          this.cachedAssets.set(src, texture)
+          this.cachedAssets.set(id, texture)
           return texture
         }
       }
     })()
 
-    this.loadingPromises.set(src, loadingPromise)
+    this.loadingPromises.set(id, loadingPromise)
     return await loadingPromise
   }
 }

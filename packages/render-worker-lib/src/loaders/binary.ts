@@ -1,7 +1,7 @@
 import { Loader } from './loader'
 
 class BinaryLoader extends Loader<Uint8Array> {
-  protected override async doLoad(src: string) {
+  protected override async doLoad(id: number, src: string) {
     const loadingPromise = (async () => {
       const response = await fetch(src)
       if (!response.ok) {
@@ -11,20 +11,20 @@ class BinaryLoader extends Loader<Uint8Array> {
 
       const arrayBuffer = await response.arrayBuffer()
 
-      this.loadingPromises.delete(src)
+      this.loadingPromises.delete(id)
 
-      if (this.hasActiveRef(src)) {
-        if (this.cachedAssets.has(src)) {
+      if (this.hasActiveRef(id)) {
+        if (this.cachedAssets.has(id)) {
           console.error(`Binary data already exists: ${src}`)
         } else {
           const data = new Uint8Array(arrayBuffer)
-          this.cachedAssets.set(src, data)
+          this.cachedAssets.set(id, data)
           return data
         }
       }
     })()
 
-    this.loadingPromises.set(src, loadingPromise)
+    this.loadingPromises.set(id, loadingPromise)
     return await loadingPromise
   }
 }

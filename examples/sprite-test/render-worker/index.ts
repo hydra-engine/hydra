@@ -11,7 +11,7 @@ onmessage = async ({ data }) => {
   if (type === 'loadAssets') {
     const assets: number[] = data.assets
     for (const asset of assets) {
-      await loadAsset(assetSources[asset])
+      await loadAsset(asset, assetSources[asset])
       postMessage({ type: 'assetLoaded', id: asset })
     }
   }

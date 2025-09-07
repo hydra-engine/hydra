@@ -1,7 +1,7 @@
 import { Loader } from './loader'
 
 class TextLoader extends Loader<string> {
-  protected override async doLoad(src: string) {
+  protected override async doLoad(id: number, src: string) {
     const loadingPromise = (async () => {
       const response = await fetch(src)
       if (!response.ok) {
@@ -11,19 +11,19 @@ class TextLoader extends Loader<string> {
 
       const text = await response.text()
 
-      this.loadingPromises.delete(src)
+      this.loadingPromises.delete(id)
 
-      if (this.hasActiveRef(src)) {
-        if (this.cachedAssets.has(src)) {
+      if (this.hasActiveRef(id)) {
+        if (this.cachedAssets.has(id)) {
           console.error(`Text already exists: ${src}`)
         } else {
-          this.cachedAssets.set(src, text)
+          this.cachedAssets.set(id, text)
           return text
         }
       }
     })()
 
-    this.loadingPromises.set(src, loadingPromise)
+    this.loadingPromises.set(id, loadingPromise)
     return await loadingPromise
   }
 }
