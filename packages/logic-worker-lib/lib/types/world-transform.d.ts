@@ -1,5 +1,6 @@
 import { ObjectStateTree } from '@hydraengine/shared';
-export declare class LocalTransform {
+import { LocalTransform } from './local-transform';
+export declare class WorldTransform {
     #private;
     cos: number;
     sin: number;
@@ -11,13 +12,10 @@ export declare class LocalTransform {
     set scaleX(v: number);
     get scaleY(): number;
     set scaleY(v: number);
-    get pivotX(): number;
-    set pivotX(v: number);
-    get pivotY(): number;
-    set pivotY(v: number);
     get rotation(): number;
     set rotation(v: number);
+    update(parent: WorldTransform, local: LocalTransform): void;
     setStateTree(id: number, tree: ObjectStateTree): void;
     clearStateTree(): void;
 }
-//# sourceMappingURL=local-transform.d.ts.map
+//# sourceMappingURL=world-transform.d.ts.map

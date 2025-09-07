@@ -1,8 +1,6 @@
 import { ObjectStateTree } from '@hydraengine/shared';
 export declare class LocalTransform {
     #private;
-    cos: number;
-    sin: number;
     get x(): number;
     set x(v: number);
     get y(): number;
@@ -20,4 +18,4 @@ export declare class LocalTransform {
     setStateTree(id: number, tree: ObjectStateTree): void;
     clearStateTree(): void;
 }
-//# sourceMappingURL=local-transform.d.ts.map
+//# sourceMappingURL=local-transform%20copy.d.ts.map
