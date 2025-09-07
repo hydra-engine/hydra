@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "dev": "webpack serve --static=. --no-client-overlay --watch --mode=development",
+    "build": "NODE_ENV=production webpack --mode=production"
+  },
+  "devDependencies": {
+    "@types/stats.js": "^0.17.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  },
+  "dependencies": {
+    "stats.js": "^0.17.0"
+  }
+}

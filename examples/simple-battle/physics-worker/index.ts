@@ -1,13 +1,14 @@
-import { Ticker } from '../../../packages/shared/src/'
+import { Ticker } from '../../../packages/shared/src'
+import { ObjectStateTree } from '../../../packages/shared/src'
 
-let sab: SharedArrayBuffer
+let ost: ObjectStateTree
 let ticker: Ticker
 
 onmessage = (event) => {
   const type = event.data.type
 
   if (type === 'init') {
-    sab = event.data.sab
+    ost = new ObjectStateTree(event.data.sab)
     ticker = new Ticker(() => {
       //TODO
     })
