@@ -3,8 +3,6 @@ import { AssetId } from './shared/assets'
 
 const logicWorker = new Worker('logic-worker.js')
 
-const physicsWorker = new Worker('physics-worker.js')
-
 const renderWorker = new Worker('render-worker.js')
 renderWorker.onmessage = (event) => {
   const type = event.data.type
@@ -19,13 +17,11 @@ await preloader.preload()
 
 const sab = createObjectStateBuffer()
 logicWorker.postMessage({ type: 'init', sab })
-physicsWorker.postMessage({ type: 'init', sab })
 renderWorker.postMessage({ type: 'init', sab })
 
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {
     logicWorker.postMessage({ type: 'setFpsCap', fps })
-    physicsWorker.postMessage({ type: 'setFpsCap', fps })
     renderWorker.postMessage({ type: 'setFpsCap', fps })
   }
 

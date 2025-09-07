@@ -4,7 +4,6 @@ module.exports = {
   entry: {
     'bundle': './index.ts',
     'logic-worker': './logic-worker/index.ts',
-    'physics-worker': './physics-worker/index.ts',
     'render-worker': './render-worker/index.ts',
   },
   output: {
