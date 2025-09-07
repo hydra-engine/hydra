@@ -8,6 +8,14 @@ let ticker: Ticker
 onmessage = async ({ data }) => {
   const type = data.type
 
+  if (type === 'loadAssets') {
+    const assets: number[] = data.assets
+    for (const asset of assets) {
+      await loadAsset(assetSources[asset])
+      postMessage({ type: 'assetLoaded', id: asset })
+    }
+  }
+
   if (type === 'init') {
     ost = new ObjectStateTree(data.sab)
     ticker = new Ticker(() => {
@@ -17,14 +25,6 @@ onmessage = async ({ data }) => {
 
   if (type === 'setFpsCap') {
     ticker.setFpsCap(data.fps)
-  }
-
-  if (type === 'loadAssets') {
-    const assets: number[] = data.assets
-    for (const asset of assets) {
-      await loadAsset(assetSources[asset])
-      postMessage({ type: 'assetLoaded', id: asset })
-    }
   }
 }
 
