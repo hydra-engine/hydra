@@ -24,19 +24,14 @@ export class Uint32Queue {
   }
 
   enqueue(v: number) {
-    let tail = this.#ctrl[1]
-    const idx = tail % this.#capacity
-    this.#data[idx] = v
-    tail = (tail + 1)
-    this.#ctrl[1] = tail
+    const tail = this.#ctrl[1]
+    this.#data[tail] = v
+    this.#ctrl[1] = (tail + 1) % this.#capacity
   }
 
   dequeue(): number {
-    let head = this.#ctrl[0]
-    const idx = head % this.#capacity
-    const val = this.#data[idx]
-    head = (head + 1)
-    this.#ctrl[0] = head
-    return val
+    const head = this.#ctrl[0]
+    this.#ctrl[0] = (head + 1) % this.#capacity
+    return this.#data[head]
   }
 }
