@@ -1,10 +1,10 @@
-import { AnimatedSpriteObject, GameObject, SpriteObject } from '@hydraengine/logic-worker-lib'
+import { AnimatedSpriteObject, RootObject, SpriteObject } from '@hydraengine/logic-worker-lib'
 import { ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
 
 let ticker: Ticker
-const root = new GameObject()
+const root = new RootObject()
 
 for (let i = 0; i < 100; i++) {
   const sprite = new SpriteObject({
