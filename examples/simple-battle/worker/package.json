@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "webpack serve --static=. --no-client-overlay --watch --mode=development",
+    "dev": "webpack --watch --mode=development",
     "build": "NODE_ENV=production webpack --mode=production"
   },
   "devDependencies": {
