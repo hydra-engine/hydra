@@ -3,9 +3,7 @@ import { ObjectStateTree, Ticker } from '../../../packages/shared/src'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
 
-let ost: ObjectStateTree
 let ticker: Ticker
-
 const root = new GameObject()
 
 for (let i = 0; i < 100; i++) {
@@ -29,7 +27,7 @@ onmessage = (event) => {
   const type = event.data.type
 
   if (type === 'init') {
-    ost = new ObjectStateTree(event.data.sab)
+    root.stateTree = new ObjectStateTree(event.data.sab)
     ticker = new Ticker((dt) => root.update(dt))
   }
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"object-state-tree.js","sourceRoot":"","sources":["../src/object-state-tree.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,eAAe;IAC1B,YAAY,GAAsB;IAClC,CAAC;CACF","sourcesContent":["export class ObjectStateTree {\n  constructor(sab: SharedArrayBuffer) {\n  }\n}\n"]}
