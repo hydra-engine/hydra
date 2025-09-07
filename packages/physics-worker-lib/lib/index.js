@@ -1,2 +1,2 @@
-export { applyPhysics } from './apply-physics';
+"use strict";
 //# sourceMappingURL=index.js.map

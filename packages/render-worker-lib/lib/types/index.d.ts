@@ -1,3 +1,3 @@
 export { AssetSource, loadAsset, releaseAsset } from './load-asset';
-export { render } from './render';
+export { Renderer } from './renderer';
 //# sourceMappingURL=index.d.ts.map
