@@ -1,11 +1,10 @@
 {
-  "name": "@hydraengine/rendering",
+  "name": "@hydraengine/physics-worker",
   "version": "0.0.1-alpha",
   "types": "./lib/types/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
-    "@esotericsoftware/spine-pixi-v8": "^4.2.89",
-    "pixi.js": "^8.12.0"
+    "matter-js": "^0.20.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
