@@ -23,7 +23,7 @@ export class GameObject {
     //TODO
   }
 
-  #attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
+  protected attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
     this.#detachFromStateTree()
 
     const id = stateTree.newChild(parentId)
@@ -33,8 +33,10 @@ export class GameObject {
     this.#stateTree = stateTree
 
     for (const child of this.#children) {
-      child.#attachToStateTree(id, stateTree)
+      child.attachToStateTree(id, stateTree)
     }
+
+    return id
   }
 
   #detachFromStateTree() {
@@ -55,7 +57,7 @@ export class GameObject {
       this.#children.push(child)
 
       if (this.#id !== undefined && this.#stateTree) {
-        child.#attachToStateTree(this.#id, this.#stateTree)
+        child.attachToStateTree(this.#id, this.#stateTree)
       }
     }
   }

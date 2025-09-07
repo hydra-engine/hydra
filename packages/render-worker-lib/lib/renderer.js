@@ -1,24 +1,30 @@
-import { ROOT_ID } from '@hydraengine/shared';
+import { ObjectType, ROOT_ID } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
+import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
+import { RenderableNode } from './rendering-node/renderable';
+import { SpriteNode } from './rendering-node/sprite';
 DOMAdapter.set(WebWorkerAdapter);
-const SEEN_PASS = Symbol('seenPass');
 export class Renderer {
     offscreenCanvas;
     devicePixelRatio;
+    animationNames;
     stateTree;
     #offscreenCanvas;
     #devicePixelRatio;
+    #animationNames;
     #stateTree;
     #pixiRenderer;
     #root = new Container({ sortableChildren: true });
-    #containers = new Map();
+    #nodes = new Map();
     #renderPass = 0;
-    constructor(offscreenCanvas, devicePixelRatio, stateTree) {
+    constructor(offscreenCanvas, devicePixelRatio, animationNames, stateTree) {
         this.offscreenCanvas = offscreenCanvas;
         this.devicePixelRatio = devicePixelRatio;
+        this.animationNames = animationNames;
         this.stateTree = stateTree;
         this.#offscreenCanvas = offscreenCanvas;
         this.#devicePixelRatio = devicePixelRatio;
+        this.#animationNames = animationNames;
         this.#stateTree = stateTree;
         this.#init();
     }
@@ -36,24 +42,40 @@ export class Renderer {
             return;
         const pass = ++this.#renderPass;
         let zIndex = 0;
-        this.#stateTree.forEach((id) => {
+        const tree = this.#stateTree;
+        tree.forEach((id) => {
             if (id === ROOT_ID)
                 return;
-            let container = this.#containers.get(id);
-            if (!container) {
-                container = new Container();
-                this.#containers.set(id, container);
-                this.#root.addChild(container);
+            const objectType = tree.getObjectType(id);
+            let node = this.#nodes.get(id);
+            if (!node) {
+                if (objectType === ObjectType.Sprite) {
+                    const assetId = tree.getAssetId(id);
+                    node = new SpriteNode(assetId);
+                }
+                else if (objectType === ObjectType.AnimatedSprite) {
+                    const assetId = tree.getAssetId(id);
+                    const animation = this.#animationNames[tree.getAnimationId(id)];
+                    const fps = tree.getFps(id);
+                    const loop = tree.getLoop(id);
+                    node = new AnimatedSpriteNode(assetId, animation, fps, loop);
+                }
+                else {
+                    node = new RenderableNode();
+                }
+                this.#nodes.set(id, node);
+                this.#root.addChild(node.pixiContainer);
             }
-            container.x = this.#stateTree.getX(id);
-            container.y = this.#stateTree.getY(id);
-            container.zIndex = zIndex++;
-            container[SEEN_PASS] = pass;
+            const pc = node.pixiContainer;
+            pc.x = tree.getX(id);
+            pc.y = tree.getY(id);
+            pc.zIndex = zIndex++;
+            node.seenPass = pass;
         });
-        for (const [id, container] of this.#containers) {
-            if (container[SEEN_PASS] !== pass) {
-                this.#root.removeChild(container);
-                this.#containers.delete(id);
+        for (const [id, node] of this.#nodes) {
+            if (node.seenPass !== pass) {
+                this.#root.removeChild(node.pixiContainer);
+                this.#nodes.delete(id);
             }
         }
         renderer.render(this.#root);

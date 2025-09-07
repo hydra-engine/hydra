@@ -1,3 +1,4 @@
+import { ObjectStateTree, ObjectType } from '@hydraengine/shared';
 import { GameObject, GameObjectOptions } from './game-object';
 export type AnimatedSpriteObjectOptions = {
     asset: number;
@@ -6,6 +7,9 @@ export type AnimatedSpriteObjectOptions = {
     loop?: boolean;
 } & GameObjectOptions;
 export declare class AnimatedSpriteObject extends GameObject {
+    #private;
+    type: ObjectType;
     constructor(options: AnimatedSpriteObjectOptions);
+    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
 }
 //# sourceMappingURL=animated-sprite.d.ts.map

@@ -8,6 +8,7 @@ export declare class GameObject {
     type: ObjectType;
     protected _rootConfig(id: number, stateTree: ObjectStateTree): void;
     constructor(options?: GameObjectOptions);
+    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
     add(...children: GameObject[]): void;
     remove(): void;
     update(dt: number): void;

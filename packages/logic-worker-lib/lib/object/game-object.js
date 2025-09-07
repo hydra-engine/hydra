@@ -12,15 +12,16 @@ export class GameObject {
     constructor(options) {
         //TODO
     }
-    #attachToStateTree(parentId, stateTree) {
+    attachToStateTree(parentId, stateTree) {
         this.#detachFromStateTree();
         const id = stateTree.newChild(parentId);
         stateTree.setObjectType(id, this.type);
         this.#id = id;
         this.#stateTree = stateTree;
         for (const child of this.#children) {
-            child.#attachToStateTree(id, stateTree);
+            child.attachToStateTree(id, stateTree);
         }
+        return id;
     }
     #detachFromStateTree() {
         if (this.#id !== undefined && this.#stateTree)
@@ -38,7 +39,7 @@ export class GameObject {
             child.#parent = this;
             this.#children.push(child);
             if (this.#id !== undefined && this.#stateTree) {
-                child.#attachToStateTree(this.#id, this.#stateTree);
+                child.attachToStateTree(this.#id, this.#stateTree);
             }
         }
     }

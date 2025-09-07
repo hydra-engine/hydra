@@ -1,5 +1,6 @@
 import { loadAsset, Renderer } from '@hydraengine/render-worker-lib'
 import { ObjectStateTree, Ticker } from '@hydraengine/shared'
+import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
 
 let ticker: Ticker
@@ -13,7 +14,7 @@ async function loadAssets(assets: number[]) {
 }
 
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
-  renderer = new Renderer(offscreenCanvas, devicePixelRatio, stateTree)
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, stateTree)
   ticker = new Ticker(() => renderer.render())
 }
 
