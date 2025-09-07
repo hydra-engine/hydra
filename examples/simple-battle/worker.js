@@ -16,7 +16,7 @@
   \******************/
 /***/ (() => {
 
-eval("{\n\n\n//# sourceURL=webpack:///./index.ts?\n}");
+eval("{\n// 워커 (worker.js)\nonmessage = (event) => {\n    const { buffer } = event.data;\n    const sharedArray = new Int32Array(buffer);\n    console.log(\"워커에서 받은 값:\", sharedArray[0]);\n    // 값 갱신\n    sharedArray[0] = 100;\n    Atomics.store(sharedArray, 1, 123);\n    Atomics.notify(sharedArray, 1, 1);\n};\n\n\n//# sourceURL=webpack:///./index.ts?\n}");
 
 /***/ })
 
