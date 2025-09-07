@@ -34,7 +34,5 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const preloader = new Preloader([AssetId.Bird, AssetId.Fire])
-
 renderWorker.postMessage({ type: 'loadAssets', assets: [AssetId.Bird, AssetId.Fire] })
-
 await preloader.preload()
