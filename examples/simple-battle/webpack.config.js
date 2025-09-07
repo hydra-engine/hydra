@@ -2,10 +2,13 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    'simple-battle': './simple-battle/index.ts',
+    'bundle': './index.ts',
+    'logic-worker': './logic-worker/index.ts',
+    'physics-worker': './physics-worker/index.ts',
+    'render-worker': './render-worker/index.ts',
   },
   output: {
-    filename: '[name]/dist/game.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, './'),
     chunkFormat: false
   },
@@ -23,8 +26,8 @@ module.exports = {
   },
   devServer: {
     headers: {
-      "Cross-Origin-Opener-Policy": "same-origin",
-      "Cross-Origin-Embedder-Policy": "require-corp"
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp'
     },
     client: {
       overlay: false,

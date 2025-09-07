@@ -10,23 +10,24 @@
     "lib": [
       "DOM",
       "ESNext",
-      "ScriptHost",
-      "webworker",
+      "ScriptHost"
     ],
     "declaration": true,
+    "declarationDir": "lib/types",
     "declarationMap": true,
     "composite": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
     "strict": true,
-    "rootDir": "./",
-    "outDir": "dist"
+    "rootDir": "./src",
+    "outDir": "lib"
   },
   "include": [
-    "./",
+    "./src",
   ],
   "exclude": [
     "node_modules",
-    "**/dist/**",
+    "**/lib/**",
+    "examples"
   ],
 }
