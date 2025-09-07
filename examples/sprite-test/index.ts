@@ -1,4 +1,4 @@
-import { createObjectStateBuffer, Preloader } from '@hydraengine/main-thread-lib'
+import { createObjectStateBuffer, Preloader, setStyle } from '@hydraengine/main-thread-lib'
 import { AssetId } from './shared/assets'
 
 const canvas = document.createElement('canvas')
@@ -27,6 +27,17 @@ renderWorker.postMessage({
   devicePixelRatio: window.devicePixelRatio,
   sab
 }, [offscreenCanvas])
+
+function updateCanvasSize(containerWidth: number, containerHeight: number) {
+  setStyle(canvas, {
+    width: `${containerWidth}px`,
+    height: `${containerHeight}px`,
+  })
+  renderWorker.postMessage({ type: 'resize', containerWidth, containerHeight })
+}
+
+updateCanvasSize(window.innerWidth, window.innerHeight)
+window.addEventListener('resize', () => updateCanvasSize(window.innerWidth, window.innerHeight))
 
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {

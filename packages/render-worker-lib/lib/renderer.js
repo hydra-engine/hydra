@@ -1,5 +1,6 @@
 import { ObjectType, ROOT_ID } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
+import { Camera } from './camera';
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
 import { RenderableNode } from './rendering-node/renderable';
 import { SpriteNode } from './rendering-node/sprite';
@@ -9,23 +10,44 @@ export class Renderer {
     devicePixelRatio;
     animationNames;
     stateTree;
+    options;
     #offscreenCanvas;
     #devicePixelRatio;
     #animationNames;
     #stateTree;
+    #logicalWidth;
+    #logicalHeight;
+    #backgroundColor;
+    #backgroundAlpha;
     #pixiRenderer;
+    camera = new Camera();
+    //#layers: { [name: string]: Layer } = {}
     #root = new Container({ sortableChildren: true });
     #nodes = new Map();
     #renderPass = 0;
-    constructor(offscreenCanvas, devicePixelRatio, animationNames, stateTree) {
+    canvasWidth = 0;
+    canvasHeight = 0;
+    canvasLeft = 0;
+    canvasTop = 0;
+    viewportScale = 1;
+    centerX = 0;
+    centerY = 0;
+    constructor(offscreenCanvas, devicePixelRatio, animationNames, stateTree, options) {
         this.offscreenCanvas = offscreenCanvas;
         this.devicePixelRatio = devicePixelRatio;
         this.animationNames = animationNames;
         this.stateTree = stateTree;
+        this.options = options;
         this.#offscreenCanvas = offscreenCanvas;
         this.#devicePixelRatio = devicePixelRatio;
         this.#animationNames = animationNames;
         this.#stateTree = stateTree;
+        if (options) {
+            this.#logicalWidth = options.logicalWidth;
+            this.#logicalHeight = options.logicalHeight;
+            this.#backgroundColor = options.backgroundColor;
+            this.#backgroundAlpha = options.backgroundAlpha;
+        }
         this.#init();
     }
     async #init() {
@@ -35,6 +57,29 @@ export class Renderer {
             resolution: this.#devicePixelRatio,
         };
         this.#pixiRenderer = await autoDetectRenderer(options);
+    }
+    #updatePosition() {
+        const S = this.camera.scale;
+        this.#root.scale = S;
+        this.#root.position.set(this.centerX - this.camera.x * S, this.centerY - this.camera.y * S);
+    }
+    resize(containerWidth, containerHeight) {
+        const canvasWidth = this.#logicalWidth ?? containerWidth;
+        const canvasHeight = this.#logicalHeight ?? containerHeight;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.centerX = canvasWidth / 2;
+        this.centerY = canvasHeight / 2;
+        this.#updatePosition();
+        const S = Math.min(containerWidth / canvasWidth, containerHeight / canvasHeight);
+        this.viewportScale = S;
+        const displayWidth = canvasWidth * S;
+        const displayHeight = canvasHeight * S;
+        const canvasLeft = (containerWidth - displayWidth) / 2;
+        const canvasTop = (containerHeight - displayHeight) / 2;
+        this.canvasLeft = canvasLeft;
+        this.canvasTop = canvasTop;
+        this.#pixiRenderer?.resize(canvasWidth, canvasHeight);
     }
     render() {
         const renderer = this.#pixiRenderer;

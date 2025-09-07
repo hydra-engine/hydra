@@ -24,6 +24,7 @@ onmessage = async ({ data }) => {
   if (type === 'loadAssets') loadAssets(data.assets)
   if (type === 'init') init(data.offscreenCanvas, data.devicePixelRatio, new ObjectStateTree(data.sab))
   if (type === 'setFpsCap') ticker.setFpsCap(data.fps)
+  if (type === 'resize') renderer.resize(data.containerWidth, data.containerHeight)
 }
 
 export { }
