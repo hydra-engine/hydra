@@ -1,11 +1,9 @@
 {
-  "name": "@hydraengine/render-worker",
+  "name": "@hydraengine/main-thread-lib",
   "version": "0.0.1-alpha",
   "types": "./lib/types/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
-    "@esotericsoftware/spine-pixi-v8": "^4.2.89",
-    "pixi.js": "^8.12.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

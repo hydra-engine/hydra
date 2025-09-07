@@ -9,7 +9,6 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/matter-js": "^0.20.0",
-    "@types/stats.js": "^0.17.4",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "ts-jest": "^29.4.1",
