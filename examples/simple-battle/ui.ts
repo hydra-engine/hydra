@@ -1,4 +1,4 @@
-import { HERO_MAX_HP } from './constants'
+import { HERO_MAX_HP } from './shared/constants'
 
 let score = 0
 
