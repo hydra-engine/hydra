@@ -71,11 +71,11 @@ export class SabTree {
   setFloat32(id: number, vi: number, v: number) { this.#float32Pool.set(id, vi, v) }
   getFloat32(id: number, vi: number) { return this.#float32Pool.get(id, vi) }
 
-  forEach(visitor: (node: number) => void) {
+  forEach(visitor: (id: number) => void) {
     this.#links.forEach(visitor)
   }
 
   sortChildren(parent: number, uint32ValueIdx: number) {
-    this.#links.sortChildren(parent, (i) => this.#uint32Pool.get(i, uint32ValueIdx))
+    this.#links.sortChildren(parent, (id) => this.#uint32Pool.get(id, uint32ValueIdx))
   }
 }

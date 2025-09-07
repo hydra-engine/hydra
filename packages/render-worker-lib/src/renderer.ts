@@ -54,6 +54,7 @@ export class Renderer {
 
       container.x = this.#stateTree.getX(id)
       container.y = this.#stateTree.getY(id)
+
       container.zIndex = zIndex++
       (container as any)[SEEN_PASS] = pass
     })

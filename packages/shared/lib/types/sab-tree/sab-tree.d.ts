@@ -11,7 +11,7 @@ export declare class SabTree {
     getUint32(id: number, vi: number): number;
     setFloat32(id: number, vi: number, v: number): void;
     getFloat32(id: number, vi: number): number;
-    forEach(visitor: (node: number) => void): void;
+    forEach(visitor: (id: number) => void): void;
     sortChildren(parent: number, uint32ValueIdx: number): void;
 }
 //# sourceMappingURL=sab-tree.d.ts.map
