@@ -1,4 +1,5 @@
-import { createObjectStateBuffer } from '../../packages/main-thread-lib/src'
+import { createObjectStateBuffer, Preloader } from '../../packages/main-thread-lib/src'
+import { AssetId } from './shared/assets'
 
 const sab = createObjectStateBuffer()
 
@@ -10,6 +11,12 @@ physicsWorker.postMessage({ type: 'init', sab })
 
 const renderWorker = new Worker('render-worker.js')
 renderWorker.postMessage({ type: 'init', sab })
+renderWorker.onmessage = (event) => {
+  const type = event.data.type
+  if (type === 'assetLoaded') {
+    preloader.markLoaded(event.data.id)
+  }
+}
 
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {
@@ -25,3 +32,9 @@ if (process.env.NODE_ENV === 'development') {
     if (event.persisted) setFpsCap(undefined)
   })
 }
+
+const preloader = new Preloader([AssetId.Bird, AssetId.Fire])
+
+renderWorker.postMessage({ type: 'loadAssets', assets: [AssetId.Bird, AssetId.Fire] })
+
+await preloader.preload()
