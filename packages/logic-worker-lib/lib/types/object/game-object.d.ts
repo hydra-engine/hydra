@@ -13,6 +13,7 @@ export declare class GameObject {
     add(...children: GameObject[]): void;
     remove(): void;
     update(dt: number): void;
+    updateWorldTransform(): void;
     set x(v: number);
     get x(): number;
     set y(v: number);

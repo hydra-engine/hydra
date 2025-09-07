@@ -26,7 +26,10 @@ function init(tree: ObjectStateTree) {
   })
   root.add(animatedSprite)
 
-  ticker = new Ticker((dt) => root.update(dt))
+  ticker = new Ticker((dt) => {
+    root.update(dt)
+    root.updateWorldTransform()
+  })
 }
 
 onmessage = (event) => {
