@@ -1,5 +1,10 @@
 const sab = new SharedArrayBuffer(1024)
 
-new Worker('logic-worker.js').postMessage(sab)
-new Worker('physics-worker.js').postMessage(sab)
-new Worker('render-worker.js').postMessage(sab)
+const logicWorker = new Worker('logic-worker.js')
+logicWorker.postMessage({ type: 'init', sab })
+
+const physicsWorker = new Worker('physics-worker.js')
+physicsWorker.postMessage({ type: 'init', sab })
+
+const renderWorker = new Worker('render-worker.js')
+renderWorker.postMessage({ type: 'init', sab })

@@ -1,3 +1,7 @@
 onmessage = (event) => {
-  const sab = event.data
+  const type = event.data.type
+
+  if (type === 'init') {
+    const sab = event.data.sab
+  }
 }
