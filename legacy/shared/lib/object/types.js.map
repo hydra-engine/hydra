@@ -1,1 +1,0 @@
-{"version":3,"file":"types.js","sourceRoot":"","sources":["../../src/object/types.ts"],"names":[],"mappings":"AAAA,MAAM,CAAN,IAAY,UAEX;AAFD,WAAY,UAAU;IACpB,qDAAa,CAAA;AACf,CAAC,EAFW,UAAU,KAAV,UAAU,QAErB","sourcesContent":["export enum ObjectType {\n  CONTAINER = 0,\n}\n"]}
