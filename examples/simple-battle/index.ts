@@ -1,4 +1,4 @@
-import { changeHp, addScore } from './ui'
+import { initUI } from './ui'
 
 const sab = new SharedArrayBuffer(1024)
 
@@ -11,4 +11,4 @@ physicsWorker.postMessage({ type: 'init', sab })
 const renderWorker = new Worker('render-worker.js')
 renderWorker.postMessage({ type: 'init', sab })
 
-changeHp(100)
+initUI()

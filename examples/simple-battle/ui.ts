@@ -1,3 +1,5 @@
+import { HERO_MAX_HP } from './constants'
+
 let score = 0
 
 function createTextElement() {
@@ -6,21 +8,25 @@ function createTextElement() {
   el.style.position = 'absolute'
   el.style.top = '10px'
   el.style.zIndex = '1'
-  document.body.appendChild(el)
   return el
 }
 
 const hpText = createTextElement()
 const scoreText = createTextElement()
 
-hpText.textContent = 'HP: ...'
-scoreText.textContent = 'Score: 0'
+export function initUI() {
+  hpText.textContent = `HP: ${HERO_MAX_HP}`
+  scoreText.textContent = 'Score: 0'
 
-hpText.style.left = '50%'
-hpText.style.transform = 'translate(-50%, 0)'
-scoreText.style.right = '10px'
+  hpText.style.left = '50%'
+  hpText.style.transform = 'translate(-50%, 0)'
+  scoreText.style.right = '10px'
 
-export function changeHp(hp: number) {
+  document.body.appendChild(hpText)
+  document.body.appendChild(scoreText)
+}
+
+export function changeHP(hp: number) {
   hpText.textContent = `HP: ${hp}`
 }
 
