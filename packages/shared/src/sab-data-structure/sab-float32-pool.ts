@@ -1,4 +1,4 @@
-export class SabFloat32DataPool {
+export class SabFloat32Pool {
   readonly #data: Float32Array
   readonly #vCount: number
 

@@ -1,4 +1,4 @@
-export class SabUint32DataPool {
+export class SabUint32Pool {
   readonly #data: Uint32Array
   readonly #vCount: number
 

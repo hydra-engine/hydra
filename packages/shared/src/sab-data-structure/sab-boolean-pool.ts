@@ -1,4 +1,4 @@
-export class SabBooleanDataPool {
+export class SabBooleanPool {
   readonly #words: Uint32Array
   readonly #vCount: number
 
@@ -6,17 +6,17 @@ export class SabBooleanDataPool {
     sab: SharedArrayBuffer,
     byteOffset: number,
     vCount: number,
-    capacity: number,
+    cap: number,
   ) {
     this.#vCount = vCount
 
-    const totalBits = vCount * capacity
+    const totalBits = vCount * cap
     const wordCount = Math.ceil(totalBits / 32)
     this.#words = new Uint32Array(sab, byteOffset, wordCount)
   }
 
-  static bytesRequired(vCount: number, capacity: number) {
-    const totalBits = vCount * capacity
+  static bytesRequired(vCount: number, cap: number) {
+    const totalBits = vCount * cap
     const wordCount = Math.ceil(totalBits / 32)
     return wordCount * Uint32Array.BYTES_PER_ELEMENT
   }
