@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   entry: './index.ts',
   output: {
-    filename: 'worker.js',
+    filename: 'logic-worker.js',
     path: path.resolve(__dirname, '../')
   },
   module: {

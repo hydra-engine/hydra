@@ -1,5 +1,5 @@
 {
-  "name": "@hydraengine/worker-lib",
+  "name": "@hydraengine/logic-worker-lib",
   "version": "0.0.1-alpha",
   "types": "./lib/types/index.d.ts",
   "main": "./lib/index.js",
