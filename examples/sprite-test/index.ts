@@ -1,4 +1,4 @@
-import { createObjectStateBuffer } from '../../packages/shared/src'
+import { createObjectStateBuffer } from '../../packages/main-thread-lib/src'
 
 const sab = createObjectStateBuffer()
 
