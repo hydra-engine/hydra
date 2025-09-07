@@ -1,4 +1,4 @@
-import { loadAsset } from '../../../packages/render-worker-lib/src'
+import { loadAsset, render } from '../../../packages/render-worker-lib/src'
 import { ObjectStateTree, Ticker } from '../../../packages/shared/src'
 import { assetSources } from '../shared/assets'
 
@@ -18,9 +18,7 @@ onmessage = async ({ data }) => {
 
   if (type === 'init') {
     ost = new ObjectStateTree(data.sab)
-    ticker = new Ticker(() => {
-      //TODO
-    })
+    ticker = new Ticker(() => render(ost))
   }
 
   if (type === 'setFpsCap') {
