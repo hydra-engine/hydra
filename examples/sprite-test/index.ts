@@ -1,6 +1,10 @@
 import { createObjectStateBuffer, Preloader } from '@hydraengine/main-thread-lib'
 import { AssetId } from './shared/assets'
 
+const canvas = document.createElement('canvas')
+document.body.appendChild(canvas)
+const offscreenCanvas = canvas.transferControlToOffscreen()
+
 const logicWorker = new Worker('logic-worker.js')
 
 const renderWorker = new Worker('render-worker.js')
@@ -17,7 +21,12 @@ await preloader.preload()
 
 const sab = createObjectStateBuffer()
 logicWorker.postMessage({ type: 'init', sab })
-renderWorker.postMessage({ type: 'init', sab })
+renderWorker.postMessage({
+  type: 'init',
+  offscreenCanvas,
+  devicePixelRatio: window.devicePixelRatio,
+  sab
+}, [offscreenCanvas])
 
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {

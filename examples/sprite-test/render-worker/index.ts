@@ -12,8 +12,8 @@ async function loadAssets(assets: number[]) {
   }
 }
 
-function init(ost: ObjectStateTree) {
-  renderer = new Renderer(ost)
+function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, stateTree)
   ticker = new Ticker(() => renderer.render())
 }
 
@@ -21,7 +21,7 @@ onmessage = async ({ data }) => {
   const type = data.type
 
   if (type === 'loadAssets') loadAssets(data.assets)
-  if (type === 'init') init(new ObjectStateTree(data.sab))
+  if (type === 'init') init(data.offscreenCanvas, data.devicePixelRatio, new ObjectStateTree(data.sab))
   if (type === 'setFpsCap') ticker.setFpsCap(data.fps)
 }
 
