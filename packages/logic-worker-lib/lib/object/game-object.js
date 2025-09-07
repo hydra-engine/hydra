@@ -1,23 +1,33 @@
 import { ObjectType } from '@hydraengine/shared';
+import { LocalTransform } from '../local-transform';
 export class GameObject {
     type = ObjectType.GameObject;
     #id;
     #stateTree;
     #parent;
     #children = [];
+    #localTransform = new LocalTransform();
+    alpha = 1;
     _rootConfig(id, stateTree) {
         this.#id = id;
         this.#stateTree = stateTree;
     }
     constructor(options) {
-        //TODO
+        if (options) {
+            if (options.x !== undefined)
+                this.x = options.x;
+            if (options.y !== undefined)
+                this.y = options.y;
+        }
     }
     attachToStateTree(parentId, stateTree) {
         this.#detachFromStateTree();
         const id = stateTree.newChild(parentId);
         stateTree.setObjectType(id, this.type);
+        stateTree.setLocalAlpha(id, this.alpha);
         this.#id = id;
         this.#stateTree = stateTree;
+        this.#localTransform.setStateTree(id, stateTree);
         for (const child of this.#children) {
             child.attachToStateTree(id, stateTree);
         }
@@ -28,6 +38,7 @@ export class GameObject {
             this.#stateTree.remove(this.#id);
         this.#id = undefined;
         this.#stateTree = undefined;
+        this.#localTransform.clearStateTree();
     }
     add(...children) {
         for (const child of children) {
@@ -60,5 +71,9 @@ export class GameObject {
     update(dt) {
         //TODO
     }
+    set x(v) { this.#localTransform.x = v; }
+    get x() { return this.#localTransform.x; }
+    set y(v) { this.#localTransform.y = v; }
+    get y() { return this.#localTransform.y; }
 }
 //# sourceMappingURL=game-object.js.map

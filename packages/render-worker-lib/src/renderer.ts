@@ -139,8 +139,10 @@ export class Renderer {
       }
 
       const pc = node.pixiContainer
-      pc.x = tree.getX(id)
-      pc.y = tree.getY(id)
+      pc.position.set(tree.getWorldX(id), tree.getWorldY(id))
+      pc.scale.set(tree.getWorldScaleX(id), tree.getWorldScaleY(id))
+      pc.rotation = tree.getWorldRotation(id)
+      pc.alpha = tree.getWorldAlpha(id)
       pc.zIndex = zIndex++
 
       node.seenPass = pass

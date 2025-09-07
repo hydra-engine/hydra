@@ -1,4 +1,5 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
+import { LocalTransform } from '../local-transform'
 
 export type GameObjectOptions = {
   x?: number
@@ -14,13 +15,19 @@ export class GameObject {
   #parent?: GameObject
   #children: GameObject[] = []
 
+  #localTransform = new LocalTransform()
+  alpha = 1
+
   protected _rootConfig(id: number, stateTree: ObjectStateTree) {
     this.#id = id
     this.#stateTree = stateTree
   }
 
   constructor(options?: GameObjectOptions) {
-    //TODO
+    if (options) {
+      if (options.x !== undefined) this.x = options.x
+      if (options.y !== undefined) this.y = options.y
+    }
   }
 
   protected attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
@@ -28,9 +35,11 @@ export class GameObject {
 
     const id = stateTree.newChild(parentId)
     stateTree.setObjectType(id, this.type)
+    stateTree.setLocalAlpha(id, this.alpha)
 
     this.#id = id
     this.#stateTree = stateTree
+    this.#localTransform.setStateTree(id, stateTree)
 
     for (const child of this.#children) {
       child.attachToStateTree(id, stateTree)
@@ -43,6 +52,7 @@ export class GameObject {
     if (this.#id !== undefined && this.#stateTree) this.#stateTree.remove(this.#id)
     this.#id = undefined
     this.#stateTree = undefined
+    this.#localTransform.clearStateTree()
   }
 
   add(...children: GameObject[]) {
@@ -81,4 +91,10 @@ export class GameObject {
   update(dt: number) {
     //TODO
   }
+
+  set x(v) { this.#localTransform.x = v }
+  get x() { return this.#localTransform.x }
+
+  set y(v) { this.#localTransform.y = v }
+  get y() { return this.#localTransform.y }
 }
