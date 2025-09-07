@@ -1,0 +1,1 @@
+{"version":3,"file":"render.js","sourceRoot":"","sources":["../src/render.ts"],"names":[],"mappings":"AAEA,MAAM,UAAU,MAAM,CAAC,GAAoB;IACzC,MAAM;AACR,CAAC","sourcesContent":["import { ObjectStateTree } from '@hydraengine/shared'\n\nexport function render(ost: ObjectStateTree) {\n  //TODO\n}\n"]}

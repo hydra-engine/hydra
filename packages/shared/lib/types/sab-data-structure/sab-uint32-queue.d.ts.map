@@ -1,0 +1,1 @@
+{"version":3,"file":"sab-uint32-queue.d.ts","sourceRoot":"","sources":["../../../src/sab-data-structure/sab-uint32-queue.ts"],"names":[],"mappings":"AAEA,qBAAa,cAAc;;gBAKb,GAAG,EAAE,iBAAiB,EAAE,UAAU,EAAE,MAAM,EAAE,GAAG,EAAE,MAAM;IAUnE,MAAM,CAAC,aAAa,CAAC,GAAG,EAAE,MAAM;IAChC,IAAI,UAAU,WAA2D;IAEzE,OAAO,CAAC,CAAC,EAAE,MAAM;IAMjB,OAAO,IAAI,MAAM;CAKlB"}

@@ -1,5 +1,5 @@
-import { loadAsset, render } from '../../../packages/render-worker-lib/src'
-import { ObjectStateTree, Ticker } from '../../../packages/shared/src'
+import { loadAsset, render } from '@hydraengine/render-worker-lib'
+import { ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { assetSources } from '../shared/assets'
 
 let ost: ObjectStateTree

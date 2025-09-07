@@ -1,0 +1,1 @@
+{"version":3,"file":"sab-tree-node-id-pool.d.ts","sourceRoot":"","sources":["../../../src/sab-tree/sab-tree-node-id-pool.ts"],"names":[],"mappings":"AAGA,qBAAa,iBAAiB;;gBAGhB,GAAG,EAAE,iBAAiB,EAAE,UAAU,EAAE,MAAM,EAAE,GAAG,EAAE,MAAM;IAKnE,MAAM,CAAC,aAAa,CAAC,GAAG,EAAE,MAAM;IAChC,IAAI,UAAU,WAAgC;IAE9C,KAAK;IACL,IAAI,CAAC,EAAE,EAAE,MAAM;CAChB"}

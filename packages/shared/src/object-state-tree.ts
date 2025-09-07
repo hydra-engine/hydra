@@ -20,6 +20,8 @@ export class ObjectStateTree extends SabTree {
     super(sab, BOOLEAN_COUNT, UINT32_COUNT, FLOAT32_COUNT, CAPACITY)
   }
 
+  static bytesRequired() { return SabTree.bytesRequired(BOOLEAN_COUNT, UINT32_COUNT, FLOAT32_COUNT, CAPACITY) }
+
   setX(id: number, v: number) { this.setFloat32(id, X_IDX, v) }
   getX(id: number) { return this.getFloat32(id, X_IDX) }
 

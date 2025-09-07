@@ -1,4 +1,4 @@
-import { createObjectStateBuffer, Preloader } from '../../packages/main-thread-lib/src'
+import { createObjectStateBuffer, Preloader } from '@hydraengine/main-thread-lib'
 import { AssetId } from './shared/assets'
 
 const logicWorker = new Worker('logic-worker.js')

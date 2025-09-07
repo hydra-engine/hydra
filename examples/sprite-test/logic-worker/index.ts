@@ -1,5 +1,5 @@
-import { AnimatedSpriteObject, GameObject, SpriteObject } from '../../../packages/logic-worker-lib/src'
-import { ObjectStateTree, Ticker } from '../../../packages/shared/src'
+import { AnimatedSpriteObject, GameObject, SpriteObject } from '@hydraengine/logic-worker-lib'
+import { ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
 

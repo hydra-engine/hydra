@@ -1,0 +1,1 @@
+{"version":3,"file":"apply-physics.js","sourceRoot":"","sources":["../src/apply-physics.ts"],"names":[],"mappings":"AAEA,MAAM,UAAU,YAAY,CAAC,GAAoB;IAC/C,MAAM;AACR,CAAC","sourcesContent":["import { ObjectStateTree } from '@hydraengine/shared'\n\nexport function applyPhysics(ost: ObjectStateTree) {\n  //TODO\n}\n"]}

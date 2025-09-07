@@ -20,7 +20,12 @@
     "skipLibCheck": true,
     "strict": true,
     "rootDir": "./src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "paths": {
+      "@hydraengine/*": [
+        "../packages/*"
+      ]
+    }
   },
   "include": [
     "./src",
