@@ -1,6 +1,7 @@
+import { createObjectStateBuffer } from '../../packages/shared/src'
 import { initUI } from './ui'
 
-const sab = new SharedArrayBuffer(1024)
+const sab = createObjectStateBuffer()
 
 const logicWorker = new Worker('logic-worker.js')
 logicWorker.postMessage({ type: 'init', sab })

@@ -1,4 +1,6 @@
-const sab = new SharedArrayBuffer(1024)
+import { createObjectStateBuffer } from '../../packages/shared/src'
+
+const sab = createObjectStateBuffer()
 
 const logicWorker = new Worker('logic-worker.js')
 logicWorker.postMessage({ type: 'init', sab })
