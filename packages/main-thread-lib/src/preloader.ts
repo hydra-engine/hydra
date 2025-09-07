@@ -9,5 +9,6 @@ export class Preloader {
 
   markLoaded(id: number) {
     //TODO
+    console.log(`Asset loaded: ${id}`)
   }
 }

@@ -1,21 +1,30 @@
-import { Ticker } from '../../../packages/shared/src'
-import { ObjectStateTree } from '../../../packages/shared/src'
+import { loadAsset } from '../../../packages/render-worker-lib/src'
+import { ObjectStateTree, Ticker } from '../../../packages/shared/src'
+import { assetSources } from '../shared/assets'
 
 let ost: ObjectStateTree
 let ticker: Ticker
 
-onmessage = (event) => {
-  const type = event.data.type
+onmessage = async ({ data }) => {
+  const type = data.type
 
   if (type === 'init') {
-    ost = new ObjectStateTree(event.data.sab)
+    ost = new ObjectStateTree(data.sab)
     ticker = new Ticker(() => {
       //TODO
     })
   }
 
   if (type === 'setFpsCap') {
-    ticker.setFpsCap(event.data.fps)
+    ticker.setFpsCap(data.fps)
+  }
+
+  if (type === 'loadAssets') {
+    const assets: number[] = data.assets
+    for (const asset of assets) {
+      await loadAsset(assetSources[asset])
+      postMessage({ type: 'assetLoaded', id: asset })
+    }
   }
 }
 
