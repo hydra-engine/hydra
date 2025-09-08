@@ -1,15 +1,22 @@
 import { SabTree } from './sab-tree/sab-tree';
 const CAPACITY = 1_000_000;
-// Boolean Indices
-const BOOLEAN_COUNT = 1;
+// ===== Boolean Indices =============================================================================
+const BOOLEAN_COUNT = 2;
+// Animation
 const LOOP_IDX = 0;
-// Uint32 Indices
+// Physics
+const FIXED_ROTATION_IDX = 0;
+const IS_STATIC_IDX = 1;
+// ===== Uint32 Indices =============================================================================
 const UINT32_COUNT = 3;
 const OBJECT_TYPE_IDX = 0;
+// Sprite / Animation
 const ASSET_ID_IDX = 1;
+// Animation
 const ANIMATION_ID_IDX = 2;
-// Float32 Indices
+// ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 19;
+// Local Transform
 const LOCAL_X_IDX = 0;
 const LOCAL_Y_IDX = 1;
 const LOCAL_SCALE_X_IDX = 2;
@@ -20,6 +27,7 @@ const LOCAL_ROTATION_IDX = 6;
 const LOCAL_COS_IDX = 7;
 const LOCAL_SIN_IDX = 8;
 const LOCAL_ALPHA_IDX = 9;
+// World Transform
 const WORLD_X_IDX = 10;
 const WORLD_Y_IDX = 11;
 const WORLD_SCALE_X_IDX = 12;
@@ -28,6 +36,7 @@ const WORLD_ROTATION_IDX = 14;
 const WORLD_COS_IDX = 15;
 const WORLD_SIN_IDX = 16;
 const WORLD_ALPHA_IDX = 17;
+// Animation
 const FPS_IDX = 18;
 export class ObjectStateTree extends SabTree {
     constructor(sab) {
@@ -80,5 +89,9 @@ export class ObjectStateTree extends SabTree {
     getFps(id) { return this.getFloat32(id, FPS_IDX); }
     setLoop(id, v) { this.setBoolean(id, LOOP_IDX, v); }
     getLoop(id) { return this.getBoolean(id, LOOP_IDX); }
+    setFixedRotation(id, v) { this.setBoolean(id, FIXED_ROTATION_IDX, v); }
+    getFixedRotation(id) { return this.getBoolean(id, FIXED_ROTATION_IDX); }
+    setIsStatic(id, v) { this.setBoolean(id, IS_STATIC_IDX, v); }
+    getIsStatic(id) { return this.getBoolean(id, IS_STATIC_IDX); }
 }
 //# sourceMappingURL=object-state-tree.js.map

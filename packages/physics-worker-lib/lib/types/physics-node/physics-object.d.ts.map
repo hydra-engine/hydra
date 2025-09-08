@@ -1,1 +1,1 @@
-{"version":3,"file":"physics-object.d.ts","sourceRoot":"","sources":["../../../src/physics-node/physics-object.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAA;AAE5C,qBAAa,aAAc,SAAQ,WAAW;CAC7C"}
+{"version":3,"file":"physics-object.d.ts","sourceRoot":"","sources":["../../../src/physics-node/physics-object.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAA;AAC5C,OAAO,EAAE,YAAY,EAAE,MAAM,iBAAiB,CAAA;AAE9C,qBAAa,aAAc,SAAQ,WAAW;IAC5C,KAAK,CAAC,EAAE,YAAY,CAAA;CACrB"}

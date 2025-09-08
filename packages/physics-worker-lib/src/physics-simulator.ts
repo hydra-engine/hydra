@@ -14,6 +14,8 @@ export class PhysicsSimulator {
   }
 
   update(dt: number) {
+    const dts = dt * 1000
+    const matterDt = dts > 16.666 ? 16.666 : dts
     const step = ++this.#simulationStep
 
     const tree = this.#stateTree

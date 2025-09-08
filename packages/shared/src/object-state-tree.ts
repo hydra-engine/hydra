@@ -2,18 +2,30 @@ import { SabTree } from './sab-tree/sab-tree'
 
 const CAPACITY = 1_000_000 as const
 
-// Boolean Indices
-const BOOLEAN_COUNT = 1 as const
+// ===== Boolean Indices =============================================================================
+const BOOLEAN_COUNT = 2 as const
+
+// Animation
 const LOOP_IDX = 0 as const
 
-// Uint32 Indices
+// Physics
+const FIXED_ROTATION_IDX = 0 as const
+const IS_STATIC_IDX = 1 as const
+
+// ===== Uint32 Indices =============================================================================
 const UINT32_COUNT = 3 as const
 const OBJECT_TYPE_IDX = 0 as const
+
+// Sprite / Animation
 const ASSET_ID_IDX = 1 as const
+
+// Animation
 const ANIMATION_ID_IDX = 2 as const
 
-// Float32 Indices
+// ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 19 as const
+
+// Local Transform
 const LOCAL_X_IDX = 0 as const
 const LOCAL_Y_IDX = 1 as const
 const LOCAL_SCALE_X_IDX = 2 as const
@@ -25,6 +37,7 @@ const LOCAL_COS_IDX = 7 as const
 const LOCAL_SIN_IDX = 8 as const
 const LOCAL_ALPHA_IDX = 9 as const
 
+// World Transform
 const WORLD_X_IDX = 10 as const
 const WORLD_Y_IDX = 11 as const
 const WORLD_SCALE_X_IDX = 12 as const
@@ -34,6 +47,7 @@ const WORLD_COS_IDX = 15 as const
 const WORLD_SIN_IDX = 16 as const
 const WORLD_ALPHA_IDX = 17 as const
 
+// Animation
 const FPS_IDX = 18 as const
 
 export class ObjectStateTree extends SabTree {
@@ -111,4 +125,10 @@ export class ObjectStateTree extends SabTree {
 
   setLoop(id: number, v: boolean) { this.setBoolean(id, LOOP_IDX, v) }
   getLoop(id: number) { return this.getBoolean(id, LOOP_IDX) }
+
+  setFixedRotation(id: number, v: boolean) { this.setBoolean(id, FIXED_ROTATION_IDX, v) }
+  getFixedRotation(id: number) { return this.getBoolean(id, FIXED_ROTATION_IDX) }
+
+  setIsStatic(id: number, v: boolean) { this.setBoolean(id, IS_STATIC_IDX, v) }
+  getIsStatic(id: number) { return this.getBoolean(id, IS_STATIC_IDX) }
 }

@@ -48,5 +48,9 @@ export declare class ObjectStateTree extends SabTree {
     getFps(id: number): number;
     setLoop(id: number, v: boolean): void;
     getLoop(id: number): boolean;
+    setFixedRotation(id: number, v: boolean): void;
+    getFixedRotation(id: number): boolean;
+    setIsStatic(id: number, v: boolean): void;
+    getIsStatic(id: number): boolean;
 }
 //# sourceMappingURL=object-state-tree.d.ts.map
