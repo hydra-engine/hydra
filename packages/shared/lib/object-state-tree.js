@@ -1,7 +1,7 @@
 import { SabTree } from './sab-tree/sab-tree';
 const CAPACITY = 1_000_000;
 // ===== Boolean Indices =============================================================================
-const BOOLEAN_COUNT = 2;
+const BOOLEAN_COUNT = 0;
 // ===== Uint32 Indices =============================================================================
 const UINT32_COUNT = 3;
 const OBJECT_TYPE_IDX = 0;
@@ -80,5 +80,7 @@ export class ObjectStateTree extends SabTree {
     getAssetId(id) { return this.getUint32(id, ASSET_ID_IDX); }
     setAnimationId(id, v) { this.setUint32(id, ANIMATION_ID_IDX, v); }
     getAnimationId(id) { return this.getUint32(id, ANIMATION_ID_IDX); }
+    setBodyId(id, v) { this.setUint32(id, BODY_ID_IDX, v); }
+    getBodyId(id) { return this.getUint32(id, BODY_ID_IDX); }
 }
 //# sourceMappingURL=object-state-tree.js.map

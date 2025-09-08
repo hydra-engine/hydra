@@ -3,7 +3,7 @@ import { SabTree } from './sab-tree/sab-tree'
 const CAPACITY = 1_000_000 as const
 
 // ===== Boolean Indices =============================================================================
-const BOOLEAN_COUNT = 2 as const
+const BOOLEAN_COUNT = 0 as const
 
 // ===== Uint32 Indices =============================================================================
 const UINT32_COUNT = 3 as const
@@ -112,4 +112,7 @@ export class ObjectStateTree extends SabTree {
 
   setAnimationId(id: number, v: number) { this.setUint32(id, ANIMATION_ID_IDX, v) }
   getAnimationId(id: number) { return this.getUint32(id, ANIMATION_ID_IDX) }
+
+  setBodyId(id: number, v: number) { this.setUint32(id, BODY_ID_IDX, v) }
+  getBodyId(id: number) { return this.getUint32(id, BODY_ID_IDX) }
 }

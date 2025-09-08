@@ -42,7 +42,7 @@ export class AnimatedSpriteNode extends RenderableNode {
       s.anchor.set(0.5, 0.5)
 
       const a = d.atlas.animations[this.#animation]
-      s.loop = a.loop ?? true
+      s.loop = a.loop
       s.animationSpeed = a.fps / 60
       s.play()
 

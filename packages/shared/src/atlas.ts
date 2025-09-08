@@ -8,7 +8,7 @@ export interface Frame {
 export type Animation = {
   frames: string[],
   fps: number,
-  loop?: boolean
+  loop: boolean
 }
 
 export type Atlas = {
