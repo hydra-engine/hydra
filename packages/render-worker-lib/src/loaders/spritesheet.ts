@@ -1,14 +1,9 @@
 import { Atlas } from '@hydraengine/shared'
-import { Dict, Spritesheet as PixiSpritesheet, SpritesheetFrameData } from 'pixi.js'
+import { Dict, Spritesheet, SpritesheetFrameData } from 'pixi.js'
 import { Loader } from './loader'
 import { textureLoader } from './texture'
 
-export type SpritesheetData = {
-  atlas: Atlas,
-  pixiSpritesheet: PixiSpritesheet
-}
-
-class SpritesheetLoader extends Loader<SpritesheetData> {
+class SpritesheetLoader extends Loader<Spritesheet> {
   protected override async doLoad(id: number, src: string, atlas: Atlas) {
     const loadingPromise = (async () => {
       const texture = await textureLoader.load(id, src)
@@ -25,7 +20,7 @@ class SpritesheetLoader extends Loader<SpritesheetData> {
       for (const [key, value] of Object.entries(atlas.animations)) {
         animations[key] = value.frames
       }
-      const spritesheet = new PixiSpritesheet(texture, { frames, meta: { scale: 1 }, animations })
+      const spritesheet = new Spritesheet(texture, { frames, meta: { scale: 1 }, animations })
       await spritesheet.parse()
 
       this.loadingPromises.delete(id)
@@ -35,9 +30,8 @@ class SpritesheetLoader extends Loader<SpritesheetData> {
           textureLoader.release(id)
           console.error(`Spritesheet already exists: ${src}`)
         } else {
-          const data = { atlas, pixiSpritesheet: spritesheet }
-          this.cachedAssets.set(id, data)
-          return data
+          this.cachedAssets.set(id, spritesheet)
+          return spritesheet
         }
       } else {
         textureLoader.release(id)
@@ -48,8 +42,8 @@ class SpritesheetLoader extends Loader<SpritesheetData> {
     return await loadingPromise
   }
 
-  protected override cleanup(id: number, { pixiSpritesheet }: SpritesheetData) {
-    pixiSpritesheet.destroy()
+  protected override cleanup(id: number, spritesheet: Spritesheet) {
+    spritesheet.destroy()
     textureLoader.release(id)
   }
 

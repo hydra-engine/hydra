@@ -6,11 +6,11 @@ import { Loader } from './loaders/loader'
 const EXTERNAL_LOADER = Symbol('EXTERNAL_LOADER')
 
 const loaderForPathMap: Array<{ check: (path: string) => boolean, loader: Loader<any> | typeof EXTERNAL_LOADER }> = [
-  { check: (p) => p.endsWith('.json') || p.endsWith('.atlas'), loader: EXTERNAL_LOADER }, // 외부 주입
-  { check: (p) => p.endsWith('.skel'), loader: EXTERNAL_LOADER }, // 외부 주입
-  { check: (p) => /\.(png|jpe?g|gif|webp)$/i.test(p), loader: EXTERNAL_LOADER }, // 외부 주입
+  { check: (p) => p.endsWith('.json') || p.endsWith('.atlas'), loader: EXTERNAL_LOADER },
+  { check: (p) => p.endsWith('.skel'), loader: EXTERNAL_LOADER },
+  { check: (p) => /\.(png|jpe?g|gif|webp)$/i.test(p), loader: EXTERNAL_LOADER },
   { check: (p) => /\.(mp3|wav|ogg)$/i.test(p), loader: audioLoader },
-  { check: (p) => !p.includes('.'), loader: fontFamilyLoader }
+  { check: (p) => !p.includes('.'), loader: fontFamilyLoader },
 ]
 
 function getLoaderForPath(path: string): Loader<any> | typeof EXTERNAL_LOADER | undefined {
@@ -20,38 +20,40 @@ function getLoaderForPath(path: string): Loader<any> | typeof EXTERNAL_LOADER | 
 const idToLoaderMap = new Map<number, Loader<any> | typeof EXTERNAL_LOADER>()
 
 async function loadAsset(id: number, asset: AssetSource): Promise<void> {
-  if (typeof asset === 'string') {
-    const loader = getLoaderForPath(asset)
-    if (!loader) {
-      console.warn(`No loader found for asset: ${asset}`)
-      return
-    }
-    idToLoaderMap.set(id, loader)
-    if (loader !== EXTERNAL_LOADER) {
-      await loader.load(id, asset)
-    }
-  } else {
+  if (typeof asset !== 'string') {
     console.warn(`Unknown asset type: ${asset}`)
+    return
+  }
+  const loader = getLoaderForPath(asset)
+  if (!loader) {
+    console.warn(`No loader found for asset: ${asset}`)
+    return
+  }
+  idToLoaderMap.set(id, loader)
+  if (loader !== EXTERNAL_LOADER) {
+    await (loader as Loader<any>).load(id, asset)
   }
 }
 
 function releaseAsset(id: number): void {
   const loader = idToLoaderMap.get(id)
-  if (!loader) {
-    console.warn(`No loader found for asset ID: ${id}`)
-    return
-  }
+  if (!loader) return
   if (loader !== EXTERNAL_LOADER) {
-    loader.release(id)
+    ; (loader as Loader<any>).release(id)
   }
 }
 
 export class Preloader {
   #assetSources: Record<number, AssetSource>
   #assetIds: number[]
-  #targets: number[]                 // 내부 로더가 있는 id만
+
+  // 내부 로드 대상
+  #internalLoadIds: number[]
+
+  // 진행률/완료 판단용 전체 대기 집합(내부+외부)
+  #waitIds: number[]
+
   #progressCallback?: (progress: number) => void
-  #loadedCount = 0
   #loadedSet = new Set<number>()
   #resolvePreload?: () => void
   #preloadPromise: Promise<void>
@@ -65,12 +67,17 @@ export class Preloader {
     this.#assetIds = assetIds
     this.#progressCallback = progressCallback
 
-    // 프리로드 대상: EXTERNAL_LOADER(외부 주입) 제외
-    this.#targets = this.#assetIds.filter((id) => {
+    // 전체 대기 집합: 로더가 식별되는 모든 항목
+    this.#waitIds = this.#assetIds.filter((id) => {
       const src = this.#assetSources[id]
-      if (typeof src !== 'string') return false
+      return typeof src === 'string' && !!getLoaderForPath(src)
+    })
+
+    // 내부 로드 집합: 내부 로더가 있는 항목만
+    this.#internalLoadIds = this.#waitIds.filter((id) => {
+      const src = this.#assetSources[id] as string
       const loader = getLoaderForPath(src)
-      return !!loader && loader !== EXTERNAL_LOADER
+      return loader && loader !== EXTERNAL_LOADER
     })
 
     this.#preloadPromise = new Promise<void>((resolve) => {
@@ -78,21 +85,20 @@ export class Preloader {
     })
   }
 
-  /** loadAsset을 사용해 실제 프리로드 수행 */
+  /** 자동 로드 수행(내부 로더 대상만). 외부 대상은 notifyLoaded(id)를 기다림. */
   async preload(): Promise<void> {
-    // 대상이 없거나 이미 완료된 경우 즉시 resolve
-    if (this.#targets.length === 0 || this.#loadedCount >= this.#targets.length) {
+    // 기다릴 게 없으면 즉시 완료
+    if (this.#waitIds.length === 0 || this.#loadedSet.size >= this.#waitIds.length) {
       this.#resolvePreload?.()
       return this.#preloadPromise
     }
 
     await Promise.all(
-      this.#targets.map(async (id) => {
+      this.#internalLoadIds.map(async (id) => {
         const asset = this.#assetSources[id]
         if (asset === undefined) {
           console.warn(`[Preloader] Missing asset for id=${id}`)
-          // 진행률 계산의 일관성을 위해 missing도 mark
-          this.markLoaded(id)
+          this.notifyLoaded(id) // 누락도 완료로 처리해 카운트 일관성 유지
           return
         }
         try {
@@ -100,7 +106,7 @@ export class Preloader {
         } catch (e) {
           console.warn(`[Preloader] Failed to load asset (id=${id}):`, e)
         } finally {
-          this.markLoaded(id)
+          this.notifyLoaded(id)
         }
       })
     )
@@ -108,31 +114,32 @@ export class Preloader {
     return this.#preloadPromise
   }
 
-  /** 진행률 업데이트 (내부 로더 대상만 카운트) */
-  markLoaded(id: number) {
-    if (!this.#targets.includes(id)) return // 대상 외 id 무시
-    if (this.#loadedSet.has(id)) return     // 중복 로딩 방지
+  /**
+   * 외부/내부 공통 완료 신호 함수.
+   * 외부 로딩이 끝났을 때도 이 함수를 호출하세요.
+   */
+  notifyLoaded(id: number): void {
+    if (!this.#waitIds.includes(id)) return
+    if (this.#loadedSet.has(id)) return
 
     this.#loadedSet.add(id)
-    this.#loadedCount++
 
-    const progress = this.#loadedCount / this.#targets.length
+    const total = this.#waitIds.length
+    const progress = total === 0 ? 1 : this.#loadedSet.size / total
     this.#progressCallback?.(progress)
 
-    if (this.#loadedCount === this.#targets.length) {
+    if (this.#loadedSet.size === total) {
       this.#resolvePreload?.()
     }
   }
 
-  /** 프리로드된(내부 로더 대상) 리소스 해제 */
+  /** 자동 로드했던 자원만 해제(외부 주입 리소스는 외부에서 관리) */
   release(): void {
-    for (const id of this.#targets) {
-      if (this.#loadedSet.has(id)) {
-        try {
-          releaseAsset(id)
-        } catch (e) {
-          console.warn(`[Preloader] Failed to release asset (id=${id}):`, e)
-        }
+    for (const id of this.#internalLoadIds) {
+      try {
+        releaseAsset(id)
+      } catch (e) {
+        console.warn(`[Preloader] Failed to release asset (id=${id}):`, e)
       }
     }
   }

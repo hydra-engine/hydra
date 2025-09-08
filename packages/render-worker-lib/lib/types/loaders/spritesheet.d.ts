@@ -1,23 +1,16 @@
 import { Atlas } from '@hydraengine/shared';
-import { Dict, Spritesheet as PixiSpritesheet, SpritesheetFrameData } from 'pixi.js';
+import { Dict, Spritesheet, SpritesheetFrameData } from 'pixi.js';
 import { Loader } from './loader';
-export type SpritesheetData = {
-    atlas: Atlas;
-    pixiSpritesheet: PixiSpritesheet;
-};
-declare class SpritesheetLoader extends Loader<SpritesheetData> {
-    protected doLoad(id: number, src: string, atlas: Atlas): Promise<{
-        atlas: Atlas;
-        pixiSpritesheet: PixiSpritesheet<{
-            frames: Dict<SpritesheetFrameData>;
-            meta: {
-                scale: number;
-            };
-            animations: Dict<string[]>;
-        }>;
-    } | undefined>;
-    protected cleanup(id: number, { pixiSpritesheet }: SpritesheetData): void;
-    load(id: number, src: string, atlas: Atlas): Promise<SpritesheetData | undefined>;
+declare class SpritesheetLoader extends Loader<Spritesheet> {
+    protected doLoad(id: number, src: string, atlas: Atlas): Promise<Spritesheet<{
+        frames: Dict<SpritesheetFrameData>;
+        meta: {
+            scale: number;
+        };
+        animations: Dict<string[]>;
+    }> | undefined>;
+    protected cleanup(id: number, spritesheet: Spritesheet): void;
+    load(id: number, src: string, atlas: Atlas): Promise<Spritesheet<import("pixi.js").SpritesheetData> | undefined>;
 }
 export declare const spritesheetLoader: SpritesheetLoader;
 export {};

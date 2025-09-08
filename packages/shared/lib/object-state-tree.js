@@ -1,5 +1,5 @@
 import { SabTree } from './sab-tree/sab-tree';
-const CAPACITY = 1_000_000;
+export const CAPACITY = 1_000_000;
 // ===== Boolean Indices =============================================================================
 const BOOLEAN_COUNT = 0;
 // ===== Uint32 Indices =============================================================================

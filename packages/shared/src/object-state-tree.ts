@@ -1,6 +1,6 @@
 import { SabTree } from './sab-tree/sab-tree'
 
-const CAPACITY = 1_000_000 as const
+export const CAPACITY = 1_000_000 as const
 
 // ===== Boolean Indices =============================================================================
 const BOOLEAN_COUNT = 0 as const

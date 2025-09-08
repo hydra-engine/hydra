@@ -1,6 +1,6 @@
 import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
 import { debugMode, enableDebug } from '@hydraengine/shared'
-import { AssetId } from './shared/assets'
+import { AssetId, assetSources } from './shared/assets'
 
 enableDebug()
 
@@ -30,7 +30,7 @@ renderWorker.onmessage = (event) => {
   const type = event.data.type
 
   if (type === 'graphicAssetLoaded') {
-    preloader.markLoaded(event.data.id)
+    preloader.notifyLoaded(event.data.id)
   }
 
   if (renderWorkerFpsDisplay && type === 'fps') {
@@ -38,7 +38,7 @@ renderWorker.onmessage = (event) => {
   }
 }
 
-const preloader = new Preloader([AssetId.Bird, AssetId.Fire])
+const preloader = new Preloader(assetSources, [AssetId.Bird, AssetId.Fire])
 renderWorker.postMessage({ type: 'loadGraphicAssets', assets: [AssetId.Bird, AssetId.Fire] })
 await preloader.preload()
 

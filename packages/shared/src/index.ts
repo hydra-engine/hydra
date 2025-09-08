@@ -1,8 +1,9 @@
 export { AssetSource } from './asset'
 export { Atlas } from './atlas'
 export { debugMode, enableDebug } from './debug'
-export { ObjectStateTree } from './object-state-tree'
+export { CAPACITY, ObjectStateTree } from './object-state-tree'
 export { ObjectType } from './object-type'
-export { ROOT_ID } from './sab-tree/sab-tree-links'
+export { NONE, ROOT_ID, TREE_LINK_V_COUNT } from './sab-tree/sab-tree-links'
+export { SabTreeNodeIdPool } from './sab-tree/sab-tree-node-id-pool'
 export { Ticker } from './ticker'
 

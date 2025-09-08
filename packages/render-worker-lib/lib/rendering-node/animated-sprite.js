@@ -6,7 +6,7 @@ export class AnimatedSpriteNode extends RenderableNode {
     #src;
     #atlas;
     #animation;
-    #data;
+    #sheet;
     #sprite;
     constructor(assetId, src, atlas, animation) {
         super();
@@ -18,26 +18,25 @@ export class AnimatedSpriteNode extends RenderableNode {
     }
     async #load() {
         if (spritesheetLoader.checkCached(this.#assetId)) {
-            this.#data = spritesheetLoader.getCached(this.#assetId);
+            this.#sheet = spritesheetLoader.getCached(this.#assetId);
         }
         else {
             console.info(`Spritesheet not preloaded. Loading now: ${this.#src}`);
-            this.#data = await spritesheetLoader.load(this.#assetId, this.#src, this.#atlas);
+            this.#sheet = await spritesheetLoader.load(this.#assetId, this.#src, this.#atlas);
         }
         this.#updateAnimation();
     }
     #updateAnimation() {
         this.#sprite?.destroy();
         this.#sprite = undefined;
-        const d = this.#data;
-        if (d) {
-            if (!d.pixiSpritesheet.animations[this.#animation]) {
+        if (this.#sheet) {
+            if (!this.#sheet.animations[this.#animation]) {
                 console.error(`Animation not found: ${this.#animation}`);
                 return;
             }
-            const s = new PixiAnimatedSprite(d.pixiSpritesheet.animations[this.#animation]);
+            const s = new PixiAnimatedSprite(this.#sheet.animations[this.#animation]);
             s.anchor.set(0.5, 0.5);
-            const a = d.atlas.animations[this.#animation];
+            const a = this.#atlas.animations[this.#animation];
             s.loop = a.loop;
             s.animationSpeed = a.fps / 60;
             s.play();

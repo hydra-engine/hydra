@@ -1,6 +1,6 @@
 export const ROOT_ID = 0;
-const NONE = 0xFFFFFFFF;
-const V_COUNT = 5;
+export const NONE = 0xFFFFFFFF;
+export const TREE_LINK_V_COUNT = 5;
 const PARENT_IDX = 0;
 const FIRST_IDX = 1;
 const LAST_IDX = 2;
@@ -9,12 +9,11 @@ const NEXT_IDX = 4;
 export class SabTreeLinks {
     #meta;
     constructor(sab, byteOffset, cap) {
-        this.#meta = new Uint32Array(sab, byteOffset, cap * V_COUNT);
-        this.#meta.fill(NONE);
+        this.#meta = new Uint32Array(sab, byteOffset, cap * TREE_LINK_V_COUNT);
     }
-    static bytesRequired(cap) { return cap * V_COUNT * Uint32Array.BYTES_PER_ELEMENT; }
+    static bytesRequired(cap) { return cap * TREE_LINK_V_COUNT * Uint32Array.BYTES_PER_ELEMENT; }
     get byteLength() { return this.#meta.byteLength; }
-    #o(id) { return id * V_COUNT; }
+    #o(id) { return id * TREE_LINK_V_COUNT; }
     parent(id) { return this.#meta[this.#o(id) + PARENT_IDX]; }
     #first(id) { return this.#meta[this.#o(id) + FIRST_IDX]; }
     #last(id) { return this.#meta[this.#o(id) + LAST_IDX]; }

@@ -1,4 +1,5 @@
 import { SabTree } from './sab-tree/sab-tree';
+export declare const CAPACITY: 1000000;
 export declare class ObjectStateTree extends SabTree {
     constructor(sab: SharedArrayBuffer);
     static bytesRequired(): number;
