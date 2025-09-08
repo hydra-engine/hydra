@@ -28,36 +28,50 @@ class BitmapFontLoader extends Loader<BitmapFont> {
             textureLoader.release(id)
             console.error(`Bitmap font already exists: ${fnt}`)
           } else {
-
+            // Parse XML using fast-xml-parser
             const parser = new XMLParser({
               ignoreAttributes: false,
               attributeNamePrefix: '',
+              parseAttributeValue: true,
+              trimValues: true,
             })
-            const xml = parser.parse(text)
+            const xmlObj: any = parser.parse(text)
 
-            const info = xml.font?.info
-            const common = xml.font?.common
-            const charArr = xml.font?.chars?.char ?? []
+            const infoEl = xmlObj?.font?.info
+            const commonEl = xmlObj?.font?.common
+            let charNodes = xmlObj?.font?.chars?.char ?? []
 
-            const size = parseInt(info?.size ?? '16', 10)
-            const lineHeight = parseInt(common?.lineHeight ?? '32', 10)
+            if (!Array.isArray(charNodes)) {
+              charNodes = [charNodes]
+            }
+
+            const size =
+              typeof infoEl?.size === 'number'
+                ? infoEl.size
+                : parseInt(infoEl?.size ?? '16', 10)
+
+            const lineHeight =
+              typeof commonEl?.lineHeight === 'number'
+                ? commonEl.lineHeight
+                : parseInt(commonEl?.lineHeight ?? '32', 10)
 
             const chars: Record<number, Char> = {}
 
-            for (const c of charArr) {
-              const idNum = parseInt(c.id, 10)
-              chars[idNum] = {
-                x: parseInt(c.x, 10),
-                y: parseInt(c.y, 10),
-                width: parseInt(c.width, 10),
-                height: parseInt(c.height, 10),
-                xoffset: parseInt(c.xoffset, 10),
-                yoffset: parseInt(c.yoffset, 10),
-                xadvance: parseInt(c.xadvance, 10),
-              }
+            for (let i = 0; i < charNodes.length; i++) {
+              const ch = charNodes[i]
+              const charId = Number(ch.id)
+              const x = Number(ch.x)
+              const y = Number(ch.y)
+              const width = Number(ch.width)
+              const height = Number(ch.height)
+              const xoffset = Number(ch.xoffset)
+              const yoffset = Number(ch.yoffset)
+              const xadvance = Number(ch.xadvance)
+
+              chars[charId] = { x, y, width, height, xoffset, yoffset, xadvance }
             }
 
-            const bitmapFont = { src, chars, texture, size, lineHeight }
+            const bitmapFont: BitmapFont = { src, chars, texture, size, lineHeight }
 
             this.cachedAssets.set(id, bitmapFont)
             return bitmapFont
@@ -65,7 +79,6 @@ class BitmapFontLoader extends Loader<BitmapFont> {
         } else {
           textureLoader.release(id)
         }
-
       } catch (error) {
         console.error(`Failed to decode font xml: ${fnt}`, error)
         this.loadingPromises.delete(id)
