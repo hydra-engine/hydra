@@ -1,6 +1,5 @@
 import { ObjectType } from '@hydraengine/shared';
 import { LocalTransform } from '../local-transform';
-import { WorldTransform } from '../world-transform';
 export class GameObject {
     type = ObjectType.GameObject;
     #id;
@@ -8,14 +7,14 @@ export class GameObject {
     #parent;
     #children = [];
     #localTransform = new LocalTransform();
-    #worldTransform = new WorldTransform();
     alpha = 1;
-    #worldAlpha = 1;
     _rootConfig(id, stateTree) {
         this.#id = id;
         this.#stateTree = stateTree;
-        this.#worldTransform.x = 0;
-        this.#worldTransform.y = 0;
+        stateTree.setWorldScaleX(id, 1);
+        stateTree.setWorldScaleY(id, 1);
+        stateTree.setWorldCos(id, 1);
+        stateTree.setWorldAlpha(id, 1);
     }
     constructor(options) {
         if (options) {
@@ -33,7 +32,6 @@ export class GameObject {
         this.#id = id;
         this.#stateTree = stateTree;
         this.#localTransform.setStateTree(id, stateTree);
-        this.#worldTransform.setStateTree(id, stateTree);
         for (const child of this.#children) {
             child.attachToStateTree(id, stateTree);
         }
@@ -45,7 +43,6 @@ export class GameObject {
         this.#id = undefined;
         this.#stateTree = undefined;
         this.#localTransform.clearStateTree();
-        this.#worldTransform.clearStateTree();
     }
     add(...children) {
         for (const child of children) {
@@ -78,23 +75,6 @@ export class GameObject {
     update(dt) {
         for (const child of this.#children) {
             child.update(dt);
-        }
-    }
-    updateWorldTransform() {
-        if (this.#parent) {
-            this.#worldTransform.update(this.#parent.#worldTransform, this.#localTransform);
-            this.#worldAlpha = this.#parent.#worldAlpha * this.alpha;
-            const id = this.#id;
-            const tree = this.#stateTree;
-            if (id !== undefined && tree) {
-                tree.setWorldAlpha(id, this.#worldAlpha);
-            }
-        }
-        for (const child of this.#children) {
-            if (child.type !== ObjectType.PhysicsWorld &&
-                child.type !== ObjectType.PhysicsObject) {
-                child.updateWorldTransform();
-            }
         }
     }
     set x(v) { this.#localTransform.x = v; }

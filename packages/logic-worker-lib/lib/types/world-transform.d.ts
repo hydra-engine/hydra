@@ -1,5 +1,4 @@
 import { ObjectStateTree } from '@hydraengine/shared';
-import { LocalTransform } from './local-transform';
 export declare class WorldTransform {
     #private;
     cos: number;
@@ -14,7 +13,6 @@ export declare class WorldTransform {
     set scaleY(v: number);
     get rotation(): number;
     set rotation(v: number);
-    update(parent: WorldTransform, local: LocalTransform): void;
     setStateTree(id: number, tree: ObjectStateTree): void;
     clearStateTree(): void;
 }

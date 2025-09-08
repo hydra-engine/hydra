@@ -14,6 +14,7 @@ setStyle(fpsDisplayContainer, { position: 'absolute', top: '0', left: '0', displ
 document.body.appendChild(fpsDisplayContainer)
 
 const logicWorkerFpsDisplay = debugMode ? new FpsDisplay(fpsDisplayContainer, 'Logic') : undefined
+const transformWorkerFpsDisplay = debugMode ? new FpsDisplay(fpsDisplayContainer, 'Transform') : undefined
 const renderWorkerFpsDisplay = debugMode ? new FpsDisplay(fpsDisplayContainer, 'Render') : undefined
 
 const logicWorker = new Worker('logic-worker.js')
@@ -22,6 +23,15 @@ logicWorker.onmessage = (event) => {
 
   if (logicWorkerFpsDisplay && type === 'fps') {
     logicWorkerFpsDisplay.fps = event.data.value
+  }
+}
+
+const transformWorker = new Worker('transform-worker.js')
+transformWorker.onmessage = (event) => {
+  const type = event.data.type
+
+  if (transformWorkerFpsDisplay && type === 'fps') {
+    transformWorkerFpsDisplay.fps = event.data.value
   }
 }
 
@@ -44,6 +54,7 @@ await preloader.preload()
 
 const sab = createObjectStateBuffer()
 logicWorker.postMessage({ type: 'init', sab })
+transformWorker.postMessage({ type: 'init', sab })
 renderWorker.postMessage({
   type: 'init',
   offscreenCanvas,
@@ -79,6 +90,7 @@ window.addEventListener('resize', () => updateCanvasSize(window.innerWidth, wind
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {
     logicWorker.postMessage({ type: 'setFpsCap', fps })
+    transformWorker.postMessage({ type: 'setFpsCap', fps })
     renderWorker.postMessage({ type: 'setFpsCap', fps })
   }
 

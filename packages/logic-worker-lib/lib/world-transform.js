@@ -69,21 +69,6 @@ export class WorldTransform {
             }
         }
     }
-    update(parent, local) {
-        const rx = local.x * parent.scaleX;
-        const ry = local.y * parent.scaleY;
-        const pCos = parent.cos;
-        const pSin = parent.sin;
-        this.scaleX = parent.scaleX * local.scaleX;
-        this.scaleY = parent.scaleY * local.scaleY;
-        const pivotX = local.pivotX * this.scaleX;
-        const pivotY = local.pivotY * this.scaleY;
-        const cos = local.cos;
-        const sin = local.sin;
-        this.x = parent.x + (rx * pCos - ry * pSin) - (pivotX * cos - pivotY * sin);
-        this.y = parent.y + (rx * pSin + ry * pCos) - (pivotX * sin + pivotY * cos);
-        this.rotation = parent.rotation + local.rotation;
-    }
     setStateTree(id, tree) {
         this.#id = id;
         this.#stateTree = tree;

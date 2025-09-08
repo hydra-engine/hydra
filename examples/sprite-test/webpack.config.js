@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     'bundle': './index.ts',
     'logic-worker': './logic-worker/index.ts',
+    'transform-worker': './transform-worker/index.ts',
     'render-worker': './render-worker/index.ts',
   },
   output: {

@@ -6,7 +6,6 @@ export class SabTreeNodeIdPool {
 
   constructor(sab: SharedArrayBuffer, byteOffset: number, cap: number) {
     this.#q = new SabUint32Queue(sab, byteOffset, cap - 1)
-    for (let id = 1; id < cap; id++) this.#q.enqueue(id)
   }
 
   static bytesRequired(cap: number) { return SabUint32Queue.bytesRequired(cap - 1) }

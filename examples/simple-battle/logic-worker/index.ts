@@ -1,7 +1,5 @@
-import { AnimatedSpriteObject, RootObject, SpriteObject } from '@hydraengine/logic-worker-lib'
+import { RootObject } from '@hydraengine/logic-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
-import { AnimationState } from '../shared/animations'
-import { AssetId } from '../shared/assets'
 
 enableDebug()
 
@@ -17,7 +15,6 @@ function init(tree: ObjectStateTree) {
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
     root.update(dt)
-    root.updateWorldTransform()
   })
 
   if (debugMode) setInterval(() => {

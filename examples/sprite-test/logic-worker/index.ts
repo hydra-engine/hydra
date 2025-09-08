@@ -30,7 +30,6 @@ function init(tree: ObjectStateTree) {
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
     root.update(dt)
-    root.updateWorldTransform()
   })
 
   if (debugMode) setInterval(() => {
