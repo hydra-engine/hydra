@@ -1,4 +1,4 @@
-import { loadAsset, Renderer } from '@hydraengine/render-worker-lib'
+import { loadGraphicAsset, Renderer } from '@hydraengine/render-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
@@ -9,15 +9,19 @@ let ticker: Ticker
 let renderer: Renderer
 let lastFps = 0
 
-async function loadAssets(assets: number[]) {
+async function loadGraphicAssets(assets: number[]) {
   for (const asset of assets) {
-    await loadAsset(asset, assetSources[asset])
-    postMessage({ type: 'assetLoaded', id: asset })
+    await loadGraphicAsset(asset, assetSources[asset])
+    postMessage({ type: 'graphicAssetLoaded', id: asset })
   }
 }
 
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
-  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, stateTree)
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
+    logicalWidth: 800,
+    logicalHeight: 600,
+    backgroundColor: '#304C79'
+  })
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
     renderer.render()
@@ -31,7 +35,7 @@ function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateT
 onmessage = async ({ data }) => {
   const type = data.type
 
-  if (type === 'loadAssets') loadAssets(data.assets)
+  if (type === 'loadGraphicAssets') loadGraphicAssets(data.assets)
   if (type === 'init') init(data.offscreenCanvas, data.devicePixelRatio, new ObjectStateTree(data.sab))
   if (type === 'setFpsCap') ticker.setFpsCap(data.fps)
   if (type === 'resize') renderer.resize(data.containerWidth, data.containerHeight)

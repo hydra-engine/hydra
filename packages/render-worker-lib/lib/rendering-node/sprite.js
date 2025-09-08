@@ -3,10 +3,12 @@ import { textureLoader } from '../loaders/texture';
 import { RenderableNode } from './renderable';
 export class SpriteNode extends RenderableNode {
     #assetId;
+    #src;
     #sprite;
-    constructor(assetId) {
+    constructor(assetId, src) {
         super();
         this.#assetId = assetId;
+        this.#src = src;
         this.#load();
     }
     async #load() {
@@ -15,8 +17,8 @@ export class SpriteNode extends RenderableNode {
             texture = textureLoader.getCached(this.#assetId);
         }
         else {
-            console.info(`Texture not preloaded. Loading now: ${this.#assetId}`);
-            texture = await textureLoader.load(this.#assetId);
+            console.info(`Texture not preloaded. Loading now: ${this.#src}`);
+            texture = await textureLoader.load(this.#assetId, this.#src);
         }
         this.#sprite?.destroy();
         this.#sprite = undefined;

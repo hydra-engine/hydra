@@ -1,14 +1,10 @@
-import { Atlas } from '@hydraengine/shared'
+import { AssetSource } from '@hydraengine/shared'
 import { binaryLoader } from './loaders/binary'
 import { bitmapFontLoader } from './loaders/bitmap-font'
 import { Loader } from './loaders/loader'
 import { spritesheetLoader } from './loaders/spritesheet'
 import { textLoader } from './loaders/text'
 import { textureLoader } from './loaders/texture'
-
-export type AssetSource = string
-  | { src: string; atlas: Atlas }
-  | { fnt: string; src: string }
 
 const loaderForPathMap: Array<{ check: (path: string) => boolean, loader: Loader<any> }> = [
   { check: (p) => p.endsWith('.json') || p.endsWith('.atlas'), loader: textLoader },
@@ -22,11 +18,11 @@ function getLoaderForPath(path: string): Loader<any> | undefined {
 
 const idToLoaderMap = new Map<number, Loader<any>>()
 
-export async function loadAsset(id: number, asset: AssetSource): Promise<void> {
+export async function loadGraphicAsset(id: number, asset: AssetSource): Promise<void> {
   if (typeof asset === 'string') {
     const loader = getLoaderForPath(asset)
     if (!loader) {
-      console.warn(`No loader found for asset: ${asset}`)
+      console.warn(`No loader found for graphic asset: ${asset}`)
       return
     }
     idToLoaderMap.set(id, loader)
@@ -42,10 +38,10 @@ export async function loadAsset(id: number, asset: AssetSource): Promise<void> {
   }
 }
 
-export function releaseAsset(id: number): void {
+export function releaseGraphicAsset(id: number): void {
   const loader = idToLoaderMap.get(id)
   if (!loader) {
-    console.warn(`No loader found for asset ID: ${id}`)
+    console.warn(`No loader found for graphic asset ID: ${id}`)
     return
   }
   loader.release(id)

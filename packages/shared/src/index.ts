@@ -1,3 +1,4 @@
+export { AssetSource } from './asset'
 export { Atlas } from './atlas'
 export { debugMode, enableDebug } from './debug'
 export { ObjectStateTree } from './object-state-tree'

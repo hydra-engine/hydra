@@ -30,6 +30,10 @@ class TextureLoader extends Loader<Texture> {
     this.loadingPromises.set(id, loadingPromise)
     return await loadingPromise
   }
+
+  override async load(id: number, src: string) {
+    return await super.load(id, src)
+  }
 }
 
 export const textureLoader = new TextureLoader()

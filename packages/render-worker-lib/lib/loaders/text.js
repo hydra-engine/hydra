@@ -22,6 +22,9 @@ class TextLoader extends Loader {
         this.loadingPromises.set(id, loadingPromise);
         return await loadingPromise;
     }
+    async load(id, src) {
+        return await super.load(id, src);
+    }
 }
 export const textLoader = new TextLoader();
 //# sourceMappingURL=text.js.map

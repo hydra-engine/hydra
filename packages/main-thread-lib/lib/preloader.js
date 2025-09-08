@@ -1,3 +1,35 @@
+import { audioLoader } from './loaders/audio';
+import { fontFamilyLoader } from './loaders/font';
+const loaderForPathMap = [
+    { check: (p) => /\.(mp3|wav|ogg)$/.test(p), loader: audioLoader },
+    { check: (p) => !p.includes('.'), loader: fontFamilyLoader }
+];
+function getLoaderForPath(path) {
+    return loaderForPathMap.find(({ check }) => check(path))?.loader;
+}
+const idToLoaderMap = new Map();
+async function loadAsset(id, asset) {
+    if (typeof asset === 'string') {
+        const loader = getLoaderForPath(asset);
+        if (!loader) {
+            console.warn(`No loader found for graphic asset: ${asset}`);
+            return;
+        }
+        idToLoaderMap.set(id, loader);
+        await loader.load(id, asset);
+    }
+    else {
+        console.warn(`Unknown asset type: ${asset}`);
+    }
+}
+function releaseAsset(id) {
+    const loader = idToLoaderMap.get(id);
+    if (!loader) {
+        console.warn(`No loader found for graphic asset ID: ${id}`);
+        return;
+    }
+    loader.release(id);
+}
 export class Preloader {
     #assetIds;
     #progressCallback;

@@ -4,11 +4,13 @@ import { RenderableNode } from './renderable'
 
 export class SpriteNode extends RenderableNode {
   #assetId: number
+  #src: string
   #sprite?: PixiSprite
 
-  constructor(assetId: number) {
+  constructor(assetId: number, src: string) {
     super()
     this.#assetId = assetId
+    this.#src = src
     this.#load()
   }
 
@@ -17,8 +19,8 @@ export class SpriteNode extends RenderableNode {
     if (textureLoader.checkCached(this.#assetId)) {
       texture = textureLoader.getCached(this.#assetId)
     } else {
-      console.info(`Texture not preloaded. Loading now: ${this.#assetId}`)
-      texture = await textureLoader.load(this.#assetId)
+      console.info(`Texture not preloaded. Loading now: ${this.#src}`)
+      texture = await textureLoader.load(this.#assetId, this.#src)
     }
 
     this.#sprite?.destroy()

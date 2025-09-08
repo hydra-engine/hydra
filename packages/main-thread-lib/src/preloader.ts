@@ -1,3 +1,42 @@
+import { AssetSource } from '@hydraengine/shared'
+import { audioLoader } from './loaders/audio'
+import { fontFamilyLoader } from './loaders/font'
+import { Loader } from './loaders/loader'
+
+const loaderForPathMap: Array<{ check: (path: string) => boolean, loader: Loader<any> }> = [
+  { check: (p) => /\.(mp3|wav|ogg)$/.test(p), loader: audioLoader },
+  { check: (p) => !p.includes('.'), loader: fontFamilyLoader }
+]
+
+function getLoaderForPath(path: string): Loader<any> | undefined {
+  return loaderForPathMap.find(({ check }) => check(path))?.loader
+}
+
+const idToLoaderMap = new Map<number, Loader<any>>()
+
+async function loadAsset(id: number, asset: AssetSource): Promise<void> {
+  if (typeof asset === 'string') {
+    const loader = getLoaderForPath(asset)
+    if (!loader) {
+      console.warn(`No loader found for graphic asset: ${asset}`)
+      return
+    }
+    idToLoaderMap.set(id, loader)
+    await loader.load(id, asset)
+  } else {
+    console.warn(`Unknown asset type: ${asset}`)
+  }
+}
+
+function releaseAsset(id: number): void {
+  const loader = idToLoaderMap.get(id)
+  if (!loader) {
+    console.warn(`No loader found for graphic asset ID: ${id}`)
+    return
+  }
+  loader.release(id)
+}
+
 export class Preloader {
   #assetIds: number[]
   #progressCallback?: (progress: number) => void

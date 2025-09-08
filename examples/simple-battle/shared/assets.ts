@@ -1,4 +1,4 @@
-import { AssetSource } from '@hydraengine/render-worker-lib'
+import { AssetSource } from '@hydraengine/shared'
 import heroAtlas from '../assets/spritesheets/hero-atlas.json'
 import orcAtlas from '../assets/spritesheets/orc-atlas.json'
 import potionAtlas from '../assets/spritesheets/potion-atlas.json'

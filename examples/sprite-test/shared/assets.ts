@@ -1,4 +1,4 @@
-import { AssetSource } from '@hydraengine/render-worker-lib'
+import { AssetSource } from '@hydraengine/shared'
 
 export enum AssetId {
   Bird,

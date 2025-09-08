@@ -3,12 +3,16 @@ import { spritesheetLoader } from '../loaders/spritesheet';
 import { RenderableNode } from './renderable';
 export class AnimatedSpriteNode extends RenderableNode {
     #assetId;
+    #src;
+    #atlas;
     #animation;
     #data;
     #sprite;
-    constructor(assetId, animation) {
+    constructor(assetId, src, atlas, animation) {
         super();
         this.#assetId = assetId;
+        this.#src = src;
+        this.#atlas = atlas;
         this.#animation = animation;
         this.#load();
     }
@@ -17,8 +21,8 @@ export class AnimatedSpriteNode extends RenderableNode {
             this.#data = spritesheetLoader.getCached(this.#assetId);
         }
         else {
-            console.info(`Spritesheet not preloaded. Loading now: ${this.#assetId}`);
-            this.#data = await spritesheetLoader.load(this.#assetId);
+            console.info(`Spritesheet not preloaded. Loading now: ${this.#src}`);
+            this.#data = await spritesheetLoader.load(this.#assetId, this.#src, this.#atlas);
         }
         this.#updateAnimation();
     }

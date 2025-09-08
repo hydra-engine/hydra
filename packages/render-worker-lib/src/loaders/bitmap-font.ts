@@ -92,6 +92,10 @@ class BitmapFontLoader extends Loader<BitmapFont> {
   protected override cleanup(id: number) {
     textureLoader.release(id)
   }
+
+  override async load(id: number, fnt: string, src: string) {
+    return await super.load(id, fnt, src)
+  }
 }
 
 export const bitmapFontLoader = new BitmapFontLoader()

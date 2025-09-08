@@ -5,6 +5,7 @@ import { AssetId } from './shared/assets'
 enableDebug()
 
 const canvas = document.createElement('canvas')
+setStyle(canvas, { position: 'absolute', top: '0', left: '0' })
 document.body.appendChild(canvas)
 const offscreenCanvas = canvas.transferControlToOffscreen()
 
@@ -28,7 +29,7 @@ const renderWorker = new Worker('render-worker.js')
 renderWorker.onmessage = (event) => {
   const type = event.data.type
 
-  if (type === 'assetLoaded') {
+  if (type === 'graphicAssetLoaded') {
     preloader.markLoaded(event.data.id)
   }
 
@@ -38,7 +39,7 @@ renderWorker.onmessage = (event) => {
 }
 
 const preloader = new Preloader([AssetId.Bird, AssetId.Fire])
-renderWorker.postMessage({ type: 'loadAssets', assets: [AssetId.Bird, AssetId.Fire] })
+renderWorker.postMessage({ type: 'loadGraphicAssets', assets: [AssetId.Bird, AssetId.Fire] })
 await preloader.preload()
 
 const sab = createObjectStateBuffer()
@@ -51,10 +52,24 @@ renderWorker.postMessage({
 }, [offscreenCanvas])
 
 function updateCanvasSize(containerWidth: number, containerHeight: number) {
+  const canvasWidth = 800
+  const canvasHeight = 600
+
+  const S = Math.min(containerWidth / canvasWidth, containerHeight / canvasHeight)
+
+  const displayWidth = canvasWidth * S
+  const displayHeight = canvasHeight * S
+
+  const canvasLeft = (containerWidth - displayWidth) / 2
+  const canvasTop = (containerHeight - displayHeight) / 2
+
   setStyle(canvas, {
-    width: `${containerWidth}px`,
-    height: `${containerHeight}px`,
+    width: `${displayWidth}px`,
+    height: `${displayHeight}px`,
+    left: `${canvasLeft}px`,
+    top: `${canvasTop}px`,
   })
+
   renderWorker.postMessage({ type: 'resize', containerWidth, containerHeight })
 }
 

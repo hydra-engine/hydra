@@ -1,17 +1,22 @@
+import { Atlas } from '@hydraengine/shared'
 import { AnimatedSprite as PixiAnimatedSprite } from 'pixi.js'
 import { SpritesheetData, spritesheetLoader } from '../loaders/spritesheet'
 import { RenderableNode } from './renderable'
 
 export class AnimatedSpriteNode extends RenderableNode {
   #assetId: number
+  #src: string
+  #atlas: Atlas
   #animation: string
 
   #data?: SpritesheetData
   #sprite?: PixiAnimatedSprite
 
-  constructor(assetId: number, animation: string) {
+  constructor(assetId: number, src: string, atlas: Atlas, animation: string) {
     super()
     this.#assetId = assetId
+    this.#src = src
+    this.#atlas = atlas
     this.#animation = animation
     this.#load()
   }
@@ -20,8 +25,8 @@ export class AnimatedSpriteNode extends RenderableNode {
     if (spritesheetLoader.checkCached(this.#assetId)) {
       this.#data = spritesheetLoader.getCached(this.#assetId)
     } else {
-      console.info(`Spritesheet not preloaded. Loading now: ${this.#assetId}`)
-      this.#data = await spritesheetLoader.load(this.#assetId)
+      console.info(`Spritesheet not preloaded. Loading now: ${this.#src}`)
+      this.#data = await spritesheetLoader.load(this.#assetId, this.#src, this.#atlas)
     }
 
     this.#updateAnimation()

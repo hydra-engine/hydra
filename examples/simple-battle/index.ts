@@ -38,7 +38,7 @@ const renderWorker = new Worker('render-worker.js')
 renderWorker.onmessage = (event) => {
   const type = event.data.type
 
-  if (type === 'assetLoaded') {
+  if (type === 'graphicAssetLoaded') {
     preloader.markLoaded(event.data.id)
   }
 
@@ -71,7 +71,7 @@ const preloader = new Preloader([
 ])
 
 renderWorker.postMessage({
-  type: 'loadAssets',
+  type: 'loadGraphicAssets',
   assets: [
     AssetId.SPRITE_HERO,
     AssetId.SPRITE_ORC,

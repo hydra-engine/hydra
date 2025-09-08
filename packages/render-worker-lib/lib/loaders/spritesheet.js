@@ -42,6 +42,9 @@ class SpritesheetLoader extends Loader {
         pixiSpritesheet.destroy();
         textureLoader.release(id);
     }
+    async load(id, src, atlas) {
+        return await super.load(id, src, atlas);
+    }
 }
 export const spritesheetLoader = new SpritesheetLoader();
 //# sourceMappingURL=spritesheet.js.map

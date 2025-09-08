@@ -1,4 +1,4 @@
-import { ObjectStateTree, ObjectType, ROOT_ID } from '@hydraengine/shared'
+import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT_ID } from '@hydraengine/shared'
 import { AutoDetectOptions, ColorSource, Container, DOMAdapter, Renderer as PixiRenderer, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js'
 import { Camera } from './camera'
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite'
@@ -19,6 +19,7 @@ export class Renderer {
   readonly #offscreenCanvas: OffscreenCanvas
   readonly #devicePixelRatio: number
   readonly #animationNames: Record<number, string>
+  readonly #assetSources: Record<number, AssetSource>
   readonly #stateTree: ObjectStateTree
 
   readonly #logicalWidth?: number
@@ -45,12 +46,14 @@ export class Renderer {
     readonly offscreenCanvas: OffscreenCanvas,
     readonly devicePixelRatio: number,
     readonly animationNames: Record<number, string>,
+    readonly assetSources: Record<number, AssetSource>,
     readonly stateTree: ObjectStateTree,
     readonly options?: RendererOptions,
   ) {
     this.#offscreenCanvas = offscreenCanvas
     this.#devicePixelRatio = devicePixelRatio
     this.#animationNames = animationNames
+    this.#assetSources = assetSources
     this.#stateTree = stateTree
 
     if (options) {
@@ -128,11 +131,12 @@ export class Renderer {
       if (!node) {
         if (objectType === ObjectType.Sprite) {
           const assetId = tree.getAssetId(id)
-          node = new SpriteNode(assetId)
+          node = new SpriteNode(assetId, this.#assetSources[assetId] as string)
         } else if (objectType === ObjectType.AnimatedSprite) {
           const assetId = tree.getAssetId(id)
           const animation = this.#animationNames[tree.getAnimationId(id)]
-          node = new AnimatedSpriteNode(assetId, animation)
+          const source = this.#assetSources[assetId] as { src: string; atlas: Atlas }
+          node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation)
         } else {
           node = new RenderableNode()
         }

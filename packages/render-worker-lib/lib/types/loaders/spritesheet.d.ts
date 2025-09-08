@@ -17,6 +17,7 @@ declare class SpritesheetLoader extends Loader<SpritesheetData> {
         }>;
     } | undefined>;
     protected cleanup(id: number, { pixiSpritesheet }: SpritesheetData): void;
+    load(id: number, src: string, atlas: Atlas): Promise<SpritesheetData | undefined>;
 }
 export declare const spritesheetLoader: SpritesheetLoader;
 export {};

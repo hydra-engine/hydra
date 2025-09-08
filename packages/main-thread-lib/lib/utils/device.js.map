@@ -1,0 +1,1 @@
+{"version":3,"file":"device.js","sourceRoot":"","sources":["../../src/utils/device.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,QAAQ,GAAG,2BAA2B,CAAC,IAAI,CAAC,SAAS,CAAC,SAAS,CAAC,CAAA","sourcesContent":["export const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)\n"]}

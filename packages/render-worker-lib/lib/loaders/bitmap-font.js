@@ -76,6 +76,9 @@ class BitmapFontLoader extends Loader {
     cleanup(id) {
         textureLoader.release(id);
     }
+    async load(id, fnt, src) {
+        return await super.load(id, fnt, src);
+    }
 }
 export const bitmapFontLoader = new BitmapFontLoader();
 //# sourceMappingURL=bitmap-font.js.map

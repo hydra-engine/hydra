@@ -52,6 +52,10 @@ class SpritesheetLoader extends Loader<SpritesheetData> {
     pixiSpritesheet.destroy()
     textureLoader.release(id)
   }
+
+  override async load(id: number, src: string, atlas: Atlas) {
+    return await super.load(id, src, atlas)
+  }
 }
 
 export const spritesheetLoader = new SpritesheetLoader()

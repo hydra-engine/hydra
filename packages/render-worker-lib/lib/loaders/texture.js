@@ -26,6 +26,9 @@ class TextureLoader extends Loader {
         this.loadingPromises.set(id, loadingPromise);
         return await loadingPromise;
     }
+    async load(id, src) {
+        return await super.load(id, src);
+    }
 }
 export const textureLoader = new TextureLoader();
 //# sourceMappingURL=texture.js.map

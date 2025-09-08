@@ -23,6 +23,9 @@ class BinaryLoader extends Loader {
         this.loadingPromises.set(id, loadingPromise);
         return await loadingPromise;
     }
+    async load(id, src) {
+        return await super.load(id, src);
+    }
 }
 export const binaryLoader = new BinaryLoader();
 //# sourceMappingURL=binary.js.map

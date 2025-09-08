@@ -9,11 +9,13 @@ export class Renderer {
     offscreenCanvas;
     devicePixelRatio;
     animationNames;
+    assetSources;
     stateTree;
     options;
     #offscreenCanvas;
     #devicePixelRatio;
     #animationNames;
+    #assetSources;
     #stateTree;
     #logicalWidth;
     #logicalHeight;
@@ -32,15 +34,17 @@ export class Renderer {
     viewportScale = 1;
     centerX = 0;
     centerY = 0;
-    constructor(offscreenCanvas, devicePixelRatio, animationNames, stateTree, options) {
+    constructor(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, options) {
         this.offscreenCanvas = offscreenCanvas;
         this.devicePixelRatio = devicePixelRatio;
         this.animationNames = animationNames;
+        this.assetSources = assetSources;
         this.stateTree = stateTree;
         this.options = options;
         this.#offscreenCanvas = offscreenCanvas;
         this.#devicePixelRatio = devicePixelRatio;
         this.#animationNames = animationNames;
+        this.#assetSources = assetSources;
         this.#stateTree = stateTree;
         if (options) {
             this.#logicalWidth = options.logicalWidth;
@@ -104,12 +108,13 @@ export class Renderer {
             if (!node) {
                 if (objectType === ObjectType.Sprite) {
                     const assetId = tree.getAssetId(id);
-                    node = new SpriteNode(assetId);
+                    node = new SpriteNode(assetId, this.#assetSources[assetId]);
                 }
                 else if (objectType === ObjectType.AnimatedSprite) {
                     const assetId = tree.getAssetId(id);
                     const animation = this.#animationNames[tree.getAnimationId(id)];
-                    node = new AnimatedSpriteNode(assetId, animation);
+                    const source = this.#assetSources[assetId];
+                    node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation);
                 }
                 else {
                     node = new RenderableNode();
