@@ -1,10 +1,13 @@
 import { loadAsset, Renderer } from '@hydraengine/render-worker-lib'
-import { ObjectStateTree, Ticker } from '@hydraengine/shared'
+import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
 
+enableDebug()
+
 let ticker: Ticker
 let renderer: Renderer
+let lastFps = 0
 
 async function loadAssets(assets: number[]) {
   for (const asset of assets) {
@@ -15,7 +18,14 @@ async function loadAssets(assets: number[]) {
 
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
   renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, stateTree)
-  ticker = new Ticker(() => renderer.render())
+  ticker = new Ticker((dt) => {
+    lastFps = 1 / dt
+    renderer.render()
+  })
+
+  if (debugMode) setInterval(() => {
+    postMessage({ type: 'fps', value: lastFps })
+  }, 1000)
 }
 
 onmessage = async ({ data }) => {

@@ -7,7 +7,6 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/matter-js": "^0.20.0",
-    "@types/stats.js": "^0.17.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"

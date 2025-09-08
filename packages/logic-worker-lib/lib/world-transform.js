@@ -16,7 +16,6 @@ export class WorldTransform {
             const tree = this.#stateTree;
             if (tree && id !== undefined) {
                 tree.setWorldX(id, v);
-                tree.setWorldXDirty(id, true);
             }
         }
     }
@@ -28,7 +27,6 @@ export class WorldTransform {
             const tree = this.#stateTree;
             if (tree && id !== undefined) {
                 tree.setWorldY(id, v);
-                tree.setWorldYDirty(id, true);
             }
         }
     }
@@ -40,7 +38,6 @@ export class WorldTransform {
             const tree = this.#stateTree;
             if (tree && id !== undefined) {
                 tree.setWorldScaleX(id, v);
-                tree.setWorldScaleXDirty(id, true);
             }
         }
     }
@@ -52,7 +49,6 @@ export class WorldTransform {
             const tree = this.#stateTree;
             if (tree && id !== undefined) {
                 tree.setWorldScaleY(id, v);
-                tree.setWorldScaleYDirty(id, true);
             }
         }
     }
@@ -68,7 +64,6 @@ export class WorldTransform {
             const tree = this.#stateTree;
             if (tree && id !== undefined) {
                 tree.setWorldRotation(id, v);
-                tree.setWorldRotationDirty(id, true);
                 tree.setWorldCos(id, cos);
                 tree.setWorldSin(id, sin);
             }
@@ -93,15 +88,10 @@ export class WorldTransform {
         this.#id = id;
         this.#stateTree = tree;
         tree.setWorldX(id, this.#x);
-        tree.setWorldXDirty(id, true);
         tree.setWorldY(id, this.#y);
-        tree.setWorldYDirty(id, true);
         tree.setWorldScaleX(id, this.#scaleX);
-        tree.setWorldScaleXDirty(id, true);
         tree.setWorldScaleY(id, this.#scaleY);
-        tree.setWorldScaleYDirty(id, true);
         tree.setWorldRotation(id, this.#rotation);
-        tree.setWorldRotationDirty(id, true);
         tree.setWorldCos(id, this.cos);
         tree.setWorldSin(id, this.sin);
     }

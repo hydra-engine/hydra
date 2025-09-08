@@ -1,10 +1,13 @@
 import { AnimatedSpriteObject, RootObject, SpriteObject } from '@hydraengine/logic-worker-lib'
-import { ObjectStateTree, Ticker } from '@hydraengine/shared'
+import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
 
+enableDebug()
+
 let ticker: Ticker
 let root: RootObject
+let lastFps = 0
 
 function init(tree: ObjectStateTree) {
   root = new RootObject(tree)
@@ -27,9 +30,14 @@ function init(tree: ObjectStateTree) {
   root.add(animatedSprite)
 
   ticker = new Ticker((dt) => {
+    lastFps = 1 / dt
     root.update(dt)
     root.updateWorldTransform()
   })
+
+  if (debugMode) setInterval(() => {
+    postMessage({ type: 'fps', value: lastFps })
+  }, 1000)
 }
 
 onmessage = (event) => {

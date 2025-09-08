@@ -110,7 +110,6 @@ export class GameObject {
       const tree = this.#stateTree
       if (id !== undefined && tree) {
         tree.setWorldAlpha(id, this.#worldAlpha)
-        tree.setWorldAlphaDirty(id, true)
       }
     }
 

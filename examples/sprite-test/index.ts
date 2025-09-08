@@ -1,17 +1,39 @@
-import { createObjectStateBuffer, Preloader, setStyle } from '@hydraengine/main-thread-lib'
+import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
+import { debugMode, enableDebug } from '@hydraengine/shared'
 import { AssetId } from './shared/assets'
+
+enableDebug()
 
 const canvas = document.createElement('canvas')
 document.body.appendChild(canvas)
 const offscreenCanvas = canvas.transferControlToOffscreen()
 
+const fpsDisplayContainer = document.createElement('div')
+setStyle(fpsDisplayContainer, { position: 'absolute', top: '0', left: '0', display: 'flex', flexDirection: 'column' })
+document.body.appendChild(fpsDisplayContainer)
+
+const logicWorkerFpsDisplay = debugMode ? new FpsDisplay(fpsDisplayContainer, 'Logic') : undefined
+const renderWorkerFpsDisplay = debugMode ? new FpsDisplay(fpsDisplayContainer, 'Render') : undefined
+
 const logicWorker = new Worker('logic-worker.js')
+logicWorker.onmessage = (event) => {
+  const type = event.data.type
+
+  if (logicWorkerFpsDisplay && type === 'fps') {
+    logicWorkerFpsDisplay.fps = event.data.value
+  }
+}
 
 const renderWorker = new Worker('render-worker.js')
 renderWorker.onmessage = (event) => {
   const type = event.data.type
+
   if (type === 'assetLoaded') {
     preloader.markLoaded(event.data.id)
+  }
+
+  if (renderWorkerFpsDisplay && type === 'fps') {
+    renderWorkerFpsDisplay.fps = event.data.value
   }
 }
 

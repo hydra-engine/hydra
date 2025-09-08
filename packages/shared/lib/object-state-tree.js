@@ -1,14 +1,8 @@
 import { SabTree } from './sab-tree/sab-tree';
 const CAPACITY = 1_000_000;
 // Boolean Indices
-const BOOLEAN_COUNT = 7;
-const WORLD_X_DIRTY_IDX = 0;
-const WORLD_Y_DIRTY_IDX = 1;
-const WORLD_SCALE_X_DIRTY_IDX = 2;
-const WORLD_SCALE_Y_DIRTY_IDX = 3;
-const WORLD_ROTATION_DIRTY_IDX = 4;
-const WORLD_ALPHA_DIRTY_IDX = 5;
-const LOOP_IDX = 6;
+const BOOLEAN_COUNT = 1;
+const LOOP_IDX = 0;
 // Uint32 Indices
 const UINT32_COUNT = 3;
 const OBJECT_TYPE_IDX = 0;
@@ -64,32 +58,20 @@ export class ObjectStateTree extends SabTree {
     getLocalAlpha(id) { return this.getFloat32(id, LOCAL_ALPHA_IDX); }
     setWorldX(id, v) { this.setFloat32(id, WORLD_X_IDX, v); }
     getWorldX(id) { return this.getFloat32(id, WORLD_X_IDX); }
-    getWorldXDirty(id) { return this.getBoolean(id, WORLD_X_DIRTY_IDX); }
-    setWorldXDirty(id, v) { this.setBoolean(id, WORLD_X_DIRTY_IDX, v); }
     setWorldY(id, v) { this.setFloat32(id, WORLD_Y_IDX, v); }
     getWorldY(id) { return this.getFloat32(id, WORLD_Y_IDX); }
-    getWorldYDirty(id) { return this.getBoolean(id, WORLD_Y_DIRTY_IDX); }
-    setWorldYDirty(id, v) { this.setBoolean(id, WORLD_Y_DIRTY_IDX, v); }
     setWorldScaleX(id, v) { this.setFloat32(id, WORLD_SCALE_X_IDX, v); }
     getWorldScaleX(id) { return this.getFloat32(id, WORLD_SCALE_X_IDX); }
-    getWorldScaleXDirty(id) { return this.getBoolean(id, WORLD_SCALE_X_DIRTY_IDX); }
-    setWorldScaleXDirty(id, v) { this.setBoolean(id, WORLD_SCALE_X_DIRTY_IDX, v); }
     setWorldScaleY(id, v) { this.setFloat32(id, WORLD_SCALE_Y_IDX, v); }
     getWorldScaleY(id) { return this.getFloat32(id, WORLD_SCALE_Y_IDX); }
-    getWorldScaleYDirty(id) { return this.getBoolean(id, WORLD_SCALE_Y_DIRTY_IDX); }
-    setWorldScaleYDirty(id, v) { this.setBoolean(id, WORLD_SCALE_Y_DIRTY_IDX, v); }
     setWorldRotation(id, v) { this.setFloat32(id, WORLD_ROTATION_IDX, v); }
     getWorldRotation(id) { return this.getFloat32(id, WORLD_ROTATION_IDX); }
-    getWorldRotationDirty(id) { return this.getBoolean(id, WORLD_ROTATION_DIRTY_IDX); }
-    setWorldRotationDirty(id, v) { this.setBoolean(id, WORLD_ROTATION_DIRTY_IDX, v); }
     setWorldCos(id, v) { this.setFloat32(id, WORLD_COS_IDX, v); }
     getWorldCos(id) { return this.getFloat32(id, WORLD_COS_IDX); }
     setWorldSin(id, v) { this.setFloat32(id, WORLD_SIN_IDX, v); }
     getWorldSin(id) { return this.getFloat32(id, WORLD_SIN_IDX); }
     setWorldAlpha(id, v) { this.setFloat32(id, WORLD_ALPHA_IDX, v); }
     getWorldAlpha(id) { return this.getFloat32(id, WORLD_ALPHA_IDX); }
-    getWorldAlphaDirty(id) { return this.getBoolean(id, WORLD_ALPHA_DIRTY_IDX); }
-    setWorldAlphaDirty(id, v) { this.setBoolean(id, WORLD_ALPHA_DIRTY_IDX, v); }
     setAssetId(id, v) { this.setUint32(id, ASSET_ID_IDX, v); }
     getAssetId(id) { return this.getUint32(id, ASSET_ID_IDX); }
     setAnimationId(id, v) { this.setUint32(id, ANIMATION_ID_IDX, v); }

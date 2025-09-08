@@ -3,14 +3,8 @@ import { SabTree } from './sab-tree/sab-tree'
 const CAPACITY = 1_000_000 as const
 
 // Boolean Indices
-const BOOLEAN_COUNT = 7 as const
-const WORLD_X_DIRTY_IDX = 0 as const
-const WORLD_Y_DIRTY_IDX = 1 as const
-const WORLD_SCALE_X_DIRTY_IDX = 2 as const
-const WORLD_SCALE_Y_DIRTY_IDX = 3 as const
-const WORLD_ROTATION_DIRTY_IDX = 4 as const
-const WORLD_ALPHA_DIRTY_IDX = 5 as const
-const LOOP_IDX = 6 as const
+const BOOLEAN_COUNT = 1 as const
+const LOOP_IDX = 0 as const
 
 // Uint32 Indices
 const UINT32_COUNT = 3 as const
@@ -85,32 +79,17 @@ export class ObjectStateTree extends SabTree {
   setWorldX(id: number, v: number) { this.setFloat32(id, WORLD_X_IDX, v) }
   getWorldX(id: number) { return this.getFloat32(id, WORLD_X_IDX) }
 
-  getWorldXDirty(id: number) { return this.getBoolean(id, WORLD_X_DIRTY_IDX) }
-  setWorldXDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_X_DIRTY_IDX, v) }
-
   setWorldY(id: number, v: number) { this.setFloat32(id, WORLD_Y_IDX, v) }
   getWorldY(id: number) { return this.getFloat32(id, WORLD_Y_IDX) }
-
-  getWorldYDirty(id: number) { return this.getBoolean(id, WORLD_Y_DIRTY_IDX) }
-  setWorldYDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_Y_DIRTY_IDX, v) }
 
   setWorldScaleX(id: number, v: number) { this.setFloat32(id, WORLD_SCALE_X_IDX, v) }
   getWorldScaleX(id: number) { return this.getFloat32(id, WORLD_SCALE_X_IDX) }
 
-  getWorldScaleXDirty(id: number) { return this.getBoolean(id, WORLD_SCALE_X_DIRTY_IDX) }
-  setWorldScaleXDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_SCALE_X_DIRTY_IDX, v) }
-
   setWorldScaleY(id: number, v: number) { this.setFloat32(id, WORLD_SCALE_Y_IDX, v) }
   getWorldScaleY(id: number) { return this.getFloat32(id, WORLD_SCALE_Y_IDX) }
 
-  getWorldScaleYDirty(id: number) { return this.getBoolean(id, WORLD_SCALE_Y_DIRTY_IDX) }
-  setWorldScaleYDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_SCALE_Y_DIRTY_IDX, v) }
-
   setWorldRotation(id: number, v: number) { this.setFloat32(id, WORLD_ROTATION_IDX, v) }
   getWorldRotation(id: number) { return this.getFloat32(id, WORLD_ROTATION_IDX) }
-
-  getWorldRotationDirty(id: number) { return this.getBoolean(id, WORLD_ROTATION_DIRTY_IDX) }
-  setWorldRotationDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_ROTATION_DIRTY_IDX, v) }
 
   setWorldCos(id: number, v: number) { this.setFloat32(id, WORLD_COS_IDX, v) }
   getWorldCos(id: number) { return this.getFloat32(id, WORLD_COS_IDX) }
@@ -120,9 +99,6 @@ export class ObjectStateTree extends SabTree {
 
   setWorldAlpha(id: number, v: number) { this.setFloat32(id, WORLD_ALPHA_IDX, v) }
   getWorldAlpha(id: number) { return this.getFloat32(id, WORLD_ALPHA_IDX) }
-
-  getWorldAlphaDirty(id: number) { return this.getBoolean(id, WORLD_ALPHA_DIRTY_IDX) }
-  setWorldAlphaDirty(id: number, v: boolean) { this.setBoolean(id, WORLD_ALPHA_DIRTY_IDX, v) }
 
   setAssetId(id: number, v: number) { this.setUint32(id, ASSET_ID_IDX, v) }
   getAssetId(id: number) { return this.getUint32(id, ASSET_ID_IDX) }

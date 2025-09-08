@@ -1,0 +1,1 @@
+{"version":3,"file":"debug.js","sourceRoot":"","sources":["../src/debug.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,IAAI,SAAS,GAAG,KAAK,CAAA;AAE5B,MAAM,UAAU,WAAW;IACzB,SAAS,GAAG,IAAI,CAAA;AAClB,CAAC","sourcesContent":["export let debugMode = false\n\nexport function enableDebug() {\n  debugMode = true\n}\n"]}
