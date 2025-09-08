@@ -1,3 +1,7 @@
-/examples/**
+/examples/sprite-test/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+/examples/simple-battle/*
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Embedder-Policy: require-corp
