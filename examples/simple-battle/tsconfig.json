@@ -18,6 +18,11 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "strict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@hydraengine/*": [
+        "../../packages/*"
+      ]
+    }
   }
 }

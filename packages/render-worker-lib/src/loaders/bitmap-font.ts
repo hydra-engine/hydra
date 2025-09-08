@@ -1,3 +1,4 @@
+import { XMLParser } from 'fast-xml-parser'
 import { BitmapFont, Char } from '../bitmap-font'
 import { Loader } from './loader'
 import { textureLoader } from './texture'
@@ -28,31 +29,32 @@ class BitmapFontLoader extends Loader<BitmapFont> {
             console.error(`Bitmap font already exists: ${fnt}`)
           } else {
 
-            const parser = new DOMParser()
-            const xmlDoc = parser.parseFromString(text, 'application/xml')
+            const parser = new XMLParser({
+              ignoreAttributes: false,
+              attributeNamePrefix: '',
+            })
+            const xml = parser.parse(text)
 
-            const infoEl = xmlDoc.getElementsByTagName('info')[0]
-            const commonEl = xmlDoc.getElementsByTagName('common')[0]
-            const charEls = xmlDoc.getElementsByTagName('char')
+            const info = xml.font?.info
+            const common = xml.font?.common
+            const charArr = xml.font?.chars?.char ?? []
 
-            const size = parseInt(infoEl.getAttribute('size') || '16', 10)
-            const lineHeight = parseInt(commonEl.getAttribute('lineHeight') || '32', 10)
+            const size = parseInt(info?.size ?? '16', 10)
+            const lineHeight = parseInt(common?.lineHeight ?? '32', 10)
 
             const chars: Record<number, Char> = {}
 
-            for (let i = 0; i < charEls.length; i++) {
-              const charEl = charEls[i]
-
-              const id = parseInt(charEl.getAttribute('id')!, 10)
-              const x = parseInt(charEl.getAttribute('x')!, 10)
-              const y = parseInt(charEl.getAttribute('y')!, 10)
-              const width = parseInt(charEl.getAttribute('width')!, 10)
-              const height = parseInt(charEl.getAttribute('height')!, 10)
-              const xoffset = parseInt(charEl.getAttribute('xoffset')!, 10)
-              const yoffset = parseInt(charEl.getAttribute('yoffset')!, 10)
-              const xadvance = parseInt(charEl.getAttribute('xadvance')!, 10)
-
-              chars[id] = { x, y, width, height, xoffset, yoffset, xadvance }
+            for (const c of charArr) {
+              const idNum = parseInt(c.id, 10)
+              chars[idNum] = {
+                x: parseInt(c.x, 10),
+                y: parseInt(c.y, 10),
+                width: parseInt(c.width, 10),
+                height: parseInt(c.height, 10),
+                xoffset: parseInt(c.xoffset, 10),
+                yoffset: parseInt(c.yoffset, 10),
+                xadvance: parseInt(c.xadvance, 10),
+              }
             }
 
             const bitmapFont = { src, chars, texture, size, lineHeight }
