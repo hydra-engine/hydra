@@ -1,7 +1,7 @@
-export { AnimatedSpriteObject } from './object/animated-sprite';
-export { GameObject } from './object/game-object';
-export { PhysicsObject } from './object/physics-object';
-export { PhysicsWorld } from './object/physics-world';
-export { RootObject } from './object/root-object';
-export { SpriteObject } from './object/sprite';
+export { GameObject } from './logic-node/core/game-object';
+export { RootObject } from './logic-node/core/root-object';
+export { AnimatedSpriteObject } from './logic-node/ext/animated-sprite';
+export { SpriteObject } from './logic-node/ext/sprite';
+export { PhysicsObject } from './logic-node/physics/physics-object';
+export { PhysicsWorld } from './logic-node/physics/physics-world';
 //# sourceMappingURL=index.js.map

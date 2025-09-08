@@ -1,7 +1,7 @@
-export { AnimatedSpriteObject, AnimatedSpriteObjectOptions } from './object/animated-sprite'
-export { GameObject, GameObjectOptions } from './object/game-object'
-export { PhysicsObject } from './object/physics-object'
-export { PhysicsWorld } from './object/physics-world'
-export { RootObject } from './object/root-object'
-export { SpriteObject, SpriteObjectOptions } from './object/sprite'
+export { GameObject, GameObjectOptions } from './logic-node/core/game-object'
+export { RootObject } from './logic-node/core/root-object'
+export { AnimatedSpriteObject, AnimatedSpriteObjectOptions } from './logic-node/ext/animated-sprite'
+export { SpriteObject, SpriteObjectOptions } from './logic-node/ext/sprite'
+export { PhysicsObject } from './logic-node/physics/physics-object'
+export { PhysicsWorld } from './logic-node/physics/physics-world'
 

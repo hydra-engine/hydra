@@ -1,5 +1,5 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
-import { LocalTransform } from '../local-transform'
+import { LocalTransform } from './local-transform'
 
 export type GameObjectOptions = {
   x?: number

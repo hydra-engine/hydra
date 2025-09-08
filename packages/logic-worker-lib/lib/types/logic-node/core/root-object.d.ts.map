@@ -1,0 +1,1 @@
+{"version":3,"file":"root-object.d.ts","sourceRoot":"","sources":["../../../../src/logic-node/core/root-object.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAW,MAAM,qBAAqB,CAAA;AAC9D,OAAO,EAAE,UAAU,EAAE,MAAM,eAAe,CAAA;AAE1C,qBAAa,UAAW,SAAQ,UAAU;gBAC5B,SAAS,EAAE,eAAe;CAIvC"}

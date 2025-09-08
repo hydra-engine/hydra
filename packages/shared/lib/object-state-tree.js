@@ -9,8 +9,6 @@ const LAYER_IDX = 1;
 // Sprite
 const ASSET_ID_IDX = 2;
 const ANIMATION_ID_IDX = 3;
-// Text
-const TEXT_ID_IDX = 2;
 // Physics
 const WORLD_ID_IDX = 2;
 const BODY_ID_IDX = 2;
@@ -85,8 +83,6 @@ export class ObjectStateTree extends SabTree {
     getAssetId(id) { return this.getUint32(id, ASSET_ID_IDX); }
     setAnimationId(id, v) { this.setUint32(id, ANIMATION_ID_IDX, v); }
     getAnimationId(id) { return this.getUint32(id, ANIMATION_ID_IDX); }
-    setTextId(id, v) { this.setUint32(id, TEXT_ID_IDX, v); }
-    getTextId(id) { return this.getUint32(id, TEXT_ID_IDX); }
     setWorldId(id, v) { this.setUint32(id, WORLD_ID_IDX, v); }
     getWorldId(id) { return this.getUint32(id, WORLD_ID_IDX); }
     setBodyId(id, v) { this.setUint32(id, BODY_ID_IDX, v); }

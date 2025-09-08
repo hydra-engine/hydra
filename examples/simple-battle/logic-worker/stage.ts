@@ -1,5 +1,7 @@
 import { PhysicsWorld } from '@hydraengine/logic-worker-lib'
 
-export class Stage extends PhysicsWorld {
+const SCORE_PER_ORC = 100
 
+export class Stage extends PhysicsWorld {
+  
 }

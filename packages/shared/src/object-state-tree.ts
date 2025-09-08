@@ -14,9 +14,6 @@ const LAYER_IDX = 1 as const
 const ASSET_ID_IDX = 2 as const
 const ANIMATION_ID_IDX = 3 as const
 
-// Text
-const TEXT_ID_IDX = 2 as const
-
 // Physics
 const WORLD_ID_IDX = 2 as const
 const BODY_ID_IDX = 2 as const
@@ -118,9 +115,6 @@ export class ObjectStateTree extends SabTree {
 
   setAnimationId(id: number, v: number) { this.setUint32(id, ANIMATION_ID_IDX, v) }
   getAnimationId(id: number) { return this.getUint32(id, ANIMATION_ID_IDX) }
-
-  setTextId(id: number, v: number) { this.setUint32(id, TEXT_ID_IDX, v) }
-  getTextId(id: number) { return this.getUint32(id, TEXT_ID_IDX) }
 
   setWorldId(id: number, v: number) { this.setUint32(id, WORLD_ID_IDX, v) }
   getWorldId(id: number) { return this.getUint32(id, WORLD_ID_IDX) }

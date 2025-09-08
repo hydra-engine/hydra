@@ -1,0 +1,1 @@
+//# sourceMappingURL=bitmap-text.d.ts.map
