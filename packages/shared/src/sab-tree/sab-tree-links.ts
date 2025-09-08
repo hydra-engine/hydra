@@ -20,7 +20,7 @@ export class SabTreeLinks {
   get byteLength() { return this.#meta.byteLength }
 
   #o(id: number) { return id * V_COUNT }
-  #parent(id: number) { return this.#meta[this.#o(id) + PARENT_IDX] }
+  parent(id: number) { return this.#meta[this.#o(id) + PARENT_IDX] }
   #first(id: number) { return this.#meta[this.#o(id) + FIRST_IDX] }
   #last(id: number) { return this.#meta[this.#o(id) + LAST_IDX] }
   #next(id: number) { return this.#meta[this.#o(id) + NEXT_IDX] }
@@ -110,7 +110,7 @@ export class SabTreeLinks {
         if (u === ROOT_ID) return
         const n = this.#next(u)
         if (n !== NONE) { u = n; break }
-        u = this.#parent(u)
+        u = this.parent(u)
       }
     }
   }

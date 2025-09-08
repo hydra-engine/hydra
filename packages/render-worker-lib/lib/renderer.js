@@ -56,6 +56,14 @@ export class Renderer {
             eventMode: 'none',
             resolution: this.#devicePixelRatio,
         };
+        if (this.#logicalWidth)
+            options.width = this.#logicalWidth;
+        if (this.#logicalHeight)
+            options.height = this.#logicalHeight;
+        if (this.#backgroundColor)
+            options.backgroundColor = this.#backgroundColor;
+        if (this.#backgroundAlpha)
+            options.backgroundAlpha = this.#backgroundAlpha;
         this.#pixiRenderer = await autoDetectRenderer(options);
     }
     #updatePosition() {

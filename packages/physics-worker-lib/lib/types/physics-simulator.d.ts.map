@@ -1,0 +1,1 @@
+{"version":3,"file":"physics-simulator.d.ts","sourceRoot":"","sources":["../../src/physics-simulator.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAA;AAIrD,qBAAa,gBAAgB;;IAOf,QAAQ,CAAC,SAAS,EAAE,eAAe;gBAA1B,SAAS,EAAE,eAAe;IAI/C,MAAM,CAAC,EAAE,EAAE,MAAM;CAQlB"}

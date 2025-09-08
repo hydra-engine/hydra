@@ -1,0 +1,1 @@
+{"version":3,"file":"physics-manager.d.ts","sourceRoot":"","sources":["../../src/physics-manager.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAA;AAIrD,qBAAa,cAAc;;IAMb,QAAQ,CAAC,SAAS,EAAE,eAAe;gBAA1B,SAAS,EAAE,eAAe;IAI/C,MAAM,CAAC,EAAE,EAAE,MAAM;CAMlB"}

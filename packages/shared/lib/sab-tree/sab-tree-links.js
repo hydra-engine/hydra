@@ -15,7 +15,7 @@ export class SabTreeLinks {
     static bytesRequired(cap) { return cap * V_COUNT * Uint32Array.BYTES_PER_ELEMENT; }
     get byteLength() { return this.#meta.byteLength; }
     #o(id) { return id * V_COUNT; }
-    #parent(id) { return this.#meta[this.#o(id) + PARENT_IDX]; }
+    parent(id) { return this.#meta[this.#o(id) + PARENT_IDX]; }
     #first(id) { return this.#meta[this.#o(id) + FIRST_IDX]; }
     #last(id) { return this.#meta[this.#o(id) + LAST_IDX]; }
     #next(id) { return this.#meta[this.#o(id) + NEXT_IDX]; }
@@ -116,7 +116,7 @@ export class SabTreeLinks {
                     u = n;
                     break;
                 }
-                u = this.#parent(u);
+                u = this.parent(u);
             }
         }
     }

@@ -1,0 +1,1 @@
+{"version":3,"file":"physics-node.js","sourceRoot":"","sources":["../../src/physics-node/physics-node.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,WAAW;IACtB,aAAa,CAAS;CACvB","sourcesContent":["export class PhysicsNode {\n  processedStep?: number\n}\n"]}

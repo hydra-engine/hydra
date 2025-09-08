@@ -4,6 +4,7 @@ export declare class SabTreeLinks {
     constructor(sab: SharedArrayBuffer, byteOffset: number, cap: number);
     static bytesRequired(cap: number): number;
     get byteLength(): number;
+    parent(id: number): number;
     remove(id: number): void;
     insert(p: number, c: number): void;
     insertAt(p: number, c: number, idx: number): void;

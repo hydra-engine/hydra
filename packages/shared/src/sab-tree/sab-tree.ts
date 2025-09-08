@@ -53,6 +53,8 @@ export class SabTree {
     return id
   }
 
+  getParent(id: number) { return this.#links.parent(id) }
+
   insertAt(p: number, c: number, idx: number) {
     this.#links.insertAt(p, c, idx)
   }
