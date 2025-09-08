@@ -3,26 +3,33 @@ import { audioLoader } from './loaders/audio'
 import { fontFamilyLoader } from './loaders/font'
 import { Loader } from './loaders/loader'
 
-const loaderForPathMap: Array<{ check: (path: string) => boolean, loader: Loader<any> }> = [
+const EXTERNAL_LOADER = Symbol('EXTERNAL_LOADER')
+
+const loaderForPathMap: Array<{ check: (path: string) => boolean, loader: Loader<any> | typeof EXTERNAL_LOADER }> = [
+  { check: (p) => p.endsWith('.json') || p.endsWith('.atlas'), loader: EXTERNAL_LOADER }, // 외부 주입
+  { check: (p) => p.endsWith('.skel'), loader: EXTERNAL_LOADER }, // 외부 주입
+  { check: (p) => /\.(png|jpe?g|gif|webp)$/.test(p), loader: EXTERNAL_LOADER }, // 외부 주입
   { check: (p) => /\.(mp3|wav|ogg)$/.test(p), loader: audioLoader },
   { check: (p) => !p.includes('.'), loader: fontFamilyLoader }
 ]
 
-function getLoaderForPath(path: string): Loader<any> | undefined {
+function getLoaderForPath(path: string): Loader<any> | typeof EXTERNAL_LOADER | undefined {
   return loaderForPathMap.find(({ check }) => check(path))?.loader
 }
 
-const idToLoaderMap = new Map<number, Loader<any>>()
+const idToLoaderMap = new Map<number, Loader<any> | typeof EXTERNAL_LOADER>()
 
 async function loadAsset(id: number, asset: AssetSource): Promise<void> {
   if (typeof asset === 'string') {
     const loader = getLoaderForPath(asset)
     if (!loader) {
-      console.warn(`No loader found for graphic asset: ${asset}`)
+      console.warn(`No loader found for asset: ${asset}`)
       return
     }
     idToLoaderMap.set(id, loader)
-    await loader.load(id, asset)
+    if (loader !== EXTERNAL_LOADER) {
+      await loader.load(id, asset)
+    }
   } else {
     console.warn(`Unknown asset type: ${asset}`)
   }
@@ -31,10 +38,12 @@ async function loadAsset(id: number, asset: AssetSource): Promise<void> {
 function releaseAsset(id: number): void {
   const loader = idToLoaderMap.get(id)
   if (!loader) {
-    console.warn(`No loader found for graphic asset ID: ${id}`)
+    console.warn(`No loader found for asset ID: ${id}`)
     return
   }
-  loader.release(id)
+  if (loader !== EXTERNAL_LOADER) {
+    loader.release(id)
+  }
 }
 
 export class Preloader {

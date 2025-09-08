@@ -17,7 +17,9 @@ async function loadGraphicAssets(assets: number[]) {
 }
 
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
-  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, stateTree)
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
+    backgroundColor: '#304C79',
+  })
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
     renderer.render()
