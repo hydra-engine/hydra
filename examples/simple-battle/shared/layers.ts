@@ -1,7 +1,4 @@
 export enum Layer {
-  HUD
-}
-
-export const layerNames = {
-  [Layer.HUD]: 'hud'
+  // 0은 기본 레이어
+  HUD = 1,
 }
