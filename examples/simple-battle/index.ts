@@ -47,7 +47,7 @@ renderWorker.onmessage = (event) => {
   }
 }
 
-const preloader = new Preloader([
+const preloader = new Preloader(assetSources, [
   AssetId.SPRITE_HERO,
   AssetId.SPRITE_ORC,
   AssetId.SPRITE_POTION,

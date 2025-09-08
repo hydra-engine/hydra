@@ -45,7 +45,7 @@ export class Preloader {
     #loadedSet = new Set();
     #resolvePreload;
     #preloadPromise;
-    constructor(assetIds, progressCallback) {
+    constructor(assetSources, assetIds, progressCallback) {
         this.#assetIds = assetIds;
         this.#progressCallback = progressCallback;
         // preload에서 사용할 Promise 미리 생성

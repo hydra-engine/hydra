@@ -1,6 +1,7 @@
+import { AssetSource } from '@hydraengine/shared';
 export declare class Preloader {
     #private;
-    constructor(assetIds: number[], progressCallback?: (progress: number) => void);
+    constructor(assetSources: Record<number, AssetSource>, assetIds: number[], progressCallback?: (progress: number) => void);
     preload(): Promise<void>;
     markLoaded(id: number): void;
 }

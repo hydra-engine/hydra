@@ -54,7 +54,11 @@ export class Preloader {
   #resolvePreload?: () => void
   #preloadPromise: Promise<void>
 
-  constructor(assetIds: number[], progressCallback?: (progress: number) => void) {
+  constructor(
+    assetSources: Record<number, AssetSource>,
+    assetIds: number[],
+    progressCallback?: (progress: number) => void,
+  ) {
     this.#assetIds = assetIds
     this.#progressCallback = progressCallback
 
