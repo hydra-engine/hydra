@@ -2,6 +2,7 @@ import { loadGraphicAsset, Renderer } from '@hydraengine/render-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
+import { Layer } from '../shared/layers'
 
 enableDebug()
 
@@ -19,6 +20,9 @@ async function loadGraphicAssets(assets: number[]) {
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
   renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
     backgroundColor: '#304C79',
+    layers: [
+      { id: Layer.HUD, drawOrder: 1 }
+    ],
   })
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
