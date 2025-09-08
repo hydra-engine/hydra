@@ -1,3 +1,4 @@
+export { Atlas } from './atlas'
 export { debugMode, enableDebug } from './debug'
 export { ObjectStateTree } from './object-state-tree'
 export { ObjectType } from './object-type'

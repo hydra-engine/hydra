@@ -1,31 +1,27 @@
-import { AnimatedSprite as PixiAnimatedSprite, Spritesheet } from 'pixi.js'
-import { spritesheetLoader } from '../loaders/spritesheet'
+import { AnimatedSprite as PixiAnimatedSprite } from 'pixi.js'
+import { SpritesheetData, spritesheetLoader } from '../loaders/spritesheet'
 import { RenderableNode } from './renderable'
 
 export class AnimatedSpriteNode extends RenderableNode {
   #assetId: number
   #animation: string
-  #fps: number
-  #loop: boolean
 
-  #sheet?: Spritesheet
+  #data?: SpritesheetData
   #sprite?: PixiAnimatedSprite
 
-  constructor(assetId: number, animation: string, fps: number, loop: boolean) {
+  constructor(assetId: number, animation: string) {
     super()
     this.#assetId = assetId
     this.#animation = animation
-    this.#fps = fps
-    this.#loop = loop
     this.#load()
   }
 
   async #load() {
     if (spritesheetLoader.checkCached(this.#assetId)) {
-      this.#sheet = spritesheetLoader.getCached(this.#assetId)
+      this.#data = spritesheetLoader.getCached(this.#assetId)
     } else {
       console.info(`Spritesheet not preloaded. Loading now: ${this.#assetId}`)
-      this.#sheet = await spritesheetLoader.load(this.#assetId)
+      this.#data = await spritesheetLoader.load(this.#assetId)
     }
 
     this.#updateAnimation()
@@ -35,16 +31,19 @@ export class AnimatedSpriteNode extends RenderableNode {
     this.#sprite?.destroy()
     this.#sprite = undefined
 
-    if (this.#sheet) {
-      if (!this.#sheet.animations[this.#animation]) {
+    const d = this.#data
+    if (d) {
+      if (!d.pixiSpritesheet.animations[this.#animation]) {
         console.error(`Animation not found: ${this.#animation}`)
         return
       }
 
-      const s = new PixiAnimatedSprite(this.#sheet.animations[this.#animation])
+      const s = new PixiAnimatedSprite(d.pixiSpritesheet.animations[this.#animation])
       s.anchor.set(0.5, 0.5)
-      s.loop = this.#loop
-      s.animationSpeed = (this.#fps ?? 0) / 60
+
+      const a = d.atlas.animations[this.#animation]
+      s.loop = a.loop ?? true
+      s.animationSpeed = a.fps / 60
       s.play()
 
       this.pixiContainer.addChild(s)

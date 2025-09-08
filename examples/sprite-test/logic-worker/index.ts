@@ -24,8 +24,6 @@ function init(tree: ObjectStateTree) {
   const animatedSprite = new AnimatedSpriteObject({
     asset: AssetId.Fire,
     animation: AnimationState.Fire,
-    fps: 12,
-    loop: true,
   })
   root.add(animatedSprite)
 

@@ -109,9 +109,7 @@ export class Renderer {
                 else if (objectType === ObjectType.AnimatedSprite) {
                     const assetId = tree.getAssetId(id);
                     const animation = this.#animationNames[tree.getAnimationId(id)];
-                    const fps = tree.getFps(id);
-                    const loop = tree.getLoop(id);
-                    node = new AnimatedSpriteNode(assetId, animation, fps, loop);
+                    node = new AnimatedSpriteNode(assetId, animation);
                 }
                 else {
                     node = new RenderableNode();

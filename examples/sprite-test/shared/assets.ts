@@ -11,15 +11,18 @@ export const assetSources: Record<number, AssetSource> = {
     src: 'assets/fire.png',
     atlas: {
       frames: {
-        fire1: { frame: { x: 0, y: 0, w: 64, h: 64 } },
-        fire2: { frame: { x: 64, y: 0, w: 64, h: 64 } },
-        fire3: { frame: { x: 128, y: 0, w: 64, h: 64 } },
-        fire4: { frame: { x: 192, y: 0, w: 64, h: 64 } },
-        fire5: { frame: { x: 256, y: 0, w: 64, h: 64 } },
+        fire1: { x: 0, y: 0, w: 64, h: 64 },
+        fire2: { x: 64, y: 0, w: 64, h: 64 },
+        fire3: { x: 128, y: 0, w: 64, h: 64 },
+        fire4: { x: 192, y: 0, w: 64, h: 64 },
+        fire5: { x: 256, y: 0, w: 64, h: 64 },
       },
-      meta: { scale: 1 },
       animations: {
-        fire: ['fire1', 'fire2', 'fire3', 'fire4', 'fire5'],
+        fire: {
+          frames: ['fire1', 'fire2', 'fire3', 'fire4', 'fire5'],
+          fps: 12,
+          loop: true,
+        },
       },
     },
   },

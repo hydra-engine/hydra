@@ -1,4 +1,4 @@
-import { Spritesheet } from 'pixi.js';
+import { Spritesheet as PixiSpritesheet } from 'pixi.js';
 import { Loader } from './loader';
 import { textureLoader } from './texture';
 class SpritesheetLoader extends Loader {
@@ -9,7 +9,15 @@ class SpritesheetLoader extends Loader {
                 console.error(`Failed to load texture: ${src}`);
                 return;
             }
-            const spritesheet = new Spritesheet(texture, atlas);
+            const frames = {};
+            for (const [key, value] of Object.entries(atlas.frames)) {
+                frames[key] = { frame: value };
+            }
+            const animations = {};
+            for (const [key, value] of Object.entries(atlas.animations)) {
+                animations[key] = value.frames;
+            }
+            const spritesheet = new PixiSpritesheet(texture, { frames, meta: { scale: 1 }, animations });
             await spritesheet.parse();
             this.loadingPromises.delete(id);
             if (this.hasActiveRef(id)) {
@@ -18,8 +26,9 @@ class SpritesheetLoader extends Loader {
                     console.error(`Spritesheet already exists: ${src}`);
                 }
                 else {
-                    this.cachedAssets.set(id, spritesheet);
-                    return spritesheet;
+                    const data = { atlas, pixiSpritesheet: spritesheet };
+                    this.cachedAssets.set(id, data);
+                    return data;
                 }
             }
             else {
@@ -29,8 +38,8 @@ class SpritesheetLoader extends Loader {
         this.loadingPromises.set(id, loadingPromise);
         return await loadingPromise;
     }
-    cleanup(id, spritesheet) {
-        spritesheet.destroy();
+    cleanup(id, { pixiSpritesheet }) {
+        pixiSpritesheet.destroy();
         textureLoader.release(id);
     }
 }

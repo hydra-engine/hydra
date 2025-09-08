@@ -5,13 +5,6 @@ const CAPACITY = 1_000_000 as const
 // ===== Boolean Indices =============================================================================
 const BOOLEAN_COUNT = 2 as const
 
-// Animation
-const LOOP_IDX = 0 as const
-
-// Physics
-const FIXED_ROTATION_IDX = 0 as const
-const IS_STATIC_IDX = 1 as const
-
 // ===== Uint32 Indices =============================================================================
 const UINT32_COUNT = 3 as const
 const OBJECT_TYPE_IDX = 0 as const
@@ -26,7 +19,7 @@ const ANIMATION_ID_IDX = 2 as const
 const BODY_ID_IDX = 1 as const
 
 // ===== Float32 Indices =============================================================================
-const FLOAT32_COUNT = 19 as const
+const FLOAT32_COUNT = 18 as const
 
 // Local Transform
 const LOCAL_X_IDX = 0 as const
@@ -49,9 +42,6 @@ const WORLD_ROTATION_IDX = 14 as const
 const WORLD_COS_IDX = 15 as const
 const WORLD_SIN_IDX = 16 as const
 const WORLD_ALPHA_IDX = 17 as const
-
-// Animation
-const FPS_IDX = 18 as const
 
 export class ObjectStateTree extends SabTree {
   constructor(sab: SharedArrayBuffer) {
@@ -122,16 +112,4 @@ export class ObjectStateTree extends SabTree {
 
   setAnimationId(id: number, v: number) { this.setUint32(id, ANIMATION_ID_IDX, v) }
   getAnimationId(id: number) { return this.getUint32(id, ANIMATION_ID_IDX) }
-
-  setFps(id: number, v: number) { this.setFloat32(id, FPS_IDX, v) }
-  getFps(id: number) { return this.getFloat32(id, FPS_IDX) }
-
-  setLoop(id: number, v: boolean) { this.setBoolean(id, LOOP_IDX, v) }
-  getLoop(id: number) { return this.getBoolean(id, LOOP_IDX) }
-
-  setFixedRotation(id: number, v: boolean) { this.setBoolean(id, FIXED_ROTATION_IDX, v) }
-  getFixedRotation(id: number) { return this.getBoolean(id, FIXED_ROTATION_IDX) }
-
-  setIsStatic(id: number, v: boolean) { this.setBoolean(id, IS_STATIC_IDX, v) }
-  getIsStatic(id: number) { return this.getBoolean(id, IS_STATIC_IDX) }
 }

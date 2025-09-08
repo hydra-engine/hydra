@@ -1,7 +1,7 @@
-import { SpritesheetData } from 'pixi.js';
+import { Atlas } from '@hydraengine/shared';
 export type AssetSource = string | {
     src: string;
-    atlas: SpritesheetData;
+    atlas: Atlas;
 } | {
     fnt: string;
     src: string;
