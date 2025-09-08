@@ -44,6 +44,8 @@ export declare class ObjectStateTree extends SabTree {
     getAssetId(id: number): number;
     setAnimationId(id: number, v: number): void;
     getAnimationId(id: number): number;
+    setWorldId(id: number, v: number): void;
+    getWorldId(id: number): number;
     setBodyId(id: number, v: number): void;
     getBodyId(id: number): number;
 }

@@ -9,13 +9,12 @@ const BOOLEAN_COUNT = 0 as const
 const UINT32_COUNT = 3 as const
 const OBJECT_TYPE_IDX = 0 as const
 
-// Sprite / Animation
+// Sprite
 const ASSET_ID_IDX = 1 as const
-
-// Animation
 const ANIMATION_ID_IDX = 2 as const
 
 // Physics
+const WORLD_ID_IDX = 1 as const
 const BODY_ID_IDX = 1 as const
 
 // ===== Float32 Indices =============================================================================
@@ -112,6 +111,9 @@ export class ObjectStateTree extends SabTree {
 
   setAnimationId(id: number, v: number) { this.setUint32(id, ANIMATION_ID_IDX, v) }
   getAnimationId(id: number) { return this.getUint32(id, ANIMATION_ID_IDX) }
+
+  setWorldId(id: number, v: number) { this.setUint32(id, WORLD_ID_IDX, v) }
+  getWorldId(id: number) { return this.getUint32(id, WORLD_ID_IDX) }
 
   setBodyId(id: number, v: number) { this.setUint32(id, BODY_ID_IDX, v) }
   getBodyId(id: number) { return this.getUint32(id, BODY_ID_IDX) }

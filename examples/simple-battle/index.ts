@@ -1,12 +1,16 @@
 import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
 import { debugMode, enableDebug } from '@hydraengine/shared'
 import { AssetId, assetSources } from './shared/assets'
+import { initUI } from './ui'
+import { Joystick } from './joystick'
 
 enableDebug()
 
 const canvas = document.createElement('canvas')
 document.body.appendChild(canvas)
 const offscreenCanvas = canvas.transferControlToOffscreen()
+
+const joystick = new Joystick(document.body)
 
 const fpsDisplayContainer = document.createElement('div')
 setStyle(fpsDisplayContainer, { position: 'absolute', top: '0', left: '0', display: 'flex', flexDirection: 'column' })
@@ -106,6 +110,7 @@ window.addEventListener('resize', () => updateCanvasSize(window.innerWidth, wind
 if (process.env.NODE_ENV === 'development') {
   function setFpsCap(fps: number | undefined) {
     logicWorker.postMessage({ type: 'setFpsCap', fps })
+    physicsWorker.postMessage({ type: 'setFpsCap', fps })
     renderWorker.postMessage({ type: 'setFpsCap', fps })
   }
 
@@ -116,3 +121,5 @@ if (process.env.NODE_ENV === 'development') {
     if (event.persisted) setFpsCap(undefined)
   })
 }
+
+initUI()
