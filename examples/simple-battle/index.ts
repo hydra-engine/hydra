@@ -1,6 +1,6 @@
 import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
 import { debugMode, enableDebug } from '@hydraengine/shared'
-import { AssetId } from './shared/assets'
+import { AssetId, assetSources } from './shared/assets'
 
 enableDebug()
 
