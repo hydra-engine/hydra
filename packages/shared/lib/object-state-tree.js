@@ -14,6 +14,8 @@ const OBJECT_TYPE_IDX = 0;
 const ASSET_ID_IDX = 1;
 // Animation
 const ANIMATION_ID_IDX = 2;
+// Physics
+const BODY_ID_IDX = 1;
 // ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 19;
 // Local Transform

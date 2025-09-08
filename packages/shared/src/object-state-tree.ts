@@ -22,6 +22,9 @@ const ASSET_ID_IDX = 1 as const
 // Animation
 const ANIMATION_ID_IDX = 2 as const
 
+// Physics
+const BODY_ID_IDX = 1 as const
+
 // ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 19 as const
 
