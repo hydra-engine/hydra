@@ -4,6 +4,7 @@ import { LocalTransform } from '../local-transform'
 export type GameObjectOptions = {
   x?: number
   y?: number
+  layer?: number
 }
 
 export class GameObject {
@@ -17,6 +18,8 @@ export class GameObject {
 
   #localTransform = new LocalTransform()
   alpha = 1
+
+  #layer = 0
 
   protected _rootConfig(id: number, stateTree: ObjectStateTree) {
     this.#id = id
@@ -32,6 +35,7 @@ export class GameObject {
     if (options) {
       if (options.x !== undefined) this.x = options.x
       if (options.y !== undefined) this.y = options.y
+      if (options.layer !== undefined) this.layer = options.layer
     }
   }
 
@@ -45,6 +49,7 @@ export class GameObject {
     this.#id = id
     this.#stateTree = stateTree
     this.#localTransform.setStateTree(id, stateTree)
+    stateTree.setLayer(id, this.#layer)
 
     for (const child of this.#children) {
       child.attachToStateTree(id, stateTree)
@@ -104,4 +109,15 @@ export class GameObject {
 
   set y(v) { this.#localTransform.y = v }
   get y() { return this.#localTransform.y }
+
+  set layer(v) {
+    if (this.#layer !== v) {
+      this.#layer = v
+
+      if (this.#id !== undefined && this.#stateTree) {
+        this.#stateTree.setLayer(this.#id, v)
+      }
+    }
+  }
+  get layer() { return this.#layer }
 }

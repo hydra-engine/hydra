@@ -2,6 +2,7 @@ import { ObjectStateTree, ObjectType } from '@hydraengine/shared';
 export type GameObjectOptions = {
     x?: number;
     y?: number;
+    layer?: number;
 };
 export declare class GameObject {
     #private;
@@ -17,5 +18,7 @@ export declare class GameObject {
     get x(): number;
     set y(v: number);
     get y(): number;
+    set layer(v: number);
+    get layer(): number;
 }
 //# sourceMappingURL=game-object.d.ts.map

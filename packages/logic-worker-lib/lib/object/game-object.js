@@ -8,6 +8,7 @@ export class GameObject {
     #children = [];
     #localTransform = new LocalTransform();
     alpha = 1;
+    #layer = 0;
     _rootConfig(id, stateTree) {
         this.#id = id;
         this.#stateTree = stateTree;
@@ -22,6 +23,8 @@ export class GameObject {
                 this.x = options.x;
             if (options.y !== undefined)
                 this.y = options.y;
+            if (options.layer !== undefined)
+                this.layer = options.layer;
         }
     }
     attachToStateTree(parentId, stateTree) {
@@ -32,6 +35,7 @@ export class GameObject {
         this.#id = id;
         this.#stateTree = stateTree;
         this.#localTransform.setStateTree(id, stateTree);
+        stateTree.setLayer(id, this.#layer);
         for (const child of this.#children) {
             child.attachToStateTree(id, stateTree);
         }
@@ -81,5 +85,14 @@ export class GameObject {
     get x() { return this.#localTransform.x; }
     set y(v) { this.#localTransform.y = v; }
     get y() { return this.#localTransform.y; }
+    set layer(v) {
+        if (this.#layer !== v) {
+            this.#layer = v;
+            if (this.#id !== undefined && this.#stateTree) {
+                this.#stateTree.setLayer(this.#id, v);
+            }
+        }
+    }
+    get layer() { return this.#layer; }
 }
 //# sourceMappingURL=game-object.js.map
