@@ -3,14 +3,17 @@ export const CAPACITY = 1_000_000;
 // ===== Boolean Indices =============================================================================
 const BOOLEAN_COUNT = 0;
 // ===== Uint32 Indices =============================================================================
-const UINT32_COUNT = 3;
+const UINT32_COUNT = 4;
 const OBJECT_TYPE_IDX = 0;
+const LAYER_IDX = 1;
 // Sprite
-const ASSET_ID_IDX = 1;
-const ANIMATION_ID_IDX = 2;
+const ASSET_ID_IDX = 2;
+const ANIMATION_ID_IDX = 3;
+// Text
+const TEXT_ID_IDX = 2;
 // Physics
-const WORLD_ID_IDX = 1;
-const BODY_ID_IDX = 1;
+const WORLD_ID_IDX = 2;
+const BODY_ID_IDX = 2;
 // ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 18;
 // Local Transform
@@ -76,10 +79,14 @@ export class ObjectStateTree extends SabTree {
     getWorldSin(id) { return this.getFloat32(id, WORLD_SIN_IDX); }
     setWorldAlpha(id, v) { this.setFloat32(id, WORLD_ALPHA_IDX, v); }
     getWorldAlpha(id) { return this.getFloat32(id, WORLD_ALPHA_IDX); }
+    setLayer(id, v) { this.setUint32(id, LAYER_IDX, v); }
+    getLayer(id) { return this.getUint32(id, LAYER_IDX); }
     setAssetId(id, v) { this.setUint32(id, ASSET_ID_IDX, v); }
     getAssetId(id) { return this.getUint32(id, ASSET_ID_IDX); }
     setAnimationId(id, v) { this.setUint32(id, ANIMATION_ID_IDX, v); }
     getAnimationId(id) { return this.getUint32(id, ANIMATION_ID_IDX); }
+    setTextId(id, v) { this.setUint32(id, TEXT_ID_IDX, v); }
+    getTextId(id) { return this.getUint32(id, TEXT_ID_IDX); }
     setWorldId(id, v) { this.setUint32(id, WORLD_ID_IDX, v); }
     getWorldId(id) { return this.getUint32(id, WORLD_ID_IDX); }
     setBodyId(id, v) { this.setUint32(id, BODY_ID_IDX, v); }
