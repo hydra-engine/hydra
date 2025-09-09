@@ -1,4 +1,4 @@
-import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
+import { createObjectStateBuffer, FpsDisplay, musicPlayer, Preloader, setStyle, sfxPlayer } from '@hydraengine/main-thread-lib'
 import { debugMode, enableDebug } from '@hydraengine/shared'
 import { Joystick } from './joystick'
 import { AssetId, assetSources } from './shared/assets'
@@ -31,7 +31,6 @@ logicWorker.onmessage = (event) => {
 
   if (type === 'changeHp') {
     changeHP(event.data.hp)
-
     if (event.data.hp <= 0) {
       showGameOver()
     }
@@ -40,6 +39,12 @@ logicWorker.onmessage = (event) => {
   if (type === 'changeScore') {
     changeScore(event.data.score)
   }
+
+  if (type === 'playMusic') musicPlayer.play(event.data.asset)
+  if (type === 'pauseMusic') musicPlayer.pause()
+  if (type === 'stopMusic') musicPlayer.stop()
+  if (type === 'playSfx') sfxPlayer.play(event.data.asset)
+  if (type === 'playSfxRandom') sfxPlayer.playRandom(...event.data.assets)
 }
 
 const physicsWorker = new Worker('physics-worker.js')
