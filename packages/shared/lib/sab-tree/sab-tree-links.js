@@ -119,86 +119,47 @@ export class SabTreeLinks {
         }
     }
     sortChildren(p, getCompValue) {
-        let n = 0;
-        let head = this.#first(p);
-        while (head !== NONE) {
-            n++;
-            head = this.#next(head);
+        // 1) p의 현재 자식들을 안전하게 수집 (사이클/오염 방지)
+        const ids = [];
+        const seen = new Set();
+        let x = this.#first(p);
+        while (x !== NONE && !seen.has(x)) {
+            // 다른 부모로 잘못 연결된 노드를 만나면 정지 (오염 구간을 더 확산시키지 않음)
+            if (this.parent(x) !== p)
+                break;
+            seen.add(x);
+            ids.push(x);
+            const nx = this.#next(x);
+            // 자기 자신을 가리키는 등 이상 링크 방지
+            if (nx === x)
+                break;
+            x = nx;
         }
-        if (n <= 1)
+        if (ids.length <= 1)
             return;
-        let runSize = 1;
-        while (runSize < n) {
-            let mergedHead = NONE;
-            let mergedTail = NONE;
-            let cur = this.#first(p);
-            while (cur !== NONE) {
-                let left = cur;
-                let i = 1;
-                while (i < runSize && this.#next(cur) !== NONE) {
-                    cur = this.#next(cur);
-                    i++;
-                }
-                let right = this.#next(cur);
-                const afterRightStart = right;
-                this.#meta[this.#o(cur) + NEXT_IDX] = NONE;
-                if (right !== NONE)
-                    this.#meta[this.#o(right) + PREV_IDX] = NONE;
-                let nextStart = afterRightStart;
-                i = 0;
-                while (i < runSize && nextStart !== NONE) {
-                    nextStart = this.#next(nextStart);
-                    i++;
-                }
-                if (nextStart !== NONE) {
-                    const prev = this.#meta[this.#o(nextStart) + PREV_IDX];
-                    if (prev !== NONE)
-                        this.#meta[this.#o(prev) + NEXT_IDX] = NONE;
-                    this.#meta[this.#o(nextStart) + PREV_IDX] = NONE;
-                }
-                cur = nextStart;
-                let merged = NONE;
-                let mergedT = NONE;
-                let a = left;
-                let b = right;
-                while (a !== NONE || b !== NONE) {
-                    let takeFromA = false;
-                    if (b === NONE)
-                        takeFromA = true;
-                    else if (a === NONE)
-                        takeFromA = false;
-                    else {
-                        const ka = getCompValue(a);
-                        const kb = getCompValue(b);
-                        takeFromA = (ka <= kb);
-                    }
-                    const id = takeFromA ? a : b;
-                    if (takeFromA)
-                        a = this.#next(a);
-                    else
-                        b = this.#next(b);
-                    const no = this.#o(id);
-                    this.#meta[no + PREV_IDX] = mergedT;
-                    this.#meta[no + NEXT_IDX] = NONE;
-                    this.#meta[no + PARENT_IDX] = p;
-                    if (merged === NONE)
-                        merged = id;
-                    else
-                        this.#meta[this.#o(mergedT) + NEXT_IDX] = id;
-                    mergedT = id;
-                }
-                if (mergedHead === NONE)
-                    mergedHead = merged;
-                else {
-                    this.#meta[this.#o(mergedTail) + NEXT_IDX] = merged;
-                    this.#meta[this.#o(merged) + PREV_IDX] = mergedTail;
-                }
-                mergedTail = mergedT;
-            }
-            const po = this.#o(p);
-            this.#meta[po + FIRST_IDX] = mergedHead;
-            this.#meta[po + LAST_IDX] = mergedTail;
-            runSize <<= 1;
+        // 2) 값/원래 인덱스를 함께 들고 안정 정렬 (엔진 안정성에 의존하지 않도록)
+        const items = ids.map((id, idx) => ({ id, k: getCompValue(id), idx }));
+        items.sort((a, b) => {
+            if (a.k < b.k)
+                return -1;
+            if (a.k > b.k)
+                return 1;
+            return a.idx - b.idx; // 같은 값이면 원래 순서 유지 (stable)
+        });
+        // 3) 링크를 깨끗하게 재구성
+        const po = this.#o(p);
+        const first = items[0].id;
+        const last = items[items.length - 1].id;
+        this.#meta[po + FIRST_IDX] = first;
+        this.#meta[po + LAST_IDX] = last;
+        for (let i = 0; i < items.length; i++) {
+            const id = items[i].id;
+            const prev = (i === 0) ? NONE : items[i - 1].id;
+            const next = (i === items.length - 1) ? NONE : items[i + 1].id;
+            const o = this.#o(id);
+            this.#meta[o + PARENT_IDX] = p;
+            this.#meta[o + PREV_IDX] = prev;
+            this.#meta[o + NEXT_IDX] = next;
         }
     }
 }
