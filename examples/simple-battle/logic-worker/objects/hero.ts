@@ -109,7 +109,7 @@ export class Hero extends Character<{
     this._sprite.animation = AnimationState.Die
     this.#cachedVelX = 0
     this.#cachedVelY = 0
-    this.disableCollisions()
+    this.body = undefined
 
     sfxPlayer.play('assets/sfx/hero/die/die.wav')
   }
