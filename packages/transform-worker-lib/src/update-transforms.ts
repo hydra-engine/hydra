@@ -1,9 +1,41 @@
 import { NONE, ObjectStateTree } from '@hydraengine/shared'
 
-export function updateTransforms(tree: ObjectStateTree) {
+const APPROACH = 10      // 목표로 붙는 속도(값이 클수록 빠르게 수렴)
+const EPS = 1e-3         // 목표 스냅 임계값
+
+export function updateTransforms(tree: ObjectStateTree, dt: number) {
   tree.forEach((id) => {
     const parent = tree.getParent(id)
     if (parent === NONE) return
+
+    const tx = tree.getTargetX(id)
+    const ty = tree.getTargetY(id)
+
+    if (!isNaN(tx) || !isNaN(ty)) {
+
+      // 프레임 독립 지수 보간: k = 1 - e^(-a*dt)
+      const k = 1 - Math.exp(-APPROACH * dt)
+
+      if (!isNaN(tx)) {
+        const lx = tree.getLocalX(id)
+        const nx = lx + (tx - lx) * k
+        tree.setLocalX(id, nx)
+
+        // 목표에 충분히 가까우면 스냅
+        const closeX = Math.abs(tx - nx) <= EPS
+        if (closeX) tree.setLocalX(id, tx)
+      }
+
+      if (!isNaN(ty)) {
+        const ly = tree.getLocalY(id)
+        const ny = ly + (ty - ly) * k
+        tree.setLocalY(id, ny)
+
+        // 목표에 충분히 가까우면 스냅
+        const closeY = Math.abs(ty - ny) <= EPS
+        if (closeY) tree.setLocalY(id, ty)
+      }
+    }
 
     // 부모 월드 값
     const pCos = tree.getWorldCos(parent)

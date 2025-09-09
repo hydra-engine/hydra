@@ -9,7 +9,7 @@ let lastFps = 0
 function init(stateTree: ObjectStateTree) {
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
-    updateTransforms(stateTree)
+    updateTransforms(stateTree, dt)
   })
 
   if (debugMode) setInterval(() => {
