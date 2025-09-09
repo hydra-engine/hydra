@@ -23,6 +23,7 @@ export class DamageText extends BitmapTextNode {
   }
 
   override update(dt: number) {
+    if (this.paused) return
     super.update(dt)
 
     this.#elapsed += dt

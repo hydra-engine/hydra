@@ -77,7 +77,7 @@ export class SabTree {
     this.#links.forEach(visitor)
   }
 
-  sortChildren(parent: number, uint32ValueIdx: number) {
-    this.#links.sortChildren(parent, (id) => this.#uint32Pool.get(id, uint32ValueIdx))
+  sortChildren(parent: number, getCompValue: (id: number) => number) {
+    this.#links.sortChildren(parent, getCompValue)
   }
 }

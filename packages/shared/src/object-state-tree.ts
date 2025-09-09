@@ -23,40 +23,42 @@ const WORLD_ID_IDX = 3 as const
 const BODY_ID_IDX = 3 as const
 
 // ===== Float32 Indices =============================================================================
-export const FLOAT32_COUNT = 22 as const
+export const FLOAT32_COUNT = 23 as const
+
+const DRAW_ORDER_IDX = 0 as const
 
 // Local Transform
-const LOCAL_X_IDX = 0 as const
-const LOCAL_Y_IDX = 1 as const
-const LOCAL_SCALE_X_IDX = 2 as const
-const LOCAL_SCALE_Y_IDX = 3 as const
-const LOCAL_PIVOT_X_IDX = 4 as const
-const LOCAL_PIVOT_Y_IDX = 5 as const
-const LOCAL_ROTATION_IDX = 6 as const
-const LOCAL_COS_IDX = 7 as const
-const LOCAL_SIN_IDX = 8 as const
-const LOCAL_ALPHA_IDX = 9 as const
+const LOCAL_X_IDX = 1 as const
+const LOCAL_Y_IDX = 2 as const
+const LOCAL_SCALE_X_IDX = 3 as const
+const LOCAL_SCALE_Y_IDX = 4 as const
+const LOCAL_PIVOT_X_IDX = 5 as const
+const LOCAL_PIVOT_Y_IDX = 6 as const
+const LOCAL_ROTATION_IDX = 7 as const
+const LOCAL_COS_IDX = 8 as const
+const LOCAL_SIN_IDX = 9 as const
+const LOCAL_ALPHA_IDX = 10 as const
 
 // World Transform
-const WORLD_X_IDX = 10 as const
-const WORLD_Y_IDX = 11 as const
-const WORLD_SCALE_X_IDX = 12 as const
-const WORLD_SCALE_Y_IDX = 13 as const
-const WORLD_ROTATION_IDX = 14 as const
-const WORLD_COS_IDX = 15 as const
-const WORLD_SIN_IDX = 16 as const
-const WORLD_ALPHA_IDX = 17 as const
+const WORLD_X_IDX = 11 as const
+const WORLD_Y_IDX = 12 as const
+const WORLD_SCALE_X_IDX = 13 as const
+const WORLD_SCALE_Y_IDX = 14 as const
+const WORLD_ROTATION_IDX = 15 as const
+const WORLD_COS_IDX = 16 as const
+const WORLD_SIN_IDX = 17 as const
+const WORLD_ALPHA_IDX = 18 as const
 
 // Shape
-const WIDTH_IDX = 18 as const
-const HEIGHT_IDX = 19 as const
-const RADIUS_IDX = 18 as const
+const WIDTH_IDX = 19 as const
+const HEIGHT_IDX = 20 as const
+const RADIUS_IDX = 19 as const
 
 // Physics
-const VELOCITY_X_IDX = 18 as const
-const VELOCITY_Y_IDX = 19 as const
-const TARGET_X_IDX = 20 as const
-const TARGET_Y_IDX = 21 as const
+const VELOCITY_X_IDX = 19 as const
+const VELOCITY_Y_IDX = 20 as const
+const TARGET_X_IDX = 21 as const
+const TARGET_Y_IDX = 22 as const
 
 export class ObjectStateTree extends SabTree {
   constructor(sab: SharedArrayBuffer) {
@@ -125,6 +127,9 @@ export class ObjectStateTree extends SabTree {
   setLayer(id: number, v: number) { this.setUint32(id, LAYER_IDX, v) }
   getLayer(id: number) { return this.getUint32(id, LAYER_IDX) }
 
+  setDrawOrder(id: number, v: number) { this.setFloat32(id, DRAW_ORDER_IDX, v) }
+  getDrawOrder(id: number) { return this.getFloat32(id, DRAW_ORDER_IDX) }
+
   setTint(id: number, v: number) { this.setUint32(id, TINT_IDX, v) }
   getTint(id: number) { return this.getUint32(id, TINT_IDX) }
 
@@ -166,4 +171,7 @@ export class ObjectStateTree extends SabTree {
 
   setTargetY(id: number, v: number) { this.setFloat32(id, TARGET_Y_IDX, v) }
   getTargetY(id: number) { return this.getFloat32(id, TARGET_Y_IDX) }
+
+  #getCompValue = (id: number) => this.getDrawOrder(id)
+  sortChildren(parent: number) { super.sortChildren(parent, this.#getCompValue) }
 }

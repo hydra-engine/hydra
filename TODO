@@ -1,2 +1,0 @@
-
-- useYSort 처리 (drawOrder가 변할때, 부모가 그것을 감지해서 sort먼저 수행하기)

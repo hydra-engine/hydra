@@ -50,8 +50,8 @@ export class SabTree {
     forEach(visitor) {
         this.#links.forEach(visitor);
     }
-    sortChildren(parent, uint32ValueIdx) {
-        this.#links.sortChildren(parent, (id) => this.#uint32Pool.get(id, uint32ValueIdx));
+    sortChildren(parent, getCompValue) {
+        this.#links.sortChildren(parent, getCompValue);
     }
 }
 //# sourceMappingURL=sab-tree.js.map

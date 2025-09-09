@@ -21,7 +21,7 @@ export type GameObjectOptions = {
 
   alpha?: number
   layer?: number
-  useYSort?: boolean //TODO
+  useYSort?: boolean
 }
 
 export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
@@ -36,6 +36,10 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   #layer = 0
   #tint = 0xffffff
 
+  #drawOrder = 0
+  #drawOrderDirty = false
+  #useYSort = false
+
   constructor(options?: GameObjectOptions) {
     super()
     if (options) {
@@ -49,6 +53,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
       if (options.rotation !== undefined) this.rotation = options.rotation
       if (options.alpha !== undefined) this.alpha = options.alpha
       if (options.layer !== undefined) this.layer = options.layer
+      if (options.useYSort !== undefined) this.#useYSort = options.useYSort
     }
   }
 
@@ -94,6 +99,32 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
           child.attachToStateTree(this.id, this.stateTree, this.messageBridge)
         }
       }
+    }
+  }
+
+  override update(dt: number) {
+    if (this.paused) return
+
+    super.update(dt)
+
+    if (this.#useYSort) {
+      this.drawOrder = this.y
+    }
+
+    let childOrderDirty = false
+    for (const child of this.children) {
+      if (!child.paused) {
+        child.update(dt)
+
+        if (this.id !== undefined && this.stateTree && isGameObject(child) && child.#drawOrderDirty) {
+          childOrderDirty = true
+          child.#drawOrderDirty = false
+        }
+      }
+    }
+
+    if (childOrderDirty && this.id !== undefined && this.stateTree) {
+      this.stateTree.sortChildren(this.id)
     }
   }
 
@@ -147,4 +178,16 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     }
   }
   get tint() { return this.#tint }
+
+  set drawOrder(v) {
+    if (!isNaN(v) && this.#drawOrder !== v) {
+      this.#drawOrder = v
+      this.#drawOrderDirty = true
+
+      if (this.id !== undefined && this.stateTree) {
+        this.stateTree.setDrawOrder(this.id, v)
+      }
+    }
+  }
+  get drawOrder() { return this.#drawOrder }
 }

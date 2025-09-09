@@ -9,6 +9,8 @@ export class DelayNode extends GameNode {
         this.#callback = callback;
     }
     update(dt) {
+        if (this.paused)
+            return;
         super.update(dt);
         this.#accumulated += dt;
         if (this.#accumulated >= this.#delay) {

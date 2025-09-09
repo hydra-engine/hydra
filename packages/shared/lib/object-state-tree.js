@@ -16,36 +16,37 @@ const SHAPE_ID_IDX = 3;
 const WORLD_ID_IDX = 3;
 const BODY_ID_IDX = 3;
 // ===== Float32 Indices =============================================================================
-export const FLOAT32_COUNT = 22;
+export const FLOAT32_COUNT = 23;
+const DRAW_ORDER_IDX = 0;
 // Local Transform
-const LOCAL_X_IDX = 0;
-const LOCAL_Y_IDX = 1;
-const LOCAL_SCALE_X_IDX = 2;
-const LOCAL_SCALE_Y_IDX = 3;
-const LOCAL_PIVOT_X_IDX = 4;
-const LOCAL_PIVOT_Y_IDX = 5;
-const LOCAL_ROTATION_IDX = 6;
-const LOCAL_COS_IDX = 7;
-const LOCAL_SIN_IDX = 8;
-const LOCAL_ALPHA_IDX = 9;
+const LOCAL_X_IDX = 1;
+const LOCAL_Y_IDX = 2;
+const LOCAL_SCALE_X_IDX = 3;
+const LOCAL_SCALE_Y_IDX = 4;
+const LOCAL_PIVOT_X_IDX = 5;
+const LOCAL_PIVOT_Y_IDX = 6;
+const LOCAL_ROTATION_IDX = 7;
+const LOCAL_COS_IDX = 8;
+const LOCAL_SIN_IDX = 9;
+const LOCAL_ALPHA_IDX = 10;
 // World Transform
-const WORLD_X_IDX = 10;
-const WORLD_Y_IDX = 11;
-const WORLD_SCALE_X_IDX = 12;
-const WORLD_SCALE_Y_IDX = 13;
-const WORLD_ROTATION_IDX = 14;
-const WORLD_COS_IDX = 15;
-const WORLD_SIN_IDX = 16;
-const WORLD_ALPHA_IDX = 17;
+const WORLD_X_IDX = 11;
+const WORLD_Y_IDX = 12;
+const WORLD_SCALE_X_IDX = 13;
+const WORLD_SCALE_Y_IDX = 14;
+const WORLD_ROTATION_IDX = 15;
+const WORLD_COS_IDX = 16;
+const WORLD_SIN_IDX = 17;
+const WORLD_ALPHA_IDX = 18;
 // Shape
-const WIDTH_IDX = 18;
-const HEIGHT_IDX = 19;
-const RADIUS_IDX = 18;
+const WIDTH_IDX = 19;
+const HEIGHT_IDX = 20;
+const RADIUS_IDX = 19;
 // Physics
-const VELOCITY_X_IDX = 18;
-const VELOCITY_Y_IDX = 19;
-const TARGET_X_IDX = 20;
-const TARGET_Y_IDX = 21;
+const VELOCITY_X_IDX = 19;
+const VELOCITY_Y_IDX = 20;
+const TARGET_X_IDX = 21;
+const TARGET_Y_IDX = 22;
 export class ObjectStateTree extends SabTree {
     constructor(sab) {
         super(sab, BOOLEAN_COUNT, UINT32_COUNT, FLOAT32_COUNT, CAPACITY);
@@ -91,6 +92,8 @@ export class ObjectStateTree extends SabTree {
     getWorldAlpha(id) { return this.getFloat32(id, WORLD_ALPHA_IDX); }
     setLayer(id, v) { this.setUint32(id, LAYER_IDX, v); }
     getLayer(id) { return this.getUint32(id, LAYER_IDX); }
+    setDrawOrder(id, v) { this.setFloat32(id, DRAW_ORDER_IDX, v); }
+    getDrawOrder(id) { return this.getFloat32(id, DRAW_ORDER_IDX); }
     setTint(id, v) { this.setUint32(id, TINT_IDX, v); }
     getTint(id) { return this.getUint32(id, TINT_IDX); }
     // Sprite
@@ -120,5 +123,7 @@ export class ObjectStateTree extends SabTree {
     getTargetX(id) { return this.getFloat32(id, TARGET_X_IDX); }
     setTargetY(id, v) { this.setFloat32(id, TARGET_Y_IDX, v); }
     getTargetY(id) { return this.getFloat32(id, TARGET_Y_IDX); }
+    #getCompValue = (id) => this.getDrawOrder(id);
+    sortChildren(parent) { super.sortChildren(parent, this.#getCompValue); }
 }
 //# sourceMappingURL=object-state-tree.js.map

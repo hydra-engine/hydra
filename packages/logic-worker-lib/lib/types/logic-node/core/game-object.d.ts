@@ -28,6 +28,7 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     constructor(options?: GameObjectOptions);
     protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge): number;
     add(...children: GameNode<EventMap>[]): void;
+    update(dt: number): void;
     remove(): void;
     set x(v: number);
     get x(): number;
@@ -49,5 +50,7 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     get layer(): number;
     set tint(v: number);
     get tint(): number;
+    set drawOrder(v: number);
+    get drawOrder(): number;
 }
 //# sourceMappingURL=game-object.d.ts.map

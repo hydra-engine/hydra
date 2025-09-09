@@ -2,8 +2,9 @@ import { SabTree } from './sab-tree/sab-tree';
 export declare const CAPACITY: 1000000;
 export declare const BOOLEAN_COUNT: 0;
 export declare const UINT32_COUNT: 5;
-export declare const FLOAT32_COUNT: 22;
+export declare const FLOAT32_COUNT: 23;
 export declare class ObjectStateTree extends SabTree {
+    #private;
     constructor(sab: SharedArrayBuffer);
     static bytesRequired(): number;
     setObjectType(id: number, v: number): void;
@@ -46,6 +47,8 @@ export declare class ObjectStateTree extends SabTree {
     getWorldAlpha(id: number): number;
     setLayer(id: number, v: number): void;
     getLayer(id: number): number;
+    setDrawOrder(id: number, v: number): void;
+    getDrawOrder(id: number): number;
     setTint(id: number, v: number): void;
     getTint(id: number): number;
     setAssetId(id: number, v: number): void;
@@ -72,5 +75,6 @@ export declare class ObjectStateTree extends SabTree {
     getTargetX(id: number): number;
     setTargetY(id: number, v: number): void;
     getTargetY(id: number): number;
+    sortChildren(parent: number): void;
 }
 //# sourceMappingURL=object-state-tree.d.ts.map
