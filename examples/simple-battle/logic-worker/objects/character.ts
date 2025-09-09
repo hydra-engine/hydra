@@ -1,5 +1,11 @@
-import { PhysicsObject, PhysicsObjectOptions, RectangleCollider } from '@hydraengine/logic-worker-lib'
+import { AnimatedSpriteNode, DelayNode, PhysicsObject, PhysicsObjectOptions, RectangleCollider, RectangleNode } from '@hydraengine/logic-worker-lib'
+import { debugMode } from '@hydraengine/shared'
 import { EventMap } from '@webtaku/event-emitter'
+import { bodyDescriptors } from '../../shared/bodies'
+import { Layer } from '../../shared/layers'
+import { DamageText } from '../hud/damage-text'
+import { HealText } from '../hud/heal-text'
+import { HpBar } from '../hud/hp-bar'
 
 export type CharacterOptions = {
   maxHp: number
@@ -7,6 +13,10 @@ export type CharacterOptions = {
   body: number
   hitbox: RectangleCollider
   hurtbox: RectangleCollider
+
+  debugBodyShape: number
+  debugHitboxShape: number
+  debugHurtboxShape: number
 } & PhysicsObjectOptions
 
 export abstract class Character<E extends EventMap = EventMap> extends PhysicsObject<E & {
@@ -26,20 +36,20 @@ export abstract class Character<E extends EventMap = EventMap> extends PhysicsOb
   #tintDelay?: DelayNode
 
   constructor(options: CharacterOptions) {
-    super({ ...options, fixedRotation: true, useYSort: true })
+    super({ ...options, useYSort: true })
     this.maxHp = options.maxHp
     this.hp = options.hp
     this.hitbox = options.hitbox
     this.hurtbox = options.hurtbox
 
-    this.#hpBar = new HpBar({ y: -30, maxHp: options.maxHp, hp: options.hp, layer: 'hud' })
+    this.#hpBar = new HpBar({ y: -30, maxHp: options.maxHp, hp: options.hp, layer: Layer.HUD })
     this.add(this.#hpBar)
 
     if (debugMode) {
-      this.add(new RectangleNode({ ...options.rigidbody, stroke: 'yellow', alpha: 0.5, layer: 'hud' }))
-      this.#hitboxDebugNode = new RectangleNode({ ...this.hitbox, stroke: 'red', alpha: 0.5, layer: 'hud' })
+      this.add(new RectangleNode({ shape: options.debugBodyShape, ...bodyDescriptors[options.body], layer: Layer.HUD }))
+      this.#hitboxDebugNode = new RectangleNode({ shape: options.debugHitboxShape, ...this.hitbox, layer: Layer.HUD })
       this.add(this.#hitboxDebugNode)
-      this.add(new RectangleNode({ ...this.hurtbox, stroke: 'green', alpha: 0.5, layer: 'hud' }))
+      this.add(new RectangleNode({ shape: options.debugHitboxShape, ...this.hurtbox, layer: Layer.HUD }))
     }
   }
 
@@ -62,7 +72,7 @@ export abstract class Character<E extends EventMap = EventMap> extends PhysicsOb
     }
     (this as any).emit('changeHp', damage)
 
-    this.add(new DamageText({ y: -20, damage, layer: 'hud' }))
+    this.add(new DamageText({ y: -20, damage, layer: Layer.HUD }))
 
     if (this.hp <= 0) {
       this.dead = true
@@ -85,7 +95,7 @@ export abstract class Character<E extends EventMap = EventMap> extends PhysicsOb
     }
     (this as any).emit('changeHp', amount)
 
-    this.add(new HealText({ y: -20, hp: amount, layer: 'hud' }))
+    this.add(new HealText({ y: -20, hp: amount, layer: Layer.HUD }))
   }
 
   protected abstract onDie(): void

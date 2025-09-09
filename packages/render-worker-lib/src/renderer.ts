@@ -150,6 +150,9 @@ export class Renderer {
       pc.scale.set(tree.getWorldScaleX(id), tree.getWorldScaleY(id))
       pc.rotation = tree.getWorldRotation(id)
       pc.alpha = tree.getWorldAlpha(id)
+
+      const tint = tree.getTint(id)
+      pc.tint = tint === 0 ? 0xffffff : tint - 1
       pc.zIndex = zIndex++
 
       node.seenPass = pass

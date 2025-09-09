@@ -19,16 +19,18 @@ export type GameObjectOptions = {
 
   alpha?: number
   layer?: number
+  useYSort?: boolean //TODO
 }
 
 export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
-  protected id?: number
+  id?: number
   protected stateTree?: ObjectStateTree
 
   type = ObjectType.GameObject
   #localTransform = new LocalTransform()
   alpha = 1
   #layer = 0
+  #tint = 0xffffff
 
   constructor(options?: GameObjectOptions) {
     super()
@@ -51,12 +53,13 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
 
     const id = stateTree.newChild(parentId)
     stateTree.setObjectType(id, this.type)
-    stateTree.setLocalAlpha(id, this.alpha)
+    stateTree.setLayer(id, this.#layer)
+    stateTree.setTint(id, this.#tint + 1)
 
     this.id = id
     this.stateTree = stateTree
     this.#localTransform.setStateTree(id, stateTree)
-    stateTree.setLayer(id, this.#layer)
+    stateTree.setLocalAlpha(id, this.alpha)
 
     for (const child of this.children) {
       if (isGameObject(child)) {
@@ -125,4 +128,15 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     }
   }
   get layer() { return this.#layer }
+
+  set tint(v) {
+    if (this.#tint !== v) {
+      this.#tint = v
+
+      if (this.id !== undefined && this.stateTree) {
+        this.stateTree.setTint(this.id, v + 1)
+      }
+    }
+  }
+  get tint() { return this.#tint }
 }

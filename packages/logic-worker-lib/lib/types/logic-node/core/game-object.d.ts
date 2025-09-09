@@ -13,10 +13,11 @@ export type GameObjectOptions = {
     rotation?: number;
     alpha?: number;
     layer?: number;
+    useYSort?: boolean;
 };
 export declare class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     #private;
-    protected id?: number;
+    id?: number;
     protected stateTree?: ObjectStateTree;
     type: ObjectType;
     alpha: number;
@@ -42,5 +43,7 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     get rotation(): number;
     set layer(v: number);
     get layer(): number;
+    set tint(v: number);
+    get tint(): number;
 }
 //# sourceMappingURL=game-object.d.ts.map

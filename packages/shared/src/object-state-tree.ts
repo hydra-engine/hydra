@@ -6,20 +6,21 @@ export const CAPACITY = 1_000_000 as const
 const BOOLEAN_COUNT = 0 as const
 
 // ===== Uint32 Indices =============================================================================
-const UINT32_COUNT = 4 as const
+const UINT32_COUNT = 5 as const
 const OBJECT_TYPE_IDX = 0 as const
 const LAYER_IDX = 1 as const
+const TINT_IDX = 2 as const
 
 // Sprite
-const ASSET_ID_IDX = 2 as const
-const ANIMATION_ID_IDX = 3 as const
+const ASSET_ID_IDX = 3 as const
+const ANIMATION_ID_IDX = 4 as const
 
 // Shape
-const SHAPE_ID_IDX = 2 as const
+const SHAPE_ID_IDX = 3 as const
 
 // Physics
-const WORLD_ID_IDX = 2 as const
-const BODY_ID_IDX = 2 as const
+const WORLD_ID_IDX = 3 as const
+const BODY_ID_IDX = 3 as const
 
 // ===== Float32 Indices =============================================================================
 const FLOAT32_COUNT = 20 as const
@@ -121,6 +122,9 @@ export class ObjectStateTree extends SabTree {
 
   setLayer(id: number, v: number) { this.setUint32(id, LAYER_IDX, v) }
   getLayer(id: number) { return this.getUint32(id, LAYER_IDX) }
+
+  setTint(id: number, v: number) { this.setUint32(id, TINT_IDX, v) }
+  getTint(id: number) { return this.getUint32(id, TINT_IDX) }
 
   // Sprite
   setAssetId(id: number, v: number) { this.setUint32(id, ASSET_ID_IDX, v) }

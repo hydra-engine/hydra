@@ -18,7 +18,6 @@ export class DamageText extends BitmapTextNode {
     super({
       ...options,
       asset: AssetId.FONT_WHITE_PEABERRY,
-      text: `-${options.damage}`,
     })
   }
 

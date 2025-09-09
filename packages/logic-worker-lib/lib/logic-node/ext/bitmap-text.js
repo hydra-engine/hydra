@@ -3,11 +3,9 @@ import { GameObject } from '../core/game-object';
 export class BitmapTextNode extends GameObject {
     type = ObjectType.BitmapText;
     #asset;
-    #text;
     constructor(options) {
         super(options);
         this.#asset = options.asset;
-        this.#text = options.text;
     }
     get asset() { return this.#asset; }
     set asset(v) {
