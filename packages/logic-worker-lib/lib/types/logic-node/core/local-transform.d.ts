@@ -1,8 +1,6 @@
 import { ObjectStateTree } from '@hydraengine/shared';
 export declare class LocalTransform {
     #private;
-    cos: number;
-    sin: number;
     get x(): number;
     set x(v: number);
     get y(): number;

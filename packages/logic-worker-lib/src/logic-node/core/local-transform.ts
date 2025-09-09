@@ -4,21 +4,28 @@ export class LocalTransform {
   #id?: number
   #stateTree?: ObjectStateTree
 
-  #x = 0
-  #y = 0
-  #scaleX = 1
-  #scaleY = 1
-  #pivotX = 0
-  #pivotY = 0
-  #rotation = 0
+  #cachedX = 0
+  #cachedY = 0
+  #cachedScaleX = 1
+  #cachedScaleY = 1
+  #cachedPivotX = 0
+  #cachedPivotY = 0
+  #cachedRotation = 0
+  #cachedCos = 1
+  #cachedSin = 0
 
-  cos = 1
-  sin = 0
+  get x() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getWorldX(id)
+    }
+    return this.#cachedX
+  }
 
-  get x() { return this.#x }
   set x(v) {
-    if (this.#x !== v) {
-      this.#x = v
+    if (this.x !== v) {
+      this.#cachedX = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -28,10 +35,18 @@ export class LocalTransform {
     }
   }
 
-  get y() { return this.#y }
+  get y() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getWorldY(id)
+    }
+    return this.#cachedY
+  }
+
   set y(v) {
-    if (this.#y !== v) {
-      this.#y = v
+    if (this.y !== v) {
+      this.#cachedY = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -41,10 +56,18 @@ export class LocalTransform {
     }
   }
 
-  get scaleX() { return this.#scaleX }
+  get scaleX() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getWorldScaleX(id)
+    }
+    return this.#cachedScaleX
+  }
+
   set scaleX(v) {
-    if (this.#scaleX !== v) {
-      this.#scaleX = v
+    if (this.scaleX !== v) {
+      this.#cachedScaleX = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -54,10 +77,18 @@ export class LocalTransform {
     }
   }
 
-  get scaleY() { return this.#scaleY }
+  get scaleY() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getWorldScaleY(id)
+    }
+    return this.#cachedScaleY
+  }
+
   set scaleY(v) {
-    if (this.#scaleY !== v) {
-      this.#scaleY = v
+    if (this.scaleY !== v) {
+      this.#cachedScaleY = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -67,10 +98,18 @@ export class LocalTransform {
     }
   }
 
-  get pivotX() { return this.#pivotX }
+  get pivotX() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getLocalPivotX(id)
+    }
+    return this.#cachedPivotX
+  }
+
   set pivotX(v) {
-    if (this.#pivotX !== v) {
-      this.#pivotX = v
+    if (this.pivotX !== v) {
+      this.#cachedPivotX = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -80,10 +119,18 @@ export class LocalTransform {
     }
   }
 
-  get pivotY() { return this.#pivotY }
+  get pivotY() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getLocalPivotY(id)
+    }
+    return this.#cachedPivotY
+  }
+
   set pivotY(v) {
-    if (this.#pivotY !== v) {
-      this.#pivotY = v
+    if (this.pivotY !== v) {
+      this.#cachedPivotY = v
 
       const id = this.#id
       const tree = this.#stateTree
@@ -93,15 +140,23 @@ export class LocalTransform {
     }
   }
 
-  get rotation() { return this.#rotation }
+  get rotation() {
+    const id = this.#id
+    const tree = this.#stateTree
+    if (tree && id !== undefined) {
+      return tree.getLocalRotation(id)
+    }
+    return this.#cachedRotation
+  }
+
   set rotation(v) {
-    if (this.#rotation !== v) {
-      this.#rotation = v
+    if (this.rotation !== v) {
+      this.#cachedRotation = v
 
       const cos = Math.cos(v)
       const sin = Math.sin(v)
-      this.cos = cos
-      this.sin = sin
+      this.#cachedCos = cos
+      this.#cachedSin = sin
 
       const id = this.#id
       const tree = this.#stateTree
@@ -117,15 +172,15 @@ export class LocalTransform {
     this.#id = id
     this.#stateTree = tree
 
-    tree.setLocalX(id, this.#x)
-    tree.setLocalY(id, this.#y)
-    tree.setLocalScaleX(id, this.#scaleX)
-    tree.setLocalScaleY(id, this.#scaleY)
-    tree.setLocalPivotX(id, this.#pivotX)
-    tree.setLocalPivotY(id, this.#pivotY)
-    tree.setLocalRotation(id, this.#rotation)
-    tree.setLocalCos(id, this.cos)
-    tree.setLocalSin(id, this.sin)
+    tree.setLocalX(id, this.#cachedX)
+    tree.setLocalY(id, this.#cachedY)
+    tree.setLocalScaleX(id, this.#cachedScaleX)
+    tree.setLocalScaleY(id, this.#cachedScaleY)
+    tree.setLocalPivotX(id, this.#cachedPivotX)
+    tree.setLocalPivotY(id, this.#cachedPivotY)
+    tree.setLocalRotation(id, this.#cachedRotation)
+    tree.setLocalCos(id, this.#cachedCos)
+    tree.setLocalSin(id, this.#cachedSin)
   }
 
   clearStateTree() {
