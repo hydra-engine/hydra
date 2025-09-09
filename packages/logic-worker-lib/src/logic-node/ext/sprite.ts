@@ -1,15 +1,16 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
+import { EventMap } from '@webtaku/event-emitter'
 import { GameObject, GameObjectOptions } from '../core/game-object'
 
-export type SpriteObjectOptions = {
+export type SpriteNodeOptions = {
   asset: number
 } & GameObjectOptions
 
-export class SpriteObject extends GameObject {
+export class SpriteNode<E extends EventMap = EventMap> extends GameObject<E> {
   type = ObjectType.Sprite
   #assetId: number
 
-  constructor(options: SpriteObjectOptions) {
+  constructor(options: SpriteNodeOptions) {
     super(options)
     this.#assetId = options.asset
   }

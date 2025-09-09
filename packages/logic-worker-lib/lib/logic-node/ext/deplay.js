@@ -1,20 +1,20 @@
 import { GameNode } from '../core/game-node';
-export class IntervalNode extends GameNode {
-    interval;
+export class DelayNode extends GameNode {
+    #delay;
     #accumulated = 0;
     #callback;
-    constructor(interval, callback) {
+    constructor(delay, callback) {
         super();
-        this.interval = interval;
+        this.#delay = delay;
         this.#callback = callback;
     }
     update(dt) {
         super.update(dt);
         this.#accumulated += dt;
-        if (this.#accumulated >= this.interval) {
-            this.#accumulated %= this.interval;
+        if (this.#accumulated >= this.#delay) {
             this.#callback();
+            this.remove();
         }
     }
 }
-//# sourceMappingURL=interval.js.map
+//# sourceMappingURL=deplay.js.map

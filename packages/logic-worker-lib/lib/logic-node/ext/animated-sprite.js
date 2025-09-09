@@ -1,6 +1,6 @@
 import { ObjectType } from '@hydraengine/shared';
 import { GameObject } from '../core/game-object';
-export class AnimatedSpriteObject extends GameObject {
+export class AnimatedSpriteNode extends GameObject {
     type = ObjectType.AnimatedSprite;
     #assetId;
     #animationId;

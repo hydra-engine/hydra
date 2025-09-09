@@ -4,6 +4,7 @@
   "types": "./lib/types/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
+    "@webtaku/event-emitter": "^0.0.2"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

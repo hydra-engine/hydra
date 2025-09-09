@@ -1,14 +1,14 @@
 import { EventMap } from '@webtaku/event-emitter'
 import { GameNode } from '../core/game-node'
 
-export class IntervalNode extends GameNode<EventMap> {
-  interval: number
+export class DelayNode extends GameNode<EventMap> {
+  #delay: number
   #accumulated = 0
   #callback: () => void
 
-  constructor(interval: number, callback: () => void) {
+  constructor(delay: number, callback: () => void) {
     super()
-    this.interval = interval
+    this.#delay = delay
     this.#callback = callback
   }
 
@@ -16,9 +16,9 @@ export class IntervalNode extends GameNode<EventMap> {
     super.update(dt)
 
     this.#accumulated += dt
-    if (this.#accumulated >= this.interval) {
-      this.#accumulated %= this.interval
+    if (this.#accumulated >= this.#delay) {
       this.#callback()
+      this.remove()
     }
   }
 }

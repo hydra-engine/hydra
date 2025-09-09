@@ -1,4 +1,4 @@
-import { AnimatedSpriteObject, RootObject, SpriteObject } from '@hydraengine/logic-worker-lib'
+import { AnimatedSpriteNode, RootObject, SpriteNode } from '@hydraengine/logic-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
@@ -13,7 +13,7 @@ function init(tree: ObjectStateTree) {
   root = new RootObject(tree)
 
   for (let i = 0; i < 100; i++) {
-    const sprite = new SpriteObject({
+    const sprite = new SpriteNode({
       asset: AssetId.Bird,
       x: Math.random() * 800 - 400,
       y: Math.random() * 600 - 300
@@ -21,7 +21,7 @@ function init(tree: ObjectStateTree) {
     root.add(sprite)
   }
 
-  const animatedSprite = new AnimatedSpriteObject({
+  const animatedSprite = new AnimatedSpriteNode({
     asset: AssetId.Fire,
     animation: AnimationState.Fire,
   })
