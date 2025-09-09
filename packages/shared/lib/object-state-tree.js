@@ -9,6 +9,8 @@ const LAYER_IDX = 1;
 // Sprite
 const ASSET_ID_IDX = 2;
 const ANIMATION_ID_IDX = 3;
+// Shape
+const SHAPE_ID_IDX = 2;
 // Physics
 const WORLD_ID_IDX = 2;
 const BODY_ID_IDX = 2;
@@ -34,6 +36,10 @@ const WORLD_ROTATION_IDX = 14;
 const WORLD_COS_IDX = 15;
 const WORLD_SIN_IDX = 16;
 const WORLD_ALPHA_IDX = 17;
+// Shape
+const WIDTH_IDX = 18;
+const HEIGHT_IDX = 19;
+const RADIUS_IDX = 18;
 // Physics
 const VELOCITY_X_IDX = 18;
 const VELOCITY_Y_IDX = 19;
@@ -82,10 +88,21 @@ export class ObjectStateTree extends SabTree {
     getWorldAlpha(id) { return this.getFloat32(id, WORLD_ALPHA_IDX); }
     setLayer(id, v) { this.setUint32(id, LAYER_IDX, v); }
     getLayer(id) { return this.getUint32(id, LAYER_IDX); }
+    // Sprite
     setAssetId(id, v) { this.setUint32(id, ASSET_ID_IDX, v); }
     getAssetId(id) { return this.getUint32(id, ASSET_ID_IDX); }
     setAnimationId(id, v) { this.setUint32(id, ANIMATION_ID_IDX, v); }
     getAnimationId(id) { return this.getUint32(id, ANIMATION_ID_IDX); }
+    // Shape
+    setShapeId(id, v) { this.setUint32(id, SHAPE_ID_IDX, v); }
+    getShapeId(id) { return this.getUint32(id, SHAPE_ID_IDX); }
+    setRadius(id, v) { this.setFloat32(id, RADIUS_IDX, v); }
+    getRadius(id) { return this.getFloat32(id, RADIUS_IDX); }
+    setWidth(id, v) { this.setFloat32(id, WIDTH_IDX, v); }
+    getWidth(id) { return this.getFloat32(id, WIDTH_IDX); }
+    setHeight(id, v) { this.setFloat32(id, HEIGHT_IDX, v); }
+    getHeight(id) { return this.getFloat32(id, HEIGHT_IDX); }
+    // Physics
     setWorldId(id, v) { this.setUint32(id, WORLD_ID_IDX, v); }
     getWorldId(id) { return this.getUint32(id, WORLD_ID_IDX); }
     setBodyId(id, v) { this.setUint32(id, BODY_ID_IDX, v); }

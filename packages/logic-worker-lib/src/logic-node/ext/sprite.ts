@@ -8,6 +8,7 @@ export type SpriteNodeOptions = {
 
 export class SpriteNode<E extends EventMap = EventMap> extends GameObject<E> {
   type = ObjectType.Sprite
+
   #assetId: number
 
   constructor(options: SpriteNodeOptions) {
