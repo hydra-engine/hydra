@@ -11,10 +11,6 @@ export class GameObject extends GameNode {
     #localTransform = new LocalTransform();
     alpha = 1;
     #layer = 0;
-    _rootConfig(id, stateTree) {
-        this.id = id;
-        this.stateTree = stateTree;
-    }
     constructor(options) {
         super();
         if (options) {

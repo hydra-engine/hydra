@@ -20,7 +20,6 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     protected stateTree?: ObjectStateTree;
     type: ObjectType;
     alpha: number;
-    protected _rootConfig(id: number, stateTree: ObjectStateTree): void;
     constructor(options?: GameObjectOptions);
     protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
     add(...children: GameNode<EventMap>[]): void;

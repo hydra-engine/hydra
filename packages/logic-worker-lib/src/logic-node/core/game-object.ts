@@ -30,11 +30,6 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   alpha = 1
   #layer = 0
 
-  protected _rootConfig(id: number, stateTree: ObjectStateTree) {
-    this.id = id
-    this.stateTree = stateTree
-  }
-
   constructor(options?: GameObjectOptions) {
     super()
     if (options) {

@@ -3,7 +3,8 @@ import { GameObject } from './game-object';
 export class RootObject extends GameObject {
     constructor(stateTree) {
         super();
-        this._rootConfig(ROOT_ID, stateTree);
+        this.id = ROOT_ID;
+        this.stateTree = stateTree;
         stateTree.setWorldScaleX(ROOT_ID, 1);
         stateTree.setWorldScaleY(ROOT_ID, 1);
         stateTree.setWorldCos(ROOT_ID, 1);
