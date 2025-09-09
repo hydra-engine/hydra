@@ -1,4 +1,4 @@
-import { loadGraphicAsset, Renderer } from '@hydraengine/render-worker-lib'
+import { loadGraphicAsset, MessageBridge, Renderer } from '@hydraengine/render-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
@@ -16,7 +16,10 @@ async function loadGraphicAssets(assets: number[]) {
   }
 }
 
-function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
+function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, sab: SharedArrayBuffer, port: MessagePort) {
+  const stateTree = new ObjectStateTree(sab)
+  const messageBridge = new MessageBridge(port)
+
   renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
     logicalWidth: 800,
     logicalHeight: 600,
@@ -36,7 +39,7 @@ onmessage = async ({ data }) => {
   const type = data.type
 
   if (type === 'loadGraphicAssets') loadGraphicAssets(data.assets)
-  if (type === 'init') init(data.offscreenCanvas, data.devicePixelRatio, new ObjectStateTree(data.sab))
+  if (type === 'init') init(data.offscreenCanvas, data.devicePixelRatio, data.sab, data.port)
   if (type === 'setFpsCap') ticker.setFpsCap(data.fps)
   if (type === 'resize') renderer.resize(data.containerWidth, data.containerHeight)
 }

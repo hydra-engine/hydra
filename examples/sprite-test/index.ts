@@ -53,14 +53,17 @@ renderWorker.postMessage({ type: 'loadGraphicAssets', assets: [AssetId.Bird, Ass
 await preloader.preload()
 
 const sab = createObjectStateBuffer()
-logicWorker.postMessage({ type: 'init', sab })
+const messageChannel = new MessageChannel()
+
+logicWorker.postMessage({ type: 'init', sab, port: messageChannel.port1 }, [messageChannel.port1])
 transformWorker.postMessage({ type: 'init', sab })
 renderWorker.postMessage({
   type: 'init',
   offscreenCanvas,
   devicePixelRatio: window.devicePixelRatio,
-  sab
-}, [offscreenCanvas])
+  sab,
+  port: messageChannel.port2
+}, [offscreenCanvas, messageChannel.port2])
 
 function updateCanvasSize(containerWidth: number, containerHeight: number) {
   const canvasWidth = 800

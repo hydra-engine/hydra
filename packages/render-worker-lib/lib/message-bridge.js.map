@@ -1,1 +1,1 @@
-{"version":3,"file":"message-bridge.js","sourceRoot":"","sources":["../src/message-bridge.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,aAAa;CACzB","sourcesContent":["export class MessageBridge {\n}\n"]}
+{"version":3,"file":"message-bridge.js","sourceRoot":"","sources":["../src/message-bridge.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,aAAa;IACxB,YAAY,IAAiB;QAC3B,MAAM;IACR,CAAC;CACF","sourcesContent":["export class MessageBridge {\n  constructor(port: MessagePort) {\n    //TODO\n  }\n}\n"]}

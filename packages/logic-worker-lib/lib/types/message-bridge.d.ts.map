@@ -1,1 +1,1 @@
-{"version":3,"file":"message-bridge.d.ts","sourceRoot":"","sources":["../../src/message-bridge.ts"],"names":[],"mappings":"AAAA,qBAAa,aAAa;IACxB,sBAAsB,CAAC,EAAE,EAAE,MAAM,EAAE,IAAI,EAAE,MAAM;CAGhD"}
+{"version":3,"file":"message-bridge.d.ts","sourceRoot":"","sources":["../../src/message-bridge.ts"],"names":[],"mappings":"AAAA,qBAAa,aAAa;gBACZ,IAAI,EAAE,WAAW;IAI7B,sBAAsB,CAAC,EAAE,EAAE,MAAM,EAAE,IAAI,EAAE,MAAM;CAGhD"}

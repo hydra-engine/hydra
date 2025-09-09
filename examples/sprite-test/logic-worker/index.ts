@@ -9,10 +9,11 @@ let ticker: Ticker
 let root: RootObject
 let lastFps = 0
 
-function init(tree: ObjectStateTree) {
-  const messageBridge = new MessageBridge()
+function init(sab: SharedArrayBuffer, port: MessagePort) {
+  const stateTree = new ObjectStateTree(sab)
+  const messageBridge = new MessageBridge(port)
 
-  root = new RootObject(tree, messageBridge)
+  root = new RootObject(stateTree, messageBridge)
 
   for (let i = 0; i < 100; i++) {
     const sprite = new SpriteNode({
@@ -42,7 +43,7 @@ function init(tree: ObjectStateTree) {
 onmessage = (event) => {
   const type = event.data.type
 
-  if (type === 'init') init(new ObjectStateTree(event.data.sab))
+  if (type === 'init') init(event.data.sab, event.data.port)
   if (type === 'setFpsCap') ticker.setFpsCap(event.data.fps)
 }
 
