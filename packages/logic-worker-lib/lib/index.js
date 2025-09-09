@@ -1,3 +1,5 @@
+export { checkCollision } from './collision/check-collision';
+export { ColliderType } from './collision/colliders';
 export { GameObject } from './logic-node/core/game-object';
 export { RootObject } from './logic-node/core/root-object';
 export { AnimatedSpriteNode } from './logic-node/ext/animated-sprite';

@@ -1,8 +1,11 @@
+export { checkCollision } from './collision/check-collision'
+export { CircleCollider, Collider, ColliderType, EllipseCollider, PolygonCollider, RectangleCollider } from './collision/colliders'
 export { GameObject, GameObjectOptions } from './logic-node/core/game-object'
 export { RootObject } from './logic-node/core/root-object'
 export { AnimatedSpriteNode, AnimatedSpriteNodeOptions } from './logic-node/ext/animated-sprite'
 export { DelayNode } from './logic-node/ext/deplay'
 export { IntervalNode } from './logic-node/ext/interval'
 export { SpriteNode, SpriteNodeOptions } from './logic-node/ext/sprite'
-export { PhysicsObject } from './logic-node/physics/physics-object'
+export { PhysicsObject, PhysicsObjectOptions } from './logic-node/physics/physics-object'
 export { PhysicsWorld } from './logic-node/physics/physics-world'
+

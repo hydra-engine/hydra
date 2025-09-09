@@ -13,7 +13,7 @@ const ANIMATION_ID_IDX = 3;
 const WORLD_ID_IDX = 2;
 const BODY_ID_IDX = 2;
 // ===== Float32 Indices =============================================================================
-const FLOAT32_COUNT = 18;
+const FLOAT32_COUNT = 20;
 // Local Transform
 const LOCAL_X_IDX = 0;
 const LOCAL_Y_IDX = 1;
@@ -34,6 +34,9 @@ const WORLD_ROTATION_IDX = 14;
 const WORLD_COS_IDX = 15;
 const WORLD_SIN_IDX = 16;
 const WORLD_ALPHA_IDX = 17;
+// Physics
+const VELOCITY_X_IDX = 18;
+const VELOCITY_Y_IDX = 19;
 export class ObjectStateTree extends SabTree {
     constructor(sab) {
         super(sab, BOOLEAN_COUNT, UINT32_COUNT, FLOAT32_COUNT, CAPACITY);
@@ -87,5 +90,9 @@ export class ObjectStateTree extends SabTree {
     getWorldId(id) { return this.getUint32(id, WORLD_ID_IDX); }
     setBodyId(id, v) { this.setUint32(id, BODY_ID_IDX, v); }
     getBodyId(id) { return this.getUint32(id, BODY_ID_IDX); }
+    setVelocityX(id, v) { this.setFloat32(id, VELOCITY_X_IDX, v); }
+    getVelocityX(id) { return this.getFloat32(id, VELOCITY_X_IDX); }
+    setVelocityY(id, v) { this.setFloat32(id, VELOCITY_Y_IDX, v); }
+    getVelocityY(id) { return this.getFloat32(id, VELOCITY_Y_IDX); }
 }
 //# sourceMappingURL=object-state-tree.js.map

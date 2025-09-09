@@ -51,5 +51,9 @@ export declare class ObjectStateTree extends SabTree {
     getWorldId(id: number): number;
     setBodyId(id: number, v: number): void;
     getBodyId(id: number): number;
+    setVelocityX(id: number, v: number): void;
+    getVelocityX(id: number): number;
+    setVelocityY(id: number, v: number): void;
+    getVelocityY(id: number): number;
 }
 //# sourceMappingURL=object-state-tree.d.ts.map
