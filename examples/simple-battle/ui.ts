@@ -1,7 +1,5 @@
 import { HERO_MAX_HP } from './shared/constants'
 
-let score = 0
-
 function createTextElement() {
   const el = document.createElement('div')
   el.style.color = 'white'
@@ -30,7 +28,6 @@ export function changeHP(hp: number) {
   hpText.textContent = `HP: ${hp}`
 }
 
-export function addScore(s: number) {
-  score += s
+export function changeScore(score: number) {
   scoreText.textContent = `Score: ${score}`
 }

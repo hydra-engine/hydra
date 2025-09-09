@@ -1,0 +1,1 @@
+{"version":3,"file":"bitmap-text.d.ts","sourceRoot":"","sources":["../../../src/rendering-node/bitmap-text.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,cAAc,EAAE,MAAM,cAAc,CAAA;AAE7C,qBAAa,cAAe,SAAQ,cAAc;;gBAMpC,OAAO,EAAE,MAAM,EAAE,GAAG,EAAE,MAAM,EAAE,GAAG,EAAE,MAAM;IA8ErD,IAAI,IAAI,CAAC,CAAC,EAAE,MAAM,EAKjB;IAED,IAAI,IAAI,IAPI,MAAM,CASjB;IAEQ,MAAM;CAIhB"}

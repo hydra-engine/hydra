@@ -3,10 +3,47 @@ import { ColliderType } from './colliders';
 // Utilities (scalar-only, no allocations at runtime)
 // =====================================================================================
 const abs = (v) => (v < 0 ? -v : v);
+// ---- numeric guards -------------------------------------------------------------
+function isFiniteNumber(n) {
+    return typeof n === 'number' && Number.isFinite(n);
+}
+function allFinite(...nums) {
+    for (let i = 0; i < nums.length; i++) {
+        if (!isFiniteNumber(nums[i]))
+            return false;
+    }
+    return true;
+}
+// ---- collider / transform validators -------------------------------------------
+function validTransform(t) {
+    return allFinite(t.x, t.y, t.cos, t.sin, t.scaleX, t.scaleY, t.rotation);
+}
+function validRect(r) {
+    return allFinite(r.width, r.height, r.x ?? 0, r.y ?? 0);
+}
+function validCircle(c) {
+    return allFinite(c.radius, c.x ?? 0, c.y ?? 0);
+}
+function validEllipse(e) {
+    return allFinite(e.width, e.height, e.x ?? 0, e.y ?? 0);
+}
+function validPoly(p) {
+    if (!Array.isArray(p.vertices) || p.vertices.length === 0)
+        return false;
+    for (let i = 0; i < p.vertices.length; i++) {
+        const v = p.vertices[i];
+        if (!allFinite(v?.x, v?.y))
+            return false;
+    }
+    return allFinite(p.x ?? 0, p.y ?? 0);
+}
 // =====================================================================================
 // OBB helpers (scalar-only)
 // =====================================================================================
 function obbRadiusOnAxis(Lx, Ly, ux, uy, vx, vy, hx, hy) {
+    // Guard: invalid → propagate NaN
+    if (!allFinite(Lx, Ly, ux, uy, vx, vy, hx, hy))
+        return NaN;
     // hx, hy must be >= 0; project axis onto OBB's local axes and scale by half extents.
     const Lu = Lx * ux + Ly * uy;
     const Lv = Lx * vx + Ly * vy;
@@ -15,16 +52,24 @@ function obbRadiusOnAxis(Lx, Ly, ux, uy, vx, vy, hx, hy) {
     return a + b;
 }
 function axisSeparates(Lx, Ly, dx, dy, aux, auy, avx, avy, ahx, ahy, bux, buy, bvx, bvy, bhx, bhy) {
+    // Invalid input → treat as separated to avoid false-positive overlap
+    if (!allFinite(Lx, Ly, dx, dy, aux, auy, avx, avy, ahx, ahy, bux, buy, bvx, bvy, bhx, bhy))
+        return true;
     const dist = dx * Lx + dy * Ly;
     const ad = dist < 0 ? -dist : dist;
     const rA = obbRadiusOnAxis(Lx, Ly, aux, auy, avx, avy, ahx, ahy);
     const rB = obbRadiusOnAxis(Lx, Ly, bux, buy, bvx, bvy, bhx, bhy);
+    if (!allFinite(ad, rA, rB))
+        return true;
     return ad > (rA + rB);
 }
 // =====================================================================================
 // Rectangle–Rectangle (OBB–OBB) — SAT with 4 axes (no allocations)
 // =====================================================================================
 function checkRectRectCollision(ca, ta, cb, tb) {
+    // Fast invalid-input exit
+    if (!validTransform(ta) || !validTransform(tb) || !validRect(ca) || !validRect(cb))
+        return false;
     // A frame (half extents must be non-negative)
     const asx = ta.scaleX, asy = ta.scaleY;
     const ahx = abs(ca.width * asx) * 0.5;
@@ -48,6 +93,8 @@ function checkRectRectCollision(ca, ta, cb, tb) {
     const boy = (cb.y || 0) * bsy;
     const bx = tb.x + bux * box + bvx * boy;
     const by = tb.y + buy * box + bvy * boy;
+    if (!allFinite(ahx, ahy, bhx, bhy, ax, ay, bx, by, aux, auy, avx, avy, bux, buy, bvx, bvy))
+        return false;
     // Fast axis-aligned branch if both rotations are zero
     const rotA = ta.rotation, rotB = tb.rotation;
     if ((rotA === 0 || rotA === 0.0) && (rotB === 0 || rotB === 0.0)) {
@@ -55,10 +102,14 @@ function checkRectRectCollision(ca, ta, cb, tb) {
         const adx0 = dx0 < 0 ? -dx0 : dx0;
         const dy0 = by - ay;
         const ady0 = dy0 < 0 ? -dy0 : dy0;
+        if (!allFinite(adx0, ady0))
+            return false;
         return (adx0 <= ahx + bhx) && (ady0 <= ahy + bhy);
     }
     const dx = bx - ax;
     const dy = by - ay;
+    if (!allFinite(dx, dy))
+        return false;
     if (axisSeparates(aux, auy, dx, dy, aux, auy, avx, avy, ahx, ahy, bux, buy, bvx, bvy, bhx, bhy))
         return false;
     if (axisSeparates(avx, avy, dx, dy, aux, auy, avx, avy, ahx, ahy, bux, buy, bvx, bvy, bhx, bhy))
@@ -76,7 +127,11 @@ function checkRectRectCollision(ca, ta, cb, tb) {
 let _ccx = 0, _ccy = 0;
 // Writes the world-space center into (_ccx, _ccy).
 function circleCenterScratch(c, t) {
-    // No object/array allocation; scalar math only
+    if (!validTransform(t) || !validCircle(c)) {
+        _ccx = NaN;
+        _ccy = NaN;
+        return;
+    }
     const sx = t.scaleX, sy = t.scaleY;
     const cos = t.cos, sin = t.sin;
     // local axes
@@ -89,16 +144,22 @@ function circleCenterScratch(c, t) {
     _ccy = t.y + uy * ox + vy * oy;
 }
 function circleScaledRadius(c, t) {
+    if (!validTransform(t) || !validCircle(c))
+        return NaN;
     const sx = abs(t.scaleX), sy = abs(t.scaleY);
     return c.radius * (sx > sy ? sx : sy); // conservative
 }
 function checkCircleCircleCollision(ca, ta, cb, tb) {
+    if (!validTransform(ta) || !validTransform(tb) || !validCircle(ca) || !validCircle(cb))
+        return false;
     circleCenterScratch(ca, ta);
     const ax = _ccx, ay = _ccy;
     circleCenterScratch(cb, tb);
     const bx = _ccx, by = _ccy;
     const ra = circleScaledRadius(ca, ta);
     const rb = circleScaledRadius(cb, tb);
+    if (!allFinite(ax, ay, bx, by, ra, rb))
+        return false;
     const dx = bx - ax, dy = by - ay;
     const r = ra + rb;
     return (dx * dx + dy * dy) <= r * r;
@@ -107,6 +168,8 @@ function checkCircleCircleCollision(ca, ta, cb, tb) {
 // Rect–Circle (no allocations)
 // =====================================================================================
 function checkRectCircleCollision(r, tr, c, tc) {
+    if (!validTransform(tr) || !validTransform(tc) || !validRect(r) || !validCircle(c))
+        return false;
     // Rect frame
     const rsx = tr.scaleX, rsy = tr.scaleY;
     const rhx = abs(r.width * rsx) * 0.5;
@@ -118,17 +181,27 @@ function checkRectCircleCollision(r, tr, c, tc) {
     const roy = (r.y || 0) * rsy;
     const rcx = tr.x + rux * rox + rvx * roy;
     const rcy = tr.y + ruy * rox + rvy * roy;
+    if (!allFinite(rhx, rhy, rux, ruy, rvx, rvy, rcx, rcy))
+        return false;
     // Circle center + radius (into scratch scalars)
     circleCenterScratch(c, tc);
     const rr = circleScaledRadius(c, tc);
+    if (!allFinite(_ccx, _ccy, rr))
+        return false;
     // Project center delta onto rect local axes and clamp
     const dx = _ccx - rcx, dy = _ccy - rcy;
+    if (!allFinite(dx, dy))
+        return false;
     const qx = dx * rux + dy * ruy;
     const qy = dx * rvx + dy * rvy;
+    if (!allFinite(qx, qy))
+        return false;
     const clx = qx < -rhx ? -rhx : (qx > rhx ? rhx : qx);
     const cly = qy < -rhy ? -rhy : (qy > rhy ? rhy : qy);
     const ddx = qx - clx;
     const ddy = qy - cly;
+    if (!allFinite(ddx, ddy))
+        return false;
     return (ddx * ddx + ddy * ddy) <= rr * rr;
 }
 // =====================================================================================
@@ -145,6 +218,8 @@ function checkRectCircleCollision(r, tr, c, tc) {
 */
 // Poly–Poly (LOCAL + Transform)
 function checkPolyPolyCollision(a, ta, b, tb) {
+    if (!validTransform(ta) || !validTransform(tb) || !validPoly(a) || !validPoly(b))
+        return false;
     const av = a.vertices, bv = b.vertices;
     const na = av.length, nb = bv.length;
     if (na === 0 || nb === 0)
@@ -167,23 +242,30 @@ function checkPolyPolyCollision(a, ta, b, tb) {
     const boy = (b.y || 0) * bsy;
     const bcx = tb.x + bux * box + bvx * boy;
     const bcy = tb.y + buy * box + bvy * boy;
+    if (!allFinite(asx, asy, aux, auy, avx, avy, acx, acy, bsx, bsy, bux, buy, bvx, bvy, bcx, bcy))
+        return false;
     let i = 0, j = 0, k = 0;
     // A's edge axes
     for (i = 0; i < na; i++) {
         j = (i + 1) % na;
         const adx = av[j].x - av[i].x;
         const ady = av[j].y - av[i].y;
-        // edge in world: Ew = U*(sx*dx) + V*(sy*dy)
         const ewx = aux * (asx * adx) + avx * (asy * ady);
         const ewy = auy * (asx * adx) + avy * (asy * ady);
-        const nx = -ewy, ny = ewx; // world normal (no normalization)
+        const nx = -ewy, ny = ewx;
+        if (!allFinite(nx, ny))
+            return false;
         // project A on (nx,ny)
         const kUa = (nx * aux + ny * auy) * asx;
         const kVa = (nx * avx + ny * avy) * asy;
         const baseA = nx * acx + ny * acy;
+        if (!allFinite(kUa, kVa, baseA))
+            return false;
         let minA = Infinity, maxA = -Infinity;
         for (k = 0; k < na; k++) {
             const s = baseA + kUa * av[k].x + kVa * av[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minA)
                 minA = s;
             if (s > maxA)
@@ -193,9 +275,13 @@ function checkPolyPolyCollision(a, ta, b, tb) {
         const kUb = (nx * bux + ny * buy) * bsx;
         const kVb = (nx * bvx + ny * bvy) * bsy;
         const baseB = nx * bcx + ny * bcy;
+        if (!allFinite(kUb, kVb, baseB))
+            return false;
         let minB = Infinity, maxB = -Infinity;
         for (k = 0; k < nb; k++) {
             const s = baseB + kUb * bv[k].x + kVb * bv[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minB)
                 minB = s;
             if (s > maxB)
@@ -212,13 +298,19 @@ function checkPolyPolyCollision(a, ta, b, tb) {
         const ewx = bux * (bsx * bdx) + bvx * (bsy * bdy);
         const ewy = buy * (bsx * bdx) + bvy * (bsy * bdy);
         const nx = -ewy, ny = ewx;
+        if (!allFinite(nx, ny))
+            return false;
         // project A
         const kUa = (nx * aux + ny * auy) * asx;
         const kVa = (nx * avx + ny * avy) * asy;
         const baseA = nx * acx + ny * acy;
+        if (!allFinite(kUa, kVa, baseA))
+            return false;
         let minA = Infinity, maxA = -Infinity;
         for (k = 0; k < na; k++) {
             const s = baseA + kUa * av[k].x + kVa * av[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minA)
                 minA = s;
             if (s > maxA)
@@ -228,9 +320,13 @@ function checkPolyPolyCollision(a, ta, b, tb) {
         const kUb = (nx * bux + ny * buy) * bsx;
         const kVb = (nx * bvx + ny * bvy) * bsy;
         const baseB = nx * bcx + ny * bcy;
+        if (!allFinite(kUb, kVb, baseB))
+            return false;
         let minB = Infinity, maxB = -Infinity;
         for (k = 0; k < nb; k++) {
             const s = baseB + kUb * bv[k].x + kVb * bv[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minB)
                 minB = s;
             if (s > maxB)
@@ -243,6 +339,8 @@ function checkPolyPolyCollision(a, ta, b, tb) {
 }
 // Poly–Circle (LOCAL + Transform)
 function checkPolyCircleCollision(poly, tp, c, tc) {
+    if (!validTransform(tp) || !validTransform(tc) || !validPoly(poly) || !validCircle(c))
+        return false;
     const v = poly.vertices;
     const n = v.length;
     if (n === 0)
@@ -256,10 +354,14 @@ function checkPolyCircleCollision(poly, tp, c, tc) {
     const poy = (poly.y || 0) * psy;
     const pcx = tp.x + pux * pox + pvx * poy;
     const pcy = tp.y + puy * pox + pvy * poy;
+    if (!allFinite(psx, psy, pux, puy, pvx, pvy, pcx, pcy))
+        return false;
     // Circle center + radius
     circleCenterScratch(c, tc);
     const CCx = _ccx, CCy = _ccy;
     const rr = circleScaledRadius(c, tc);
+    if (!allFinite(CCx, CCy, rr))
+        return false;
     let i = 0, j = 0, k = 0;
     // (A) Polygon edge axes
     for (i = 0; i < n; i++) {
@@ -269,21 +371,33 @@ function checkPolyCircleCollision(poly, tp, c, tc) {
         const ewx = pux * (psx * dx) + pvx * (psy * dy);
         const ewy = puy * (psx * dx) + pvy * (psy * dy);
         const nx = -ewy, ny = ewx;
+        if (!allFinite(nx, ny))
+            return false;
         const kUp = (nx * pux + ny * puy) * psx;
         const kVp = (nx * pvx + ny * pvy) * psy;
         const baseP = nx * pcx + ny * pcy;
+        if (!allFinite(kUp, kVp, baseP))
+            return false;
         let minP = Infinity, maxP = -Infinity;
         for (k = 0; k < n; k++) {
             const s = baseP + kUp * v[k].x + kVp * v[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minP)
                 minP = s;
             if (s > maxP)
                 maxP = s;
         }
         const nlen = Math.hypot(nx, ny);
+        if (!isFiniteNumber(nlen))
+            return false;
         const cProj = nx * CCx + ny * CCy;
+        if (!isFiniteNumber(cProj))
+            return false;
         const minC = cProj - rr * nlen;
         const maxC = cProj + rr * nlen;
+        if (!allFinite(minC, maxC))
+            return false;
         if (maxP < minC || maxC < minP)
             return false;
     }
@@ -292,34 +406,54 @@ function checkPolyCircleCollision(poly, tp, c, tc) {
     for (i = 0; i < n; i++) {
         const wx = pcx + pux * (psx * v[i].x) + pvx * (psy * v[i].y);
         const wy = pcy + puy * (psx * v[i].x) + pvy * (psy * v[i].y);
+        if (!allFinite(wx, wy))
+            return false;
         const dx = CCx - wx;
         const dy = CCy - wy;
+        if (!allFinite(dx, dy))
+            return false;
         const d2 = dx * dx + dy * dy;
+        if (!isFiniteNumber(d2))
+            return false;
         if (d2 < bestD2) {
             bestD2 = d2;
             bestDx = dx;
             bestDy = dy;
         }
     }
+    if (!isFiniteNumber(bestD2))
+        return false;
     if (bestD2 === 0)
         return true;
     {
         const nx = bestDx, ny = bestDy;
+        if (!allFinite(nx, ny))
+            return false;
         const kUp = (nx * pux + ny * puy) * psx;
         const kVp = (nx * pvx + ny * pvy) * psy;
         const baseP = nx * pcx + ny * pcy;
+        if (!allFinite(kUp, kVp, baseP))
+            return false;
         let minP = Infinity, maxP = -Infinity;
         for (i = 0; i < n; i++) {
             const s = baseP + kUp * v[i].x + kVp * v[i].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minP)
                 minP = s;
             if (s > maxP)
                 maxP = s;
         }
         const nlen = Math.hypot(nx, ny);
+        if (!isFiniteNumber(nlen))
+            return false;
         const cProj = nx * CCx + ny * CCy;
+        if (!isFiniteNumber(cProj))
+            return false;
         const minC = cProj - rr * nlen;
         const maxC = cProj + rr * nlen;
+        if (!allFinite(minC, maxC))
+            return false;
         if (maxP < minC || maxC < minP)
             return false;
     }
@@ -327,6 +461,8 @@ function checkPolyCircleCollision(poly, tp, c, tc) {
 }
 // Poly–Rect (LOCAL + Transform)
 function checkPolyRectCollision(poly, tp, r, tr) {
+    if (!validTransform(tp) || !validTransform(tr) || !validPoly(poly) || !validRect(r))
+        return false;
     const v = poly.vertices;
     const n = v.length;
     if (n === 0)
@@ -340,6 +476,8 @@ function checkPolyRectCollision(poly, tp, r, tr) {
     const poy = (poly.y || 0) * psy;
     const pcx = tp.x + pux * pox + pvx * poy;
     const pcy = tp.y + puy * pox + pvy * poy;
+    if (!allFinite(psx, psy, pux, puy, pvx, pvy, pcx, pcy))
+        return false;
     // Rect frame
     const rsx = tr.scaleX, rsy = tr.scaleY;
     const rhx = abs(r.width * rsx) * 0.5;
@@ -350,6 +488,8 @@ function checkPolyRectCollision(poly, tp, r, tr) {
     const rox = (r.x || 0) * rsx, roy = (r.y || 0) * rsy;
     const rcx = tr.x + rux * rox + rvx * roy;
     const rcy = tr.y + ruy * rox + rvy * roy;
+    if (!allFinite(rhx, rhy, rux, ruy, rvx, rvy, rcx, rcy))
+        return false;
     let i = 0, j = 0, k = 0;
     // (A) polygon edge axes
     for (i = 0; i < n; i++) {
@@ -359,13 +499,19 @@ function checkPolyRectCollision(poly, tp, r, tr) {
         const ewx = pux * (psx * dx) + pvx * (psy * dy);
         const ewy = puy * (psx * dx) + pvy * (psy * dy);
         const nx = -ewy, ny = ewx;
+        if (!allFinite(nx, ny))
+            return false;
         // poly projection
         const kUp = (nx * pux + ny * puy) * psx;
         const kVp = (nx * pvx + ny * pvy) * psy;
         const baseP = nx * pcx + ny * pcy;
+        if (!allFinite(kUp, kVp, baseP))
+            return false;
         let minP = Infinity, maxP = -Infinity;
         for (k = 0; k < n; k++) {
             const s = baseP + kUp * v[k].x + kVp * v[k].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minP)
                 minP = s;
             if (s > maxP)
@@ -374,10 +520,16 @@ function checkPolyRectCollision(poly, tp, r, tr) {
         // rect projection radius on axis
         const nu = nx * rux + ny * ruy;
         const nv = nx * rvx + ny * rvy;
+        if (!allFinite(nu, nv))
+            return false;
         const rRad = rhx * (nu < 0 ? -nu : nu) + rhy * (nv < 0 ? -nv : nv);
         const cProj = nx * rcx + ny * rcy;
+        if (!allFinite(rRad, cProj))
+            return false;
         const minR = cProj - rRad;
         const maxR = cProj + rRad;
+        if (!allFinite(minR, maxR))
+            return false;
         if (maxP < minR || maxR < minP)
             return false;
     }
@@ -387,17 +539,25 @@ function checkPolyRectCollision(poly, tp, r, tr) {
         const kUp = (nx * pux + ny * puy) * psx;
         const kVp = (nx * pvx + ny * pvy) * psy;
         const baseP = nx * pcx + ny * pcy;
+        if (!allFinite(nx, ny, kUp, kVp, baseP))
+            return false;
         let minP = Infinity, maxP = -Infinity;
         for (i = 0; i < n; i++) {
             const s = baseP + kUp * v[i].x + kVp * v[i].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minP)
                 minP = s;
             if (s > maxP)
                 maxP = s;
         }
         const cProj = nx * rcx + ny * rcy;
+        if (!isFiniteNumber(cProj))
+            return false;
         const minR = cProj - rhx;
         const maxR = cProj + rhx;
+        if (!allFinite(minR, maxR))
+            return false;
         if (maxP < minR || maxR < minP)
             return false;
     }
@@ -407,17 +567,25 @@ function checkPolyRectCollision(poly, tp, r, tr) {
         const kUp = (nx * pux + ny * puy) * psx;
         const kVp = (nx * pvx + ny * pvy) * psy;
         const baseP = nx * pcx + ny * pcy;
+        if (!allFinite(nx, ny, kUp, kVp, baseP))
+            return false;
         let minP = Infinity, maxP = -Infinity;
         for (i = 0; i < n; i++) {
             const s = baseP + kUp * v[i].x + kVp * v[i].y;
+            if (!isFiniteNumber(s))
+                return false;
             if (s < minP)
                 minP = s;
             if (s > maxP)
                 maxP = s;
         }
         const cProj = nx * rcx + ny * rcy;
+        if (!isFiniteNumber(cProj))
+            return false;
         const minR = cProj - rhy;
         const maxR = cProj + rhy;
+        if (!allFinite(minR, maxR))
+            return false;
         if (maxP < minR || maxR < minP)
             return false;
     }
@@ -448,6 +616,11 @@ let _Bcx = 0, _Bcy = 0, _Bux = 0, _Buy = 0, _Bvx = 0, _Bvy = 0, _Brx = 0, _Bry =
 let _Bpoly = null;
 function setSupportCircle(dx, dy, cx, cy, r) {
     const len = Math.hypot(dx, dy);
+    if (!isFiniteNumber(len)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     if (len === 0) {
         _sx = cx;
         _sy = cy;
@@ -458,6 +631,11 @@ function setSupportCircle(dx, dy, cx, cy, r) {
     _sy = cy + dy * inv * r;
 }
 function setSupportOBB(dx, dy, cx, cy, ux, uy, vx, vy, hx, hy) {
+    if (!allFinite(dx, dy, cx, cy, ux, uy, vx, vy, hx, hy)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     const du = dx * ux + dy * uy;
     const dv = dx * vx + dy * vy;
     const sx = du >= 0 ? 1 : -1;
@@ -465,11 +643,21 @@ function setSupportOBB(dx, dy, cx, cy, ux, uy, vx, vy, hx, hy) {
     _sx = cx + ux * hx * sx + vx * hy * sy;
     _sy = cy + uy * hx * sx + vy * hy * sy;
 }
-function dvDy(dy, a) { return dy * a; } // tiny inline helper (prevents temp vars)
+function dvDy(dy, a) { return dy * a; } // tiny inline helper
 function setSupportEllipse(dx, dy, cx, cy, ux, uy, vx, vy, rx, ry) {
+    if (!allFinite(dx, dy, cx, cy, ux, uy, vx, vy, rx, ry)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     const du = dx * ux + dvDy(dy, uy);
     const dv = dx * vx + dvDy(dy, vy);
     const denom = Math.hypot(rx * du, ry * dv);
+    if (!isFiniteNumber(denom)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     if (denom === 0) {
         _sx = cx;
         _sy = cy;
@@ -481,10 +669,20 @@ function setSupportEllipse(dx, dy, cx, cy, ux, uy, vx, vy, rx, ry) {
     _sy = cy + kU * uy + kV * vy;
 }
 function setSupportPoly(dx, dy, verts) {
+    if (!allFinite(dx, dy)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     let best = 0, bestDot = -Infinity;
     for (let i = 0, n = verts.length; i < n; i++) {
         const vx = verts[i].x, vy = verts[i].y;
         const d = dx * vx + dy * vy;
+        if (!isFiniteNumber(d)) {
+            _sx = NaN;
+            _sy = NaN;
+            return;
+        }
         if (d > bestDot) {
             bestDot = d;
             best = i;
@@ -495,11 +693,26 @@ function setSupportPoly(dx, dy, verts) {
 }
 // PolyLocal support: verts in LOCAL, with frame (cx,cy, U/V, sx/sy)
 function setSupportPolyLocal(dx, dy, verts, cx, cy, ux, uy, vx, vy, sx, sy) {
+    if (!allFinite(dx, dy, cx, cy, ux, uy, vx, vy, sx, sy)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     const kU = (dx * ux + dy * uy) * sx;
     const kV = (dx * vx + dy * vy) * sy;
+    if (!allFinite(kU, kV)) {
+        _sx = NaN;
+        _sy = NaN;
+        return;
+    }
     let best = 0, bestDot = -Infinity;
     for (let i = 0, n = verts.length; i < n; i++) {
         const s = kU * verts[i].x + kV * verts[i].y;
+        if (!isFiniteNumber(s)) {
+            _sx = NaN;
+            _sy = NaN;
+            return;
+        }
         if (s > bestDot) {
             bestDot = s;
             best = i;
@@ -521,8 +734,8 @@ function supportA(dx, dy) {
     else if (_supportAType === 5 /* SupportType.PolyLocal */)
         setSupportPolyLocal(dx, dy, _Apoly, _Acx, _Acy, _Aux, _Auy, _Avx, _Avy, _Arx, _Ary);
     else {
-        _sx = 0;
-        _sy = 0;
+        _sx = NaN;
+        _sy = NaN;
     }
 }
 function supportB(dx, dy) {
@@ -537,8 +750,8 @@ function supportB(dx, dy) {
     else if (_supportBType === 5 /* SupportType.PolyLocal */)
         setSupportPolyLocal(dx, dy, _Bpoly, _Bcx, _Bcy, _Bux, _Buy, _Bvx, _Bvy, _Brx, _Bry);
     else {
-        _sx = 0;
-        _sy = 0;
+        _sx = NaN;
+        _sy = NaN;
     }
 }
 // GJK core — returns true if intersection (robust; no allocations)
@@ -557,6 +770,10 @@ function gjkIntersectsNoAlloc() {
         const pax = _sx, pay = _sy;
         supportB(-dx, -dy);
         const pbx = _sx, pby = _sy;
+        if (!allFinite(pax, pay, pbx, pby)) {
+            ax = ay = bx = by = cx = cy = NaN;
+            return;
+        }
         const px = pax - pbx, py = pay - pby;
         cx = bx;
         cy = by;
@@ -568,28 +785,38 @@ function gjkIntersectsNoAlloc() {
             n++;
     }
     addPointAsA();
+    if (!allFinite(ax, ay))
+        return false;
     if (ax * ax + ay * ay <= EPS2)
         return true; // origin exactly (or ~) hit
     dx = -ax;
     dy = -ay;
     for (let iter = 0; iter < 32; iter++) {
         const dLen2 = dx * dx + dy * dy;
+        if (!isFiniteNumber(dLen2))
+            return false;
         if (dLen2 <= EPS2)
             return true; // direction collapsed → enclosed
         addPointAsA();
+        if (!allFinite(ax, ay, bx, by, cx, cy))
+            return false;
         // If new point A does not pass beyond origin along d, shapes are separated
         const Ad = ax * dx + ay * dy;
+        if (!isFiniteNumber(Ad))
+            return false;
         if (Ad <= 0)
             return false;
         if (ax * ax + ay * ay <= EPS2)
             return true;
         if (n === 2) {
-            // Segment (B-A). Use triple product to get perpendicular toward origin: d = triple(AB, AO, AB)
+            // Segment (B-A). d = triple(AB, AO, AB)
             const abx = bx - ax, aby = by - ay;
             const aox = -ax, aoy = -ay;
-            const ac = abx * abx + aby * aby; // (AB·AB)
-            const bc = aox * abx + aoy * aby; // (AO·AB)
-            dx = aox * ac - abx * bc; // AO*(AB·AB) - AB*(AO·AB)
+            const ac = abx * abx + aby * aby;
+            const bc = aox * abx + aoy * aby;
+            if (!allFinite(abx, aby, aox, aoy, ac, bc))
+                return false;
+            dx = aox * ac - abx * bc;
             dy = aoy * ac - aby * bc;
             continue;
         }
@@ -597,11 +824,15 @@ function gjkIntersectsNoAlloc() {
         const abx = bx - ax, aby = by - ay;
         const acx = cx - ax, acy = cy - ay;
         const aox = -ax, aoy = -ay;
+        if (!allFinite(abx, aby, acx, acy, aox, aoy))
+            return false;
         // abPerp = triple(AC, AO, AB)
-        const ac_ab = acx * abx + acy * aby; // (AC·AB)
-        const ao_ab = aox * abx + aoy * aby; // (AO·AB)
+        const ac_ab = acx * abx + acy * aby;
+        const ao_ab = aox * abx + aoy * aby;
         let t1x = aox * ac_ab - acx * ao_ab;
         let t1y = aoy * ac_ab - acy * ao_ab;
+        if (!allFinite(ac_ab, ao_ab, t1x, t1y))
+            return false;
         if (t1x * aox + t1y * aoy > 0) {
             // Origin is in the AB region: drop C -> segment(B-A)
             cx = bx;
@@ -612,10 +843,12 @@ function gjkIntersectsNoAlloc() {
             continue;
         }
         // acPerp = triple(AB, AO, AC)
-        const ab_ac = abx * acx + aby * acy; // (AB·AC)
-        const ao_ac = aox * acx + aoy * acy; // (AO·AC)
+        const ab_ac = abx * acx + aby * acy;
+        const ao_ac = aox * acx + aoy * acy;
         let t2x = aox * ab_ac - abx * ao_ac;
         let t2y = aoy * ab_ac - aby * ao_ac;
+        if (!allFinite(ab_ac, ao_ac, t2x, t2y))
+            return false;
         if (t2x * aox + t2y * aoy > 0) {
             // Origin is in the AC region: drop B -> segment(C-A)
             bx = cx;
@@ -635,6 +868,8 @@ function gjkIntersectsNoAlloc() {
 // Ellipse interactions via GJK (no allocations)
 // =====================================================================================
 function checkEllipseRectCollision(e, te, r, tr) {
+    if (!validTransform(te) || !validTransform(tr) || !validEllipse(e) || !validRect(r))
+        return false;
     // A = Ellipse
     const esx = te.scaleX, esy = te.scaleY;
     _Arx = abs(e.width * esx) * 0.5;
@@ -663,9 +898,13 @@ function checkEllipseRectCollision(e, te, r, tr) {
     _Bcy = tr.y + _Buy * rox + _Bvy * roy;
     _supportBType = 2 /* SupportType.OBB */;
     _Bpoly = null;
+    if (!allFinite(_Arx, _Ary, _Aux, _Auy, _Avx, _Avy, _Acx, _Acy, _Bhx, _Bhy, _Bux, _Buy, _Bvx, _Bvy, _Bcx, _Bcy))
+        return false;
     return gjkIntersectsNoAlloc();
 }
 function checkEllipseCircleCollision(e, te, c, tc) {
+    if (!validTransform(te) || !validTransform(tc) || !validEllipse(e) || !validCircle(c))
+        return false;
     // A = Ellipse
     const esx = te.scaleX, esy = te.scaleY;
     _Arx = abs(e.width * esx) * 0.5;
@@ -687,9 +926,13 @@ function checkEllipseCircleCollision(e, te, c, tc) {
     _Brr = circleScaledRadius(c, tc);
     _supportBType = 3 /* SupportType.Circle */;
     _Bpoly = null;
+    if (!allFinite(_Arx, _Ary, _Aux, _Auy, _Avx, _Avy, _Acx, _Acy, _Bcx, _Bcy, _Brr))
+        return false;
     return gjkIntersectsNoAlloc();
 }
 function checkEllipseEllipseCollision(a, ta, b, tb) {
+    if (!validTransform(ta) || !validTransform(tb) || !validEllipse(a) || !validEllipse(b))
+        return false;
     // A
     const asx = ta.scaleX, asy = ta.scaleY;
     _Arx = abs(a.width * asx) * 0.5;
@@ -718,10 +961,14 @@ function checkEllipseEllipseCollision(a, ta, b, tb) {
     _Bcy = tb.y + _Buy * box + _Bvy * boy;
     _supportBType = 1 /* SupportType.Ellipse */;
     _Bpoly = null;
+    if (!allFinite(_Arx, _Ary, _Aux, _Auy, _Avx, _Avy, _Acx, _Acy, _Brx, _Bry, _Bux, _Buy, _Bvx, _Bvy, _Bcx, _Bcy))
+        return false;
     return gjkIntersectsNoAlloc();
 }
 // Poly–Ellipse via GJK (Poly in LOCAL + Transform, Ellipse in LOCAL + Transform)
 function checkPolyEllipseCollision(poly, tp, e, te) {
+    if (!validTransform(tp) || !validTransform(te) || !validPoly(poly) || !validEllipse(e))
+        return false;
     // A = Poly (LOCAL + Transform) → use PolyLocal support; reuse A scratch slots
     const psx = tp.scaleX, psy = tp.scaleY;
     const pcs = tp.cos, psn = tp.sin;
@@ -753,12 +1000,17 @@ function checkPolyEllipseCollision(poly, tp, e, te) {
     _Bcy = te.y + _Buy * eox + _Bvy * eoy;
     _Bpoly = null;
     _supportBType = 1 /* SupportType.Ellipse */;
+    if (!allFinite(_Acx, _Acy, _Aux, _Auy, _Avx, _Avy, _Arx, _Ary, _Bcx, _Bcy, _Bux, _Buy, _Bvx, _Bvy, _Brx, _Bry))
+        return false;
     return gjkIntersectsNoAlloc();
 }
 // =====================================================================================
 // Dispatcher (no allocations)
 // =====================================================================================
 export function checkCollision(ca, ta, cb, tb) {
+    // global transform validity first
+    if (!validTransform(ta) || !validTransform(tb))
+        return false;
     // Rectangle–Rectangle
     if (ca.type === ColliderType.Rectangle && cb.type === ColliderType.Rectangle)
         return checkRectRectCollision(ca, ta, cb, tb);

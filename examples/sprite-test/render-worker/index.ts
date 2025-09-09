@@ -20,7 +20,7 @@ function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, sab: S
   const stateTree = new ObjectStateTree(sab)
   const messageBridge = new MessageBridge(port)
 
-  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, {}, stateTree, messageBridge, {
     logicalWidth: 800,
     logicalHeight: 600,
     backgroundColor: '#304C79'

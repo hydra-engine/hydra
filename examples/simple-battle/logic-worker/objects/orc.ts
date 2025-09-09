@@ -34,14 +34,7 @@ export class Orc extends Character<{
       animation: AnimationState.Idle,
       scale: 2
     })
-    this._sprite.on('animationend', (animation) => {
-      if (animation.startsWith('attack')) {
-        this.#attacking = false
-        this._sprite.animation = AnimationState.Idle
-      } else if (animation === 'die') {
-        this.emit('dead')
-      }
-    })
+
     this.add(this._sprite)
   }
 
@@ -80,6 +73,11 @@ export class Orc extends Character<{
       AssetId.SFX_ORC_MISS_2,
       AssetId.SFX_ORC_MISS_3
     )
+
+    this.add(new DelayNode(0.5, () => {
+      this.#attacking = false
+      this._sprite.animation = AnimationState.Idle
+    }))
   }
 
   override update(dt: number) {
@@ -104,5 +102,7 @@ export class Orc extends Character<{
     this.body = NONE
 
     sfxPlayer.play(AssetId.SFX_ORC_DIE)
+
+    this.add(new DelayNode(0.5, () => this.emit('dead')))
   }
 }

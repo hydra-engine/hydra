@@ -2,7 +2,7 @@ import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydra
 import { debugMode, enableDebug } from '@hydraengine/shared'
 import { Joystick } from './joystick'
 import { AssetId, assetSources } from './shared/assets'
-import { initUI } from './ui'
+import { changeHP, changeScore, initUI } from './ui'
 
 enableDebug()
 
@@ -27,6 +27,14 @@ logicWorker.onmessage = (event) => {
 
   if (logicWorkerFpsDisplay && type === 'fps') {
     logicWorkerFpsDisplay.fps = event.data.value
+  }
+
+  if (type === 'changeHp') {
+    changeHP(event.data.hp)
+  }
+
+  if (type === 'changeScore') {
+    changeScore(event.data.score)
   }
 }
 

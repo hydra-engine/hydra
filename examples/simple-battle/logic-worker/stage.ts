@@ -7,7 +7,10 @@ import { Potion } from './objects/potion'
 
 const SCORE_PER_ORC = 100
 
-export class Stage extends PhysicsWorld {
+export class Stage extends PhysicsWorld<{
+  changeHp: (hp: number) => void
+  changeScore: (score: number) => void
+}> {
   #hero = new Hero();
   #orcs: Set<Orc> = new Set();
   #potions: Set<Potion> = new Set();
@@ -59,6 +62,7 @@ export class Stage extends PhysicsWorld {
     o.on('hit', (damage) => {
       if (checkCollision(this.#hero.hurtbox, this.#hero.worldTransform, o.hitbox, o.worldTransform)) {
         this.#hero.takeDamage(damage)
+        this.emit('changeHp', this.#hero.hp)
       }
     })
     this.add(o)
@@ -66,6 +70,7 @@ export class Stage extends PhysicsWorld {
     o.on('dead', () => {
       this.#orcs.delete(o)
       this.#score += SCORE_PER_ORC
+      this.emit('changeScore', this.#score)
     })
   }
 

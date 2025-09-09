@@ -44,6 +44,13 @@ export class AnimatedSpriteNode extends RenderableNode {
             this.#sprite = s;
         }
     }
+    set animation(v) {
+        if (v !== this.#animation) {
+            this.#animation = v;
+            this.#updateAnimation();
+        }
+    }
+    get animation() { return this.#animation; }
     remove() {
         spritesheetLoader.release(this.#assetId);
         super.remove();

@@ -2,6 +2,7 @@ import { ObjectType, ROOT } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
 import { Camera } from './camera';
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
+import { BitmapTextNode } from './rendering-node/bitmap-text';
 import { CircleNode } from './rendering-node/circle';
 import { RectangleNode } from './rendering-node/rectangle';
 import { RenderableNode } from './rendering-node/renderable';
@@ -14,6 +15,7 @@ export class Renderer {
     assetSources;
     shapeDescriptors;
     stateTree;
+    messageBridge;
     options;
     #offscreenCanvas;
     #devicePixelRatio;
@@ -21,6 +23,7 @@ export class Renderer {
     #assetSources;
     #shapeDescriptors;
     #stateTree;
+    #messageBridge;
     #logicalWidth;
     #logicalHeight;
     #backgroundColor;
@@ -38,13 +41,14 @@ export class Renderer {
     viewportScale = 1;
     centerX = 0;
     centerY = 0;
-    constructor(offscreenCanvas, devicePixelRatio, animationNames, assetSources, shapeDescriptors, stateTree, options) {
+    constructor(offscreenCanvas, devicePixelRatio, animationNames, assetSources, shapeDescriptors, stateTree, messageBridge, options) {
         this.offscreenCanvas = offscreenCanvas;
         this.devicePixelRatio = devicePixelRatio;
         this.animationNames = animationNames;
         this.assetSources = assetSources;
         this.shapeDescriptors = shapeDescriptors;
         this.stateTree = stateTree;
+        this.messageBridge = messageBridge;
         this.options = options;
         this.#offscreenCanvas = offscreenCanvas;
         this.#devicePixelRatio = devicePixelRatio;
@@ -52,6 +56,7 @@ export class Renderer {
         this.#assetSources = assetSources;
         this.#shapeDescriptors = shapeDescriptors;
         this.#stateTree = stateTree;
+        this.#messageBridge = messageBridge;
         if (options) {
             this.#logicalWidth = options.logicalWidth;
             this.#logicalHeight = options.logicalHeight;
@@ -109,9 +114,9 @@ export class Renderer {
         tree.forEach((id) => {
             if (id === ROOT)
                 return;
+            const objectType = tree.getObjectType(id);
             let node = this.#nodes.get(id);
             if (!node) {
-                const objectType = tree.getObjectType(id);
                 if (objectType === ObjectType.GameObject) {
                     node = new RenderableNode(new Container());
                 }
@@ -139,8 +144,9 @@ export class Renderer {
                     node = new CircleNode(radius, shapeDescriptor.fill, shapeDescriptor.stroke);
                 }
                 else if (objectType === ObjectType.BitmapText) {
-                    //TODO
-                    node = new RenderableNode(new Container());
+                    const assetId = tree.getAssetId(id);
+                    const source = this.#assetSources[assetId];
+                    node = new BitmapTextNode(assetId, source.fnt, source.src);
                 }
                 else if (objectType === ObjectType.PhysicsWorld) {
                     //TODO
@@ -164,6 +170,12 @@ export class Renderer {
             const tint = tree.getTint(id);
             pc.tint = tint === 0 ? 0xffffff : tint - 1;
             pc.zIndex = zIndex++;
+            if (objectType === ObjectType.AnimatedSprite) {
+                node.animation = this.#animationNames[tree.getAnimationId(id)];
+            }
+            if (objectType === ObjectType.BitmapText) {
+                node.text = this.#messageBridge.getText(id);
+            }
             node.seenPass = pass;
         });
         for (const [id, node] of this.#nodes) {

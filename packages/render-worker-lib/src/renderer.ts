@@ -1,7 +1,9 @@
 import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT, ShapeDescriptor } from '@hydraengine/shared'
 import { AutoDetectOptions, ColorSource, Container, DOMAdapter, Renderer as PixiRenderer, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js'
 import { Camera } from './camera'
+import { MessageBridge } from './message-bridge'
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite'
+import { BitmapTextNode } from './rendering-node/bitmap-text'
 import { CircleNode } from './rendering-node/circle'
 import { RectangleNode } from './rendering-node/rectangle'
 import { RenderableNode } from './rendering-node/renderable'
@@ -24,6 +26,7 @@ export class Renderer {
   readonly #assetSources: Record<number, AssetSource>
   readonly #shapeDescriptors: Record<number, ShapeDescriptor>
   readonly #stateTree: ObjectStateTree
+  readonly #messageBridge: MessageBridge
 
   readonly #logicalWidth?: number
   readonly #logicalHeight?: number
@@ -52,6 +55,7 @@ export class Renderer {
     readonly assetSources: Record<number, AssetSource>,
     readonly shapeDescriptors: Record<number, ShapeDescriptor>,
     readonly stateTree: ObjectStateTree,
+    readonly messageBridge: MessageBridge,
     readonly options?: RendererOptions,
   ) {
     this.#offscreenCanvas = offscreenCanvas
@@ -60,6 +64,7 @@ export class Renderer {
     this.#assetSources = assetSources
     this.#shapeDescriptors = shapeDescriptors
     this.#stateTree = stateTree
+    this.#messageBridge = messageBridge
 
     if (options) {
       this.#logicalWidth = options.logicalWidth
@@ -130,10 +135,10 @@ export class Renderer {
     tree.forEach((id) => {
       if (id === ROOT) return
 
+      const objectType = tree.getObjectType(id)
+
       let node = this.#nodes.get(id)
       if (!node) {
-        const objectType = tree.getObjectType(id)
-
         if (objectType === ObjectType.GameObject) {
           node = new RenderableNode(new Container())
         }
@@ -166,8 +171,9 @@ export class Renderer {
         }
 
         else if (objectType === ObjectType.BitmapText) {
-          //TODO
-          node = new RenderableNode(new Container())
+          const assetId = tree.getAssetId(id)
+          const source = this.#assetSources[assetId] as { fnt: string; src: string }
+          node = new BitmapTextNode(assetId, source.fnt, source.src)
         }
 
         else if (objectType === ObjectType.PhysicsWorld) {
@@ -197,6 +203,14 @@ export class Renderer {
       const tint = tree.getTint(id)
       pc.tint = tint === 0 ? 0xffffff : tint - 1
       pc.zIndex = zIndex++
+
+      if (objectType === ObjectType.AnimatedSprite) {
+        (node as AnimatedSpriteNode).animation = this.#animationNames[tree.getAnimationId(id)]
+      }
+
+      if (objectType === ObjectType.BitmapText) {
+        (node as BitmapTextNode).text = this.#messageBridge.getText(id)
+      }
 
       node.seenPass = pass
     })

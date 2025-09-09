@@ -14,7 +14,11 @@ function init(sab: SharedArrayBuffer, port: MessagePort) {
 
   root = new RootObject(stateTree, messageBridge)
 
-  root.add(new Stage())
+  const stage = new Stage()
+  stage.on('changeHp', (hp) => postMessage({ type: 'changeHp', hp }))
+  stage.on('changeScore', (score) => postMessage({ type: 'changeScore', score }))
+
+  root.add(stage)
 
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt

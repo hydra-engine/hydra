@@ -1,6 +1,7 @@
 import { AssetSource, ObjectStateTree, ShapeDescriptor } from '@hydraengine/shared';
 import { ColorSource } from 'pixi.js';
 import { Camera } from './camera';
+import { MessageBridge } from './message-bridge';
 export type RendererOptions = {
     logicalWidth?: number;
     logicalHeight?: number;
@@ -19,6 +20,7 @@ export declare class Renderer {
     readonly assetSources: Record<number, AssetSource>;
     readonly shapeDescriptors: Record<number, ShapeDescriptor>;
     readonly stateTree: ObjectStateTree;
+    readonly messageBridge: MessageBridge;
     readonly options?: RendererOptions | undefined;
     camera: Camera;
     canvasWidth: number;
@@ -28,7 +30,7 @@ export declare class Renderer {
     viewportScale: number;
     centerX: number;
     centerY: number;
-    constructor(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, animationNames: Record<number, string>, assetSources: Record<number, AssetSource>, shapeDescriptors: Record<number, ShapeDescriptor>, stateTree: ObjectStateTree, options?: RendererOptions | undefined);
+    constructor(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, animationNames: Record<number, string>, assetSources: Record<number, AssetSource>, shapeDescriptors: Record<number, ShapeDescriptor>, stateTree: ObjectStateTree, messageBridge: MessageBridge, options?: RendererOptions | undefined);
     resize(containerWidth: number, containerHeight: number): void;
     render(): void;
 }
