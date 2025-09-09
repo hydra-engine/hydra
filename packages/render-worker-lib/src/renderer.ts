@@ -73,7 +73,16 @@ export class Renderer {
       this.#backgroundAlpha = options.backgroundAlpha
     }
 
+    messageBridge.on('animationChanged', this.#handleAnimationChanged)
+
     this.#init()
+  }
+
+  #handleAnimationChanged = (id: number, animationId: number) => {
+    const node = this.#nodes.get(id)
+    if (node instanceof AnimatedSpriteNode) {
+      node.changeAnimation(this.#animationNames[animationId])
+    }
   }
 
   async #init() {

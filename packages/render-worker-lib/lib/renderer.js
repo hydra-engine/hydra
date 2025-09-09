@@ -63,8 +63,15 @@ export class Renderer {
             this.#backgroundColor = options.backgroundColor;
             this.#backgroundAlpha = options.backgroundAlpha;
         }
+        messageBridge.on('animationChanged', this.#handleAnimationChanged);
         this.#init();
     }
+    #handleAnimationChanged = (id, animationId) => {
+        const node = this.#nodes.get(id);
+        if (node instanceof AnimatedSpriteNode) {
+            node.changeAnimation(this.#animationNames[animationId]);
+        }
+    };
     async #init() {
         const options = {
             canvas: this.#offscreenCanvas,

@@ -6,5 +6,8 @@ export class MessageBridge {
     sendTextToRenderWorker(id, text) {
         this.#port.postMessage({ type: 'text', id, text });
     }
+    sendAnimationChangedToRenderWorker(id, animation) {
+        this.#port.postMessage({ type: 'animationChanged', id, animation });
+    }
 }
 //# sourceMappingURL=message-bridge.js.map

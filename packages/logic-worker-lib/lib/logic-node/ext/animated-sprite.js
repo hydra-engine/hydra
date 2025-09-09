@@ -22,6 +22,9 @@ export class AnimatedSpriteNode extends GameObject {
                 this.stateTree.setAnimationId(this.id, v);
             }
         }
+        if (this.id) {
+            this.messageBridge?.sendAnimationChangedToRenderWorker(this.id, v);
+        }
     }
     get animation() {
         return this.#animationId;

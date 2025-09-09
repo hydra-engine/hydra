@@ -8,4 +8,8 @@ export class MessageBridge {
   sendTextToRenderWorker(id: number, text: string) {
     this.#port.postMessage({ type: 'text', id, text })
   }
+
+  sendAnimationChangedToRenderWorker(id: number, animation: number) {
+    this.#port.postMessage({ type: 'animationChanged', id, animation })
+  }
 }

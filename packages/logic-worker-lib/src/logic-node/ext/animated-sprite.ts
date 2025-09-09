@@ -35,6 +35,10 @@ export class AnimatedSpriteNode<E extends EventMap = EventMap> extends GameObjec
         this.stateTree.setAnimationId(this.id, v)
       }
     }
+
+    if (this.id) {
+      this.messageBridge?.sendAnimationChangedToRenderWorker(this.id, v)
+    }
   }
 
   get animation() {
