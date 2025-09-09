@@ -115,48 +115,36 @@ export class SabTreeLinks {
   }
 
   sortChildren(p: number, getCompValue: (id: number) => number) {
-    // 1) p의 현재 자식들을 안전하게 수집 (사이클/오염 방지)
-    const ids: number[] = []
-    const seen = new Set<number>()
-    let x = this.#first(p)
-
-    while (x !== NONE && !seen.has(x)) {
-      // 다른 부모로 잘못 연결된 노드를 만나면 정지 (오염 구간을 더 확산시키지 않음)
-      if (this.parent(x) !== p) break
-      seen.add(x)
-      ids.push(x)
-      const nx = this.#next(x)
-      // 자기 자신을 가리키는 등 이상 링크 방지
-      if (nx === x) break
-      x = nx
+    let head = this.#first(p)
+    if (head === NONE || this.#next(head) === NONE) {
+      return // 0 또는 1개의 요소는 정렬할 필요가 없습니다.
     }
 
-    if (ids.length <= 1) return
+    // 연결 리스트를 배열로 변환합니다.
+    const children = []
+    let current = head
+    while (current !== NONE) {
+      children.push(current)
+      current = this.#next(current)
+    }
 
-    // 2) 값/원래 인덱스를 함께 들고 안정 정렬 (엔진 안정성에 의존하지 않도록)
-    const items = ids.map((id, idx) => ({ id, k: getCompValue(id), idx }))
-    items.sort((a, b) => {
-      if (a.k < b.k) return -1
-      if (a.k > b.k) return 1
-      return a.idx - b.idx // 같은 값이면 원래 순서 유지 (stable)
-    })
+    // 병합 정렬을 사용하여 배열을 정렬합니다.
+    children.sort((a, b) => getCompValue(a) - getCompValue(b))
 
-    // 3) 링크를 깨끗하게 재구성
+    // 정렬된 배열을 기반으로 연결 리스트를 다시 연결합니다.
     const po = this.#o(p)
-    const first = items[0].id
-    const last = items[items.length - 1].id
-    this.#meta[po + FIRST_IDX] = first
-    this.#meta[po + LAST_IDX] = last
+    this.#meta[po + FIRST_IDX] = children[0]
+    this.#meta[po + LAST_IDX] = children[children.length - 1]
 
-    for (let i = 0; i < items.length; i++) {
-      const id = items[i].id
-      const prev = (i === 0) ? NONE : items[i - 1].id
-      const next = (i === items.length - 1) ? NONE : items[i + 1].id
-      const o = this.#o(id)
+    for (let i = 0; i < children.length; i++) {
+      const childId = children[i]
+      const co = this.#o(childId)
+      const prevId = i > 0 ? children[i - 1] : NONE
+      const nextId = i < children.length - 1 ? children[i + 1] : NONE
 
-      this.#meta[o + PARENT_IDX] = p
-      this.#meta[o + PREV_IDX] = prev
-      this.#meta[o + NEXT_IDX] = next
+      this.#meta[co + PARENT_IDX] = p
+      this.#meta[co + PREV_IDX] = prevId
+      this.#meta[co + NEXT_IDX] = nextId
     }
   }
 }
