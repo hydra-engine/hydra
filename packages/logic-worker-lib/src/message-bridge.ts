@@ -1,9 +1,11 @@
 export class MessageBridge {
+  #port: MessagePort
+
   constructor(port: MessagePort) {
-    //TODO
+    this.#port = port
   }
 
   sendTextToRenderWorker(id: number, text: string) {
-    //TODO
+    this.#port.postMessage({ type: 'text', id, text })
   }
 }

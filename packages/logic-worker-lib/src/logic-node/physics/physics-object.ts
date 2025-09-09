@@ -10,4 +10,8 @@ export type PhysicsObjectOptions = {
 
 export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> {
   type = ObjectType.PhysicsObject
+
+  disableCollisions() {
+    //TODO
+  }
 }

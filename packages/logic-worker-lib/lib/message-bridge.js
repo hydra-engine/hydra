@@ -1,9 +1,10 @@
 export class MessageBridge {
+    #port;
     constructor(port) {
-        //TODO
+        this.#port = port;
     }
     sendTextToRenderWorker(id, text) {
-        //TODO
+        this.#port.postMessage({ type: 'text', id, text });
     }
 }
 //# sourceMappingURL=message-bridge.js.map

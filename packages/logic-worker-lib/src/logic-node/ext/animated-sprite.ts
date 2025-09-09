@@ -26,4 +26,18 @@ export class AnimatedSpriteNode<E extends EventMap = EventMap> extends GameObjec
     stateTree.setAnimationId(id, this.#animationId)
     return id
   }
+
+  set animation(animation: number) {
+    if (this.#animationId !== animation) {
+      this.#animationId = animation
+
+      if (this.id !== undefined && this.stateTree) {
+        this.stateTree.setAnimationId(this.id, animation)
+      }
+    }
+  }
+
+  get animation() {
+    return this.#animationId
+  }
 }

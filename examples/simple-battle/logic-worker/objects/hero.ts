@@ -1,5 +1,9 @@
 import { AnimatedSpriteNode, ColliderType, DelayNode, GameObjectOptions } from '@hydraengine/logic-worker-lib'
+import { AnimationState } from '../../shared/animations'
+import { AssetId } from '../../shared/assets'
+import { BodyId } from '../../shared/bodies'
 import { HERO_MAX_HP } from '../../shared/constants'
+import { ShapeId } from '../../shared/shapes'
 import { Character } from './character'
 
 const HERO_MOVE_SPEED = 200 as const
@@ -22,22 +26,24 @@ export class Hero extends Character<{
       ...options,
       maxHp: HERO_MAX_HP,
       hp: HERO_MAX_HP,
-      rigidbody: { type: RigidbodyType.Rectangle, width: 30, height: 30 },
+      body: BodyId.HERO_BODY,
       hitbox: { type: ColliderType.Rectangle, width: 32, height: 52, x: HERO_HITBOX_X, y: -8 },
       hurtbox: { type: ColliderType.Rectangle, width: 24, height: 40, x: 0, y: -4 },
-      isStatic: true
+
+      debugBodyShape: ShapeId.DEBUG_HERO_BODY,
+      debugHitboxShape: ShapeId.DEBUG_HERO_HITBOX,
+      debugHurtboxShape: ShapeId.DEBUG_HERO_HURTBOX,
     })
 
     this._sprite = new AnimatedSpriteNode({
-      src: 'assets/spritesheets/hero.png',
-      atlas: heroAtlas,
-      animation: 'idle',
+      asset: AssetId.SPRITE_HERO,
+      animation: AnimationState.Idle,
       scale: 2
     })
     this._sprite.on('animationend', (animation) => {
       if (animation.startsWith('attack')) {
         this.#attacking = false
-        this._sprite.animation = 'idle'
+        this._sprite.animation = AnimationState.Idle
       } else if (animation === 'die') {
         this.emit('dead')
       }
@@ -60,7 +66,7 @@ export class Hero extends Character<{
     if (this.dead || this.#attacking) return
     this.#attacking = true
 
-    this._sprite.animation = Math.floor(Math.random() * 2) ? 'attack1' : 'attack2'
+    this._sprite.animation = Math.floor(Math.random() * 2) ? AnimationState.Attack1 : AnimationState.Attack2
 
     this.add(new DelayNode(0.3, () => this.emit('hit', HERO_ATTACK_DAMAGE)))
 
@@ -100,7 +106,7 @@ export class Hero extends Character<{
   }
 
   protected override onDie() {
-    this._sprite.animation = 'die'
+    this._sprite.animation = AnimationState.Die
     this.#cachedVelX = 0
     this.#cachedVelY = 0
     this.disableCollisions()

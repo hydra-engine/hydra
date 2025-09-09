@@ -1,6 +1,10 @@
 export enum ShapeId {
   HP_BAR_BG,
   HP_BAR_FG,
+
+  DEBUG_HERO_BODY,
+  DEBUG_HERO_HITBOX,
+  DEBUG_HERO_HURTBOX,
 }
 
 export interface ShapeDescriptor {

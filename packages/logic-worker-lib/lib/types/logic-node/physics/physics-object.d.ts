@@ -8,5 +8,6 @@ export type PhysicsObjectOptions = {
 };
 export declare class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> {
     type: ObjectType;
+    disableCollisions(): void;
 }
 //# sourceMappingURL=physics-object.d.ts.map

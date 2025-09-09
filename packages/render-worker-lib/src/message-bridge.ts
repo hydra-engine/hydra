@@ -1,5 +1,7 @@
 export class MessageBridge {
   constructor(port: MessagePort) {
-    //TODO
+    port.onmessage = (event) => {
+      console.log(event)
+    }
   }
 }

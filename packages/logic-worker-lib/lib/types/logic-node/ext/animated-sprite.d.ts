@@ -11,5 +11,7 @@ export declare class AnimatedSpriteNode<E extends EventMap = EventMap> extends G
     type: ObjectType;
     constructor(options: AnimatedSpriteNodeOptions);
     protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge): number;
+    set animation(animation: number);
+    get animation(): number;
 }
 //# sourceMappingURL=animated-sprite.d.ts.map
