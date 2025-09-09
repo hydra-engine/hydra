@@ -13,7 +13,7 @@ export class RectangleNode extends GameObject {
     }
     get width() { return this.#width; }
     set width(v) {
-        if (this.#width !== v) {
+        if (!isNaN(v) && this.#width !== v) {
             this.#width = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setWidth(this.id, v);
@@ -22,7 +22,7 @@ export class RectangleNode extends GameObject {
     }
     get height() { return this.#height; }
     set height(v) {
-        if (this.#height !== v) {
+        if (!isNaN(v) && this.#height !== v) {
             this.#height = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setHeight(this.id, v);

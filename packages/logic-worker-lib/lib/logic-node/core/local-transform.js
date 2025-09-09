@@ -19,7 +19,7 @@ export class LocalTransform {
         return this.#cachedX;
     }
     set x(v) {
-        if (this.x !== v) {
+        if (!isNaN(v) && this.x !== v) {
             this.#cachedX = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -37,7 +37,7 @@ export class LocalTransform {
         return this.#cachedY;
     }
     set y(v) {
-        if (this.y !== v) {
+        if (!isNaN(v) && this.y !== v) {
             this.#cachedY = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -55,7 +55,7 @@ export class LocalTransform {
         return this.#cachedScaleX;
     }
     set scaleX(v) {
-        if (this.scaleX !== v) {
+        if (!isNaN(v) && this.scaleX !== v) {
             this.#cachedScaleX = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -73,7 +73,7 @@ export class LocalTransform {
         return this.#cachedScaleY;
     }
     set scaleY(v) {
-        if (this.scaleY !== v) {
+        if (!isNaN(v) && this.scaleY !== v) {
             this.#cachedScaleY = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -91,7 +91,7 @@ export class LocalTransform {
         return this.#cachedPivotX;
     }
     set pivotX(v) {
-        if (this.pivotX !== v) {
+        if (!isNaN(v) && this.pivotX !== v) {
             this.#cachedPivotX = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -109,7 +109,7 @@ export class LocalTransform {
         return this.#cachedPivotY;
     }
     set pivotY(v) {
-        if (this.pivotY !== v) {
+        if (!isNaN(v) && this.pivotY !== v) {
             this.#cachedPivotY = v;
             const id = this.#id;
             const tree = this.#stateTree;
@@ -127,7 +127,7 @@ export class LocalTransform {
         return this.#cachedRotation;
     }
     set rotation(v) {
-        if (this.rotation !== v) {
+        if (!isNaN(v) && this.rotation !== v) {
             this.#cachedRotation = v;
             const cos = Math.cos(v);
             const sin = Math.sin(v);

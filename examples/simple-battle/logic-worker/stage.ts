@@ -86,12 +86,11 @@ export class Stage extends PhysicsWorld {
     if (h.dead) return
 
     for (const o of this.#orcs) {
-      /*if (checkCollision(h.hurtbox, h.worldTransform, o.hitbox, o.worldTransform)) {
+      if (checkCollision(h.hurtbox, h.worldTransform, o.hitbox, o.worldTransform)) {
         o.attack()
       } else {
         o.moveTo(this.#hero.x, this.#hero.y)
-      }*/
-      o.moveTo(this.#hero.x, this.#hero.y)
+      }
     }
 
     for (const p of this.#potions) {

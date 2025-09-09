@@ -27,12 +27,12 @@ export class AnimatedSpriteNode<E extends EventMap = EventMap> extends GameObjec
     return id
   }
 
-  set animation(animation: number) {
-    if (this.#animationId !== animation) {
-      this.#animationId = animation
+  set animation(v: number) {
+    if (!isNaN(v) && this.#animationId !== v) {
+      this.#animationId = v
 
       if (this.id !== undefined && this.stateTree) {
-        this.stateTree.setAnimationId(this.id, animation)
+        this.stateTree.setAnimationId(this.id, v)
       }
     }
   }

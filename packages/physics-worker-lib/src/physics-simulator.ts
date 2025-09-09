@@ -63,6 +63,7 @@ export class PhysicsSimulator {
           if (!object.isStatic) {
             object.velocityX = tree.getVelocityX(id)
             object.velocityY = tree.getVelocityY(id)
+
             tree.setLocalX(id, object.x)
             tree.setLocalY(id, object.y)
           }

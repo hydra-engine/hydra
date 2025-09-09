@@ -2,6 +2,7 @@ import { SabTree } from './sab-tree/sab-tree';
 export declare const CAPACITY: 1000000;
 export declare const BOOLEAN_COUNT: 0;
 export declare const UINT32_COUNT: 5;
+export declare const FLOAT32_COUNT: 20;
 export declare class ObjectStateTree extends SabTree {
     constructor(sab: SharedArrayBuffer);
     static bytesRequired(): number;

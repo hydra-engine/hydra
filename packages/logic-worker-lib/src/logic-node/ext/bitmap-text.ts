@@ -22,7 +22,7 @@ export class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E>
 
   get asset() { return this.#asset }
   set asset(v) {
-    if (this.#asset !== v) {
+    if (!isNaN(v) && this.#asset !== v) {
       this.#asset = v
 
       if (this.id !== undefined && this.stateTree) {

@@ -31,36 +31,36 @@ export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> 
     return id
   }
 
-  set body(body: number) {
-    if (this.#bodyId !== body) {
-      this.#bodyId = body
+  set body(v: number) {
+    if (!isNaN(v) && this.#bodyId !== v) {
+      this.#bodyId = v
 
       if (this.id !== undefined && this.stateTree) {
-        this.stateTree.setBodyId(this.id, body)
+        this.stateTree.setBodyId(this.id, v)
       }
     }
   }
 
   get body() { return this.#bodyId }
 
-  set velocityX(velocity: number) {
-    if (this.#velocityX !== velocity) {
-      this.#velocityX = velocity
+  set velocityX(v: number) {
+    if (!isNaN(v) && this.#velocityX !== v) {
+      this.#velocityX = v
 
       if (this.id !== undefined && this.stateTree) {
-        this.stateTree.setVelocityX(this.id, velocity)
+        this.stateTree.setVelocityX(this.id, v)
       }
     }
   }
 
   get velocityX() { return this.#velocityX }
 
-  set velocityY(velocity: number) {
-    if (this.#velocityY !== velocity) {
-      this.#velocityY = velocity
+  set velocityY(v: number) {
+    if (!isNaN(v) && this.#velocityY !== v) {
+      this.#velocityY = v
 
       if (this.id !== undefined && this.stateTree) {
-        this.stateTree.setVelocityY(this.id, velocity)
+        this.stateTree.setVelocityY(this.id, v)
       }
     }
   }

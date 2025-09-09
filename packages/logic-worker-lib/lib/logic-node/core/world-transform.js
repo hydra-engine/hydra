@@ -7,7 +7,7 @@ export class WorldTransform {
         if (tree && id !== undefined) {
             return tree.getWorldX(id);
         }
-        return Number.NEGATIVE_INFINITY;
+        return NaN;
     }
     get y() {
         const id = this.#id;
@@ -15,7 +15,7 @@ export class WorldTransform {
         if (tree && id !== undefined) {
             return tree.getWorldY(id);
         }
-        return Number.NEGATIVE_INFINITY;
+        return NaN;
     }
     get scaleX() {
         const id = this.#id;

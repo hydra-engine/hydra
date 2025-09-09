@@ -16,7 +16,7 @@ const SHAPE_ID_IDX = 3;
 const WORLD_ID_IDX = 3;
 const BODY_ID_IDX = 3;
 // ===== Float32 Indices =============================================================================
-const FLOAT32_COUNT = 20;
+export const FLOAT32_COUNT = 20;
 // Local Transform
 const LOCAL_X_IDX = 0;
 const LOCAL_Y_IDX = 1;

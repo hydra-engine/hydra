@@ -23,7 +23,7 @@ const WORLD_ID_IDX = 3 as const
 const BODY_ID_IDX = 3 as const
 
 // ===== Float32 Indices =============================================================================
-const FLOAT32_COUNT = 20 as const
+export const FLOAT32_COUNT = 20 as const
 
 // Local Transform
 const LOCAL_X_IDX = 0 as const

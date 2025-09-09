@@ -15,11 +15,11 @@ export class AnimatedSpriteNode extends GameObject {
         stateTree.setAnimationId(id, this.#animationId);
         return id;
     }
-    set animation(animation) {
-        if (this.#animationId !== animation) {
-            this.#animationId = animation;
+    set animation(v) {
+        if (!isNaN(v) && this.#animationId !== v) {
+            this.#animationId = v;
             if (this.id !== undefined && this.stateTree) {
-                this.stateTree.setAnimationId(this.id, animation);
+                this.stateTree.setAnimationId(this.id, v);
             }
         }
     }

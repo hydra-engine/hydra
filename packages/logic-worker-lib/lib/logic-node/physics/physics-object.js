@@ -18,29 +18,29 @@ export class PhysicsObject extends GameObject {
         stateTree.setVelocityY(id, this.#velocityY);
         return id;
     }
-    set body(body) {
-        if (this.#bodyId !== body) {
-            this.#bodyId = body;
+    set body(v) {
+        if (!isNaN(v) && this.#bodyId !== v) {
+            this.#bodyId = v;
             if (this.id !== undefined && this.stateTree) {
-                this.stateTree.setBodyId(this.id, body);
+                this.stateTree.setBodyId(this.id, v);
             }
         }
     }
     get body() { return this.#bodyId; }
-    set velocityX(velocity) {
-        if (this.#velocityX !== velocity) {
-            this.#velocityX = velocity;
+    set velocityX(v) {
+        if (!isNaN(v) && this.#velocityX !== v) {
+            this.#velocityX = v;
             if (this.id !== undefined && this.stateTree) {
-                this.stateTree.setVelocityX(this.id, velocity);
+                this.stateTree.setVelocityX(this.id, v);
             }
         }
     }
     get velocityX() { return this.#velocityX; }
-    set velocityY(velocity) {
-        if (this.#velocityY !== velocity) {
-            this.#velocityY = velocity;
+    set velocityY(v) {
+        if (!isNaN(v) && this.#velocityY !== v) {
+            this.#velocityY = v;
             if (this.id !== undefined && this.stateTree) {
-                this.stateTree.setVelocityY(this.id, velocity);
+                this.stateTree.setVelocityY(this.id, v);
             }
         }
     }
