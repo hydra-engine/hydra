@@ -1,4 +1,4 @@
-import { Atlas } from './atlas';
+import { Atlas } from '../atlas';
 export type AssetSource = string | {
     src: string;
     atlas: Atlas;

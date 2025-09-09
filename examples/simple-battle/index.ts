@@ -1,8 +1,8 @@
 import { createObjectStateBuffer, FpsDisplay, Preloader, setStyle } from '@hydraengine/main-thread-lib'
 import { debugMode, enableDebug } from '@hydraengine/shared'
+import { Joystick } from './joystick'
 import { AssetId, assetSources } from './shared/assets'
 import { initUI } from './ui'
-import { Joystick } from './joystick'
 
 enableDebug()
 
@@ -53,7 +53,7 @@ renderWorker.onmessage = (event) => {
   const type = event.data.type
 
   if (type === 'graphicAssetLoaded') {
-    preloader.notifyLoaded(event.data.id)
+    preloader.markLoaded(event.data.id)
   }
 
   if (renderWorkerFpsDisplay && type === 'fps') {
@@ -97,15 +97,18 @@ renderWorker.postMessage({
 await preloader.preload()
 
 const sab = createObjectStateBuffer()
-logicWorker.postMessage({ type: 'init', sab })
+const messageChannel = new MessageChannel()
+
+logicWorker.postMessage({ type: 'init', sab, port: messageChannel.port1 }, [messageChannel.port1])
 physicsWorker.postMessage({ type: 'init', sab })
 transformWorker.postMessage({ type: 'init', sab })
 renderWorker.postMessage({
   type: 'init',
   offscreenCanvas,
   devicePixelRatio: window.devicePixelRatio,
-  sab
-}, [offscreenCanvas])
+  sab,
+  port: messageChannel.port2
+}, [offscreenCanvas, messageChannel.port2])
 
 function updateCanvasSize(containerWidth: number, containerHeight: number) {
   setStyle(canvas, {

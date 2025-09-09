@@ -1,7 +1,6 @@
-export enum WorldId {
-}
+import { WorldDescriptor } from '@hydraengine/shared'
 
-export interface WorldDescriptor {
+export enum WorldId {
 }
 
 export const worldDescriptors: Record<number, WorldDescriptor> = {}

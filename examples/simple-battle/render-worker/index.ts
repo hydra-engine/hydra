@@ -3,6 +3,7 @@ import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/sh
 import { animationNames } from '../shared/animations'
 import { assetSources } from '../shared/assets'
 import { Layer } from '../shared/layers'
+import { shapeDescriptors } from '../shared/shapes'
 
 enableDebug()
 
@@ -18,12 +19,13 @@ async function loadGraphicAssets(assets: number[]) {
 }
 
 function init(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, stateTree: ObjectStateTree) {
-  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, {
+  renderer = new Renderer(offscreenCanvas, devicePixelRatio, animationNames, assetSources, shapeDescriptors, stateTree, {
     backgroundColor: '#304C79',
     layers: [
       { id: Layer.HUD, drawOrder: 1 }
     ],
   })
+
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
     renderer.render()

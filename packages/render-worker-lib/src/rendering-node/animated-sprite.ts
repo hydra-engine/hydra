@@ -1,5 +1,5 @@
 import { Atlas } from '@hydraengine/shared'
-import { AnimatedSprite as PixiAnimatedSprite, Spritesheet } from 'pixi.js'
+import { Container, AnimatedSprite as PixiAnimatedSprite, Spritesheet } from 'pixi.js'
 import { spritesheetLoader } from '../loaders/spritesheet'
 import { RenderableNode } from './renderable'
 
@@ -13,7 +13,7 @@ export class AnimatedSpriteNode extends RenderableNode {
   #sprite?: PixiAnimatedSprite
 
   constructor(assetId: number, src: string, atlas: Atlas, animation: string) {
-    super()
+    super(new Container())
     this.#assetId = assetId
     this.#src = src
     this.#atlas = atlas

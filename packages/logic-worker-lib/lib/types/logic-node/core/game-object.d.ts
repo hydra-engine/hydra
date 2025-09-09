@@ -2,6 +2,7 @@ import { ObjectStateTree, ObjectType } from '@hydraengine/shared';
 import { EventMap } from '@webtaku/event-emitter';
 import { MessageBridge } from '../../message-bridge';
 import { GameNode } from './game-node';
+import { WorldTransform } from './world-transform';
 export declare function isGameObject(v: unknown): v is GameObject;
 export type GameObjectOptions = {
     x?: number;
@@ -22,6 +23,7 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     protected stateTree?: ObjectStateTree;
     protected messageBridge?: MessageBridge;
     type: ObjectType;
+    worldTransform: WorldTransform;
     alpha: number;
     constructor(options?: GameObjectOptions);
     protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge): number;

@@ -1,4 +1,4 @@
-import { AnimatedSprite as PixiAnimatedSprite } from 'pixi.js';
+import { Container, AnimatedSprite as PixiAnimatedSprite } from 'pixi.js';
 import { spritesheetLoader } from '../loaders/spritesheet';
 import { RenderableNode } from './renderable';
 export class AnimatedSpriteNode extends RenderableNode {
@@ -9,7 +9,7 @@ export class AnimatedSpriteNode extends RenderableNode {
     #sheet;
     #sprite;
     constructor(assetId, src, atlas, animation) {
-        super();
+        super(new Container());
         this.#assetId = assetId;
         this.#src = src;
         this.#atlas = atlas;

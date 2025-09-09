@@ -1,7 +1,9 @@
-import { Container } from 'pixi.js';
 export class RenderableNode {
-    pixiContainer = new Container();
+    pixiContainer;
     seenPass;
+    constructor(pixiContainer) {
+        this.pixiContainer = pixiContainer;
+    }
     remove() {
         this.pixiContainer.destroy();
     }

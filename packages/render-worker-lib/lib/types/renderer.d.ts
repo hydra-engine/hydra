@@ -1,4 +1,4 @@
-import { AssetSource, ObjectStateTree } from '@hydraengine/shared';
+import { AssetSource, ObjectStateTree, ShapeDescriptor } from '@hydraengine/shared';
 import { ColorSource } from 'pixi.js';
 import { Camera } from './camera';
 export type RendererOptions = {
@@ -17,6 +17,7 @@ export declare class Renderer {
     readonly devicePixelRatio: number;
     readonly animationNames: Record<number, string>;
     readonly assetSources: Record<number, AssetSource>;
+    readonly shapeDescriptors: Record<number, ShapeDescriptor>;
     readonly stateTree: ObjectStateTree;
     readonly options?: RendererOptions | undefined;
     camera: Camera;
@@ -27,7 +28,7 @@ export declare class Renderer {
     viewportScale: number;
     centerX: number;
     centerY: number;
-    constructor(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, animationNames: Record<number, string>, assetSources: Record<number, AssetSource>, stateTree: ObjectStateTree, options?: RendererOptions | undefined);
+    constructor(offscreenCanvas: OffscreenCanvas, devicePixelRatio: number, animationNames: Record<number, string>, assetSources: Record<number, AssetSource>, shapeDescriptors: Record<number, ShapeDescriptor>, stateTree: ObjectStateTree, options?: RendererOptions | undefined);
     resize(containerWidth: number, containerHeight: number): void;
     render(): void;
 }

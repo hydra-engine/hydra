@@ -1,6 +1,7 @@
 import { ObjectType } from '@hydraengine/shared';
 import { GameNode } from './game-node';
 import { LocalTransform } from './local-transform';
+import { WorldTransform } from './world-transform';
 export function isGameObject(v) {
     return v.attachToStateTree !== undefined;
 }
@@ -10,6 +11,7 @@ export class GameObject extends GameNode {
     messageBridge;
     type = ObjectType.GameObject;
     #localTransform = new LocalTransform();
+    worldTransform = new WorldTransform();
     alpha = 1;
     #layer = 0;
     #tint = 0xffffff;
@@ -48,6 +50,7 @@ export class GameObject extends GameNode {
         this.stateTree = stateTree;
         this.messageBridge = messageBridge;
         this.#localTransform.setStateTree(id, stateTree);
+        this.worldTransform.setStateTree(id, stateTree);
         stateTree.setLocalAlpha(id, this.alpha);
         for (const child of this.children) {
             if (isGameObject(child)) {
@@ -62,6 +65,7 @@ export class GameObject extends GameNode {
         this.id = undefined;
         this.stateTree = undefined;
         this.#localTransform.clearStateTree();
+        this.worldTransform.clearStateTree();
     }
     add(...children) {
         super.add(...children);

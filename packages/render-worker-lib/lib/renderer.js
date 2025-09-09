@@ -2,6 +2,8 @@ import { ObjectType, ROOT } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
 import { Camera } from './camera';
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
+import { CircleNode } from './rendering-node/circle';
+import { RectangleNode } from './rendering-node/rectangle';
 import { RenderableNode } from './rendering-node/renderable';
 import { SpriteNode } from './rendering-node/sprite';
 DOMAdapter.set(WebWorkerAdapter);
@@ -10,12 +12,14 @@ export class Renderer {
     devicePixelRatio;
     animationNames;
     assetSources;
+    shapeDescriptors;
     stateTree;
     options;
     #offscreenCanvas;
     #devicePixelRatio;
     #animationNames;
     #assetSources;
+    #shapeDescriptors;
     #stateTree;
     #logicalWidth;
     #logicalHeight;
@@ -34,17 +38,19 @@ export class Renderer {
     viewportScale = 1;
     centerX = 0;
     centerY = 0;
-    constructor(offscreenCanvas, devicePixelRatio, animationNames, assetSources, stateTree, options) {
+    constructor(offscreenCanvas, devicePixelRatio, animationNames, assetSources, shapeDescriptors, stateTree, options) {
         this.offscreenCanvas = offscreenCanvas;
         this.devicePixelRatio = devicePixelRatio;
         this.animationNames = animationNames;
         this.assetSources = assetSources;
+        this.shapeDescriptors = shapeDescriptors;
         this.stateTree = stateTree;
         this.options = options;
         this.#offscreenCanvas = offscreenCanvas;
         this.#devicePixelRatio = devicePixelRatio;
         this.#animationNames = animationNames;
         this.#assetSources = assetSources;
+        this.#shapeDescriptors = shapeDescriptors;
         this.#stateTree = stateTree;
         if (options) {
             this.#logicalWidth = options.logicalWidth;
@@ -103,10 +109,13 @@ export class Renderer {
         tree.forEach((id) => {
             if (id === ROOT)
                 return;
-            const objectType = tree.getObjectType(id);
             let node = this.#nodes.get(id);
             if (!node) {
-                if (objectType === ObjectType.Sprite) {
+                const objectType = tree.getObjectType(id);
+                if (objectType === ObjectType.GameObject) {
+                    node = new RenderableNode(new Container());
+                }
+                else if (objectType === ObjectType.Sprite) {
                     const assetId = tree.getAssetId(id);
                     node = new SpriteNode(assetId, this.#assetSources[assetId]);
                 }
@@ -116,8 +125,33 @@ export class Renderer {
                     const source = this.#assetSources[assetId];
                     node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation);
                 }
+                else if (objectType === ObjectType.Rectangle) {
+                    const width = tree.getWidth(id);
+                    const height = tree.getHeight(id);
+                    const shapeId = tree.getShapeId(id);
+                    const shapeDescriptor = this.#shapeDescriptors[shapeId];
+                    node = new RectangleNode(width, height, shapeDescriptor.fill, shapeDescriptor.stroke);
+                }
+                else if (objectType === ObjectType.Circle) {
+                    const radius = tree.getRadius(id);
+                    const shapeId = tree.getShapeId(id);
+                    const shapeDescriptor = this.#shapeDescriptors[shapeId];
+                    node = new CircleNode(radius, shapeDescriptor.fill, shapeDescriptor.stroke);
+                }
+                else if (objectType === ObjectType.BitmapText) {
+                    //TODO
+                    node = new RenderableNode(new Container());
+                }
+                else if (objectType === ObjectType.PhysicsWorld) {
+                    //TODO
+                    node = new RenderableNode(new Container());
+                }
+                else if (objectType === ObjectType.PhysicsObject) {
+                    //TODO
+                    node = new RenderableNode(new Container());
+                }
                 else {
-                    node = new RenderableNode();
+                    throw new Error(`Unknown object type: ${objectType}`);
                 }
                 this.#nodes.set(id, node);
                 this.#root.addChild(node.pixiContainer);

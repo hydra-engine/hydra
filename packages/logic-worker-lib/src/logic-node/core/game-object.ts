@@ -3,6 +3,7 @@ import { EventMap } from '@webtaku/event-emitter'
 import { MessageBridge } from '../../message-bridge'
 import { GameNode } from './game-node'
 import { LocalTransform } from './local-transform'
+import { WorldTransform } from './world-transform'
 
 export function isGameObject(v: unknown): v is GameObject {
   return (v as any).attachToStateTree !== undefined
@@ -30,6 +31,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
 
   type = ObjectType.GameObject
   #localTransform = new LocalTransform()
+  worldTransform = new WorldTransform()
   alpha = 1
   #layer = 0
   #tint = 0xffffff
@@ -63,6 +65,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     this.messageBridge = messageBridge
 
     this.#localTransform.setStateTree(id, stateTree)
+    this.worldTransform.setStateTree(id, stateTree)
     stateTree.setLocalAlpha(id, this.alpha)
 
     for (const child of this.children) {
@@ -79,6 +82,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     this.id = undefined
     this.stateTree = undefined
     this.#localTransform.clearStateTree()
+    this.worldTransform.clearStateTree()
   }
 
   override add(...children: GameNode<EventMap>[]) {

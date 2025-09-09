@@ -1,7 +1,9 @@
-import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT } from '@hydraengine/shared'
+import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT, ShapeDescriptor } from '@hydraengine/shared'
 import { AutoDetectOptions, ColorSource, Container, DOMAdapter, Renderer as PixiRenderer, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js'
 import { Camera } from './camera'
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite'
+import { CircleNode } from './rendering-node/circle'
+import { RectangleNode } from './rendering-node/rectangle'
 import { RenderableNode } from './rendering-node/renderable'
 import { SpriteNode } from './rendering-node/sprite'
 
@@ -20,6 +22,7 @@ export class Renderer {
   readonly #devicePixelRatio: number
   readonly #animationNames: Record<number, string>
   readonly #assetSources: Record<number, AssetSource>
+  readonly #shapeDescriptors: Record<number, ShapeDescriptor>
   readonly #stateTree: ObjectStateTree
 
   readonly #logicalWidth?: number
@@ -47,6 +50,7 @@ export class Renderer {
     readonly devicePixelRatio: number,
     readonly animationNames: Record<number, string>,
     readonly assetSources: Record<number, AssetSource>,
+    readonly shapeDescriptors: Record<number, ShapeDescriptor>,
     readonly stateTree: ObjectStateTree,
     readonly options?: RendererOptions,
   ) {
@@ -54,6 +58,7 @@ export class Renderer {
     this.#devicePixelRatio = devicePixelRatio
     this.#animationNames = animationNames
     this.#assetSources = assetSources
+    this.#shapeDescriptors = shapeDescriptors
     this.#stateTree = stateTree
 
     if (options) {
@@ -125,20 +130,58 @@ export class Renderer {
     tree.forEach((id) => {
       if (id === ROOT) return
 
-      const objectType = tree.getObjectType(id)
-
       let node = this.#nodes.get(id)
       if (!node) {
-        if (objectType === ObjectType.Sprite) {
+        const objectType = tree.getObjectType(id)
+
+        if (objectType === ObjectType.GameObject) {
+          node = new RenderableNode(new Container())
+        }
+
+        else if (objectType === ObjectType.Sprite) {
           const assetId = tree.getAssetId(id)
           node = new SpriteNode(assetId, this.#assetSources[assetId] as string)
-        } else if (objectType === ObjectType.AnimatedSprite) {
+        }
+
+        else if (objectType === ObjectType.AnimatedSprite) {
           const assetId = tree.getAssetId(id)
           const animation = this.#animationNames[tree.getAnimationId(id)]
           const source = this.#assetSources[assetId] as { src: string; atlas: Atlas }
           node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation)
-        } else {
-          node = new RenderableNode()
+        }
+
+        else if (objectType === ObjectType.Rectangle) {
+          const width = tree.getWidth(id)
+          const height = tree.getHeight(id)
+          const shapeId = tree.getShapeId(id)
+          const shapeDescriptor = this.#shapeDescriptors[shapeId]
+          node = new RectangleNode(width, height, shapeDescriptor.fill, shapeDescriptor.stroke)
+        }
+
+        else if (objectType === ObjectType.Circle) {
+          const radius = tree.getRadius(id)
+          const shapeId = tree.getShapeId(id)
+          const shapeDescriptor = this.#shapeDescriptors[shapeId]
+          node = new CircleNode(radius, shapeDescriptor.fill, shapeDescriptor.stroke)
+        }
+
+        else if (objectType === ObjectType.BitmapText) {
+          //TODO
+          node = new RenderableNode(new Container())
+        }
+
+        else if (objectType === ObjectType.PhysicsWorld) {
+          //TODO
+          node = new RenderableNode(new Container())
+        }
+
+        else if (objectType === ObjectType.PhysicsObject) {
+          //TODO
+          node = new RenderableNode(new Container())
+        }
+
+        else {
+          throw new Error(`Unknown object type: ${objectType}`)
         }
 
         this.#nodes.set(id, node)

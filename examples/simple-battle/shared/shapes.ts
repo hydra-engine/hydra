@@ -1,3 +1,5 @@
+import { ShapeDescriptor } from '@hydraengine/shared'
+
 export enum ShapeId {
   HP_BAR_BG,
   HP_BAR_FG,
@@ -6,11 +8,6 @@ export enum ShapeId {
   DEBUG_CHAR_HITBOX,
   DEBUG_CHAR_HURTBOX,
   DEBUG_POTION_TRIGGER,
-}
-
-export interface ShapeDescriptor {
-  fill?: string
-  stroke?: string
 }
 
 export const shapeDescriptors: Record<number, ShapeDescriptor> = {

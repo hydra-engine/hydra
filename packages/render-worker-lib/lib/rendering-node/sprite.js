@@ -1,4 +1,4 @@
-import { Sprite as PixiSprite } from 'pixi.js';
+import { Container, Sprite as PixiSprite } from 'pixi.js';
 import { textureLoader } from '../loaders/texture';
 import { RenderableNode } from './renderable';
 export class SpriteNode extends RenderableNode {
@@ -6,7 +6,7 @@ export class SpriteNode extends RenderableNode {
     #src;
     #sprite;
     constructor(assetId, src) {
-        super();
+        super(new Container());
         this.#assetId = assetId;
         this.#src = src;
         this.#load();

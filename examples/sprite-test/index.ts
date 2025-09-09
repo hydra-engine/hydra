@@ -40,7 +40,7 @@ renderWorker.onmessage = (event) => {
   const type = event.data.type
 
   if (type === 'graphicAssetLoaded') {
-    preloader.notifyLoaded(event.data.id)
+    preloader.markLoaded(event.data.id)
   }
 
   if (renderWorkerFpsDisplay && type === 'fps') {

@@ -1,7 +1,8 @@
 import { Container } from 'pixi.js';
-export declare class RenderableNode {
-    pixiContainer: Container<import("pixi.js").ContainerChild>;
+export declare class RenderableNode<T extends Container = Container> {
+    pixiContainer: T;
     seenPass?: number;
+    constructor(pixiContainer: T);
     remove(): void;
 }
 //# sourceMappingURL=renderable.d.ts.map
