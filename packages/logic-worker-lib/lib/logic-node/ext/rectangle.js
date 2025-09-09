@@ -29,8 +29,8 @@ export class RectangleNode extends GameObject {
             }
         }
     }
-    attachToStateTree(parentId, stateTree) {
-        const id = super.attachToStateTree(parentId, stateTree);
+    attachToStateTree(parentId, stateTree, messageBridge) {
+        const id = super.attachToStateTree(parentId, stateTree, messageBridge);
         stateTree.setShapeId(id, this.#shapeId);
         stateTree.setWidth(id, this.#width);
         stateTree.setHeight(id, this.#height);

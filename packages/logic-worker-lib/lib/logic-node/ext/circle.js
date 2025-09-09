@@ -18,8 +18,8 @@ export class CircleNode extends GameObject {
             }
         }
     }
-    attachToStateTree(parentId, stateTree) {
-        const id = super.attachToStateTree(parentId, stateTree);
+    attachToStateTree(parentId, stateTree, messageBridge) {
+        const id = super.attachToStateTree(parentId, stateTree, messageBridge);
         stateTree.setShapeId(id, this.#shapeId);
         stateTree.setRadius(id, this.#radius);
         return id;

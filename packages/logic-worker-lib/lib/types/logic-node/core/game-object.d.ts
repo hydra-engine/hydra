@@ -20,12 +20,11 @@ export declare class GameObject<E extends EventMap = EventMap> extends GameNode<
     #private;
     protected id?: number;
     protected stateTree?: ObjectStateTree;
+    protected messageBridge?: MessageBridge;
     type: ObjectType;
     alpha: number;
     constructor(options?: GameObjectOptions);
-    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
-    protected set messageBridge(v: MessageBridge | undefined);
-    protected get messageBridge(): MessageBridge | undefined;
+    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge): number;
     add(...children: GameNode<EventMap>[]): void;
     remove(): void;
     set x(v: number);

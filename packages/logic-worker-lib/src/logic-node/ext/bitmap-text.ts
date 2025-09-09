@@ -1,5 +1,6 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
 import { EventMap } from '@webtaku/event-emitter'
+import { MessageBridge } from '../../message-bridge'
 import { GameObject, GameObjectOptions } from '../core/game-object'
 
 export type BitmapTextNodeOptions = {
@@ -30,9 +31,10 @@ export class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E>
     }
   }
 
-  protected override attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
-    const id = super.attachToStateTree(parentId, stateTree)
+  protected override attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge) {
+    const id = super.attachToStateTree(parentId, stateTree, messageBridge)
     stateTree.setAssetId(id, this.#asset)
+    messageBridge.sendTextToRenderWorker(id, this.#text)
     return id
   }
 }

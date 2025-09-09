@@ -18,9 +18,10 @@ export class BitmapTextNode extends GameObject {
             }
         }
     }
-    attachToStateTree(parentId, stateTree) {
-        const id = super.attachToStateTree(parentId, stateTree);
+    attachToStateTree(parentId, stateTree, messageBridge) {
+        const id = super.attachToStateTree(parentId, stateTree, messageBridge);
         stateTree.setAssetId(id, this.#asset);
+        messageBridge.sendTextToRenderWorker(id, this.#text);
         return id;
     }
 }

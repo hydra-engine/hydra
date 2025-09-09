@@ -1,1 +1,2 @@
-export class MessageBridge { }
+export class MessageBridge {
+}

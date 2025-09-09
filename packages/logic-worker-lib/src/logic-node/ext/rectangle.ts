@@ -1,4 +1,5 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
+import { MessageBridge } from '../../message-bridge'
 import { GameObject, GameObjectOptions } from '../core/game-object'
 
 export type RectangleNodeOptions = {
@@ -43,8 +44,8 @@ export class RectangleNode extends GameObject {
     }
   }
 
-  protected override attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
-    const id = super.attachToStateTree(parentId, stateTree)
+  protected override attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge) {
+    const id = super.attachToStateTree(parentId, stateTree, messageBridge)
     stateTree.setShapeId(id, this.#shapeId)
     stateTree.setWidth(id, this.#width)
     stateTree.setHeight(id, this.#height)

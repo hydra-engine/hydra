@@ -26,7 +26,7 @@ export type GameObjectOptions = {
 export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   protected id?: number
   protected stateTree?: ObjectStateTree
-  #messageBridge?: MessageBridge
+  protected messageBridge?: MessageBridge
 
   type = ObjectType.GameObject
   #localTransform = new LocalTransform()
@@ -50,7 +50,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     }
   }
 
-  protected attachToStateTree(parentId: number, stateTree: ObjectStateTree) {
+  protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge) {
     this.#detachFromStateTree()
 
     const id = stateTree.newChild(parentId)
@@ -60,12 +60,14 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
 
     this.id = id
     this.stateTree = stateTree
+    this.messageBridge = messageBridge
+
     this.#localTransform.setStateTree(id, stateTree)
     stateTree.setLocalAlpha(id, this.alpha)
 
     for (const child of this.children) {
       if (isGameObject(child)) {
-        child.attachToStateTree(id, stateTree)
+        child.attachToStateTree(id, stateTree, messageBridge)
       }
     }
 
@@ -79,24 +81,13 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     this.#localTransform.clearStateTree()
   }
 
-  protected set messageBridge(v: MessageBridge | undefined) {
-    this.#messageBridge = v
-
-    for (const child of this.children) {
-      if (isGameObject(child)) child.messageBridge = v
-    }
-  }
-
-  protected get messageBridge() { return this.#messageBridge }
-
   override add(...children: GameNode<EventMap>[]) {
     super.add(...children)
 
-    if (this.id !== undefined && this.stateTree) {
+    if (this.id !== undefined && this.stateTree && this.messageBridge) {
       for (const child of children) {
         if (isGameObject(child)) {
-          child.attachToStateTree(this.id, this.stateTree)
-          child.messageBridge = this.#messageBridge
+          child.attachToStateTree(this.id, this.stateTree, this.messageBridge)
         }
       }
     }

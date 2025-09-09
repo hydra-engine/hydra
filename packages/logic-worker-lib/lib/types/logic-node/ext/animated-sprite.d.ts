@@ -1,5 +1,6 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared';
 import { EventMap } from '@webtaku/event-emitter';
+import { MessageBridge } from '../../message-bridge';
 import { GameObject, GameObjectOptions } from '../core/game-object';
 export type AnimatedSpriteNodeOptions = {
     asset: number;
@@ -9,6 +10,6 @@ export declare class AnimatedSpriteNode<E extends EventMap = EventMap> extends G
     #private;
     type: ObjectType;
     constructor(options: AnimatedSpriteNodeOptions);
-    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
+    protected attachToStateTree(parentId: number, stateTree: ObjectStateTree, messageBridge: MessageBridge): number;
 }
 //# sourceMappingURL=animated-sprite.d.ts.map

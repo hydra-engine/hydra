@@ -9,8 +9,8 @@ export class AnimatedSpriteNode extends GameObject {
         this.#assetId = options.asset;
         this.#animationId = options.animation;
     }
-    attachToStateTree(parentId, stateTree) {
-        const id = super.attachToStateTree(parentId, stateTree);
+    attachToStateTree(parentId, stateTree, messageBridge) {
+        const id = super.attachToStateTree(parentId, stateTree, messageBridge);
         stateTree.setAssetId(id, this.#assetId);
         stateTree.setAnimationId(id, this.#animationId);
         return id;
