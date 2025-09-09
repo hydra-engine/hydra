@@ -11,4 +11,5 @@ export { RectangleNode, RectangleNodeOptions } from './logic-node/ext/rectangle'
 export { SpriteNode, SpriteNodeOptions } from './logic-node/ext/sprite';
 export { PhysicsObject, PhysicsObjectOptions } from './logic-node/physics/physics-object';
 export { PhysicsWorld } from './logic-node/physics/physics-world';
+export { MessageBridge } from './message-bridge';
 //# sourceMappingURL=index.d.ts.map

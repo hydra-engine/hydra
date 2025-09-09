@@ -11,4 +11,5 @@ export { RectangleNode } from './logic-node/ext/rectangle';
 export { SpriteNode } from './logic-node/ext/sprite';
 export { PhysicsObject } from './logic-node/physics/physics-object';
 export { PhysicsWorld } from './logic-node/physics/physics-world';
+export { MessageBridge } from './message-bridge';
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,6 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared'
 import { EventMap } from '@webtaku/event-emitter'
+import { MessageBridge } from '../../message-bridge'
 import { GameNode } from './game-node'
 import { LocalTransform } from './local-transform'
 
@@ -23,8 +24,9 @@ export type GameObjectOptions = {
 }
 
 export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
-  id?: number
+  protected id?: number
   protected stateTree?: ObjectStateTree
+  #messageBridge?: MessageBridge
 
   type = ObjectType.GameObject
   #localTransform = new LocalTransform()
@@ -77,6 +79,16 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     this.#localTransform.clearStateTree()
   }
 
+  protected set messageBridge(v: MessageBridge | undefined) {
+    this.#messageBridge = v
+
+    for (const child of this.children) {
+      if (isGameObject(child)) child.messageBridge = v
+    }
+  }
+
+  protected get messageBridge() { return this.#messageBridge }
+
   override add(...children: GameNode<EventMap>[]) {
     super.add(...children)
 
@@ -84,6 +96,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
       for (const child of children) {
         if (isGameObject(child)) {
           child.attachToStateTree(this.id, this.stateTree)
+          child.messageBridge = this.#messageBridge
         }
       }
     }

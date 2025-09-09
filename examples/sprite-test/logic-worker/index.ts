@@ -1,4 +1,4 @@
-import { AnimatedSpriteNode, RootObject, SpriteNode } from '@hydraengine/logic-worker-lib'
+import { AnimatedSpriteNode, MessageBridge, RootObject, SpriteNode } from '@hydraengine/logic-worker-lib'
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
 import { AnimationState } from '../shared/animations'
 import { AssetId } from '../shared/assets'
@@ -10,7 +10,9 @@ let root: RootObject
 let lastFps = 0
 
 function init(tree: ObjectStateTree) {
-  root = new RootObject(tree)
+  const messageBridge = new MessageBridge()
+
+  root = new RootObject(tree, messageBridge)
 
   for (let i = 0; i < 100; i++) {
     const sprite = new SpriteNode({

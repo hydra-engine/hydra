@@ -1,5 +1,6 @@
 import { ObjectStateTree, ObjectType } from '@hydraengine/shared';
 import { EventMap } from '@webtaku/event-emitter';
+import { MessageBridge } from '../../message-bridge';
 import { GameNode } from './game-node';
 export declare function isGameObject(v: unknown): v is GameObject;
 export type GameObjectOptions = {
@@ -17,12 +18,14 @@ export type GameObjectOptions = {
 };
 export declare class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
     #private;
-    id?: number;
+    protected id?: number;
     protected stateTree?: ObjectStateTree;
     type: ObjectType;
     alpha: number;
     constructor(options?: GameObjectOptions);
     protected attachToStateTree(parentId: number, stateTree: ObjectStateTree): number;
+    protected set messageBridge(v: MessageBridge | undefined);
+    protected get messageBridge(): MessageBridge | undefined;
     add(...children: GameNode<EventMap>[]): void;
     remove(): void;
     set x(v: number);

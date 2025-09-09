@@ -7,6 +7,7 @@ export function isGameObject(v) {
 export class GameObject extends GameNode {
     id;
     stateTree;
+    #messageBridge;
     type = ObjectType.GameObject;
     #localTransform = new LocalTransform();
     alpha = 1;
@@ -61,12 +62,21 @@ export class GameObject extends GameNode {
         this.stateTree = undefined;
         this.#localTransform.clearStateTree();
     }
+    set messageBridge(v) {
+        this.#messageBridge = v;
+        for (const child of this.children) {
+            if (isGameObject(child))
+                child.messageBridge = v;
+        }
+    }
+    get messageBridge() { return this.#messageBridge; }
     add(...children) {
         super.add(...children);
         if (this.id !== undefined && this.stateTree) {
             for (const child of children) {
                 if (isGameObject(child)) {
                     child.attachToStateTree(this.id, this.stateTree);
+                    child.messageBridge = this.#messageBridge;
                 }
             }
         }
