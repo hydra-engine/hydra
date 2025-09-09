@@ -1,4 +1,4 @@
-import { BodyDescriptor } from '@hydraengine/shared'
+import { BodyDescriptor, RigidbodyType } from '@hydraengine/shared'
 
 export enum BodyId {
   HERO_BODY,
@@ -6,6 +6,6 @@ export enum BodyId {
 }
 
 export const bodyDescriptors: Record<number, BodyDescriptor> = {
-  [BodyId.HERO_BODY]: { width: 30, height: 30, fixedRotation: true, isStatic: true },
-  [BodyId.ORC_BODY]: { width: 30, height: 30, fixedRotation: true },
+  [BodyId.HERO_BODY]: { rigidbody: { type: RigidbodyType.Rectangle, width: 30, height: 30 }, fixedRotation: true, isStatic: true },
+  [BodyId.ORC_BODY]: { rigidbody: { type: RigidbodyType.Rectangle, width: 30, height: 30 }, fixedRotation: true },
 }

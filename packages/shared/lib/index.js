@@ -7,4 +7,5 @@ export { SabUint32Queue } from './sab-data-structure/sab-uint32-queue';
 export { SabTreeLinks, TREE_LINK_V_COUNT } from './sab-tree/sab-tree-links';
 export { SabTreeNodeIdPool } from './sab-tree/sab-tree-node-id-pool';
 export { Ticker } from './ticker';
+export { RigidbodyType } from './types/rigidbodies';
 //# sourceMappingURL=index.js.map

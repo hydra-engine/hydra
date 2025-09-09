@@ -1,1 +1,1 @@
-{"version":3,"file":"world.js","sourceRoot":"","sources":["../../src/types/world.ts"],"names":[],"mappings":"","sourcesContent":["export type WorldDescriptor = {\n  gravity?: number\n}\n"]}
+{"version":3,"file":"world.js","sourceRoot":"","sources":["../../src/types/world.ts"],"names":[],"mappings":"","sourcesContent":["export type WorldDescriptor = {\n  gravity: number\n}\n"]}

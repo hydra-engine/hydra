@@ -1,4 +1,4 @@
 export type WorldDescriptor = {
-    gravity?: number;
+    gravity: number;
 };
 //# sourceMappingURL=world.d.ts.map

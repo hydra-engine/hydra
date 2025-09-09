@@ -1,5 +1,5 @@
 import { AnimatedSpriteNode, DelayNode, PhysicsObject, PhysicsObjectOptions, RectangleCollider, RectangleNode } from '@hydraengine/logic-worker-lib'
-import { debugMode } from '@hydraengine/shared'
+import { debugMode, RectangleRigidbody } from '@hydraengine/shared'
 import { EventMap } from '@webtaku/event-emitter'
 import { bodyDescriptors } from '../../shared/bodies'
 import { Layer } from '../../shared/layers'
@@ -43,7 +43,8 @@ export abstract class Character<E extends EventMap = EventMap> extends PhysicsOb
     this.add(this.#hpBar)
 
     if (debugMode) {
-      this.add(new RectangleNode({ shape: ShapeId.DEBUG_CHAR_BODY, ...bodyDescriptors[options.body], alpha: 0.5, layer: Layer.HUD }))
+      const rigidbody = bodyDescriptors[options.body].rigidbody as RectangleRigidbody
+      this.add(new RectangleNode({ shape: ShapeId.DEBUG_CHAR_BODY, ...rigidbody, alpha: 0.5, layer: Layer.HUD }))
       this.#hitboxDebugNode = new RectangleNode({ shape: ShapeId.DEBUG_CHAR_HITBOX, ...this.hitbox, alpha: 0.5, layer: Layer.HUD })
       this.add(this.#hitboxDebugNode)
       this.add(new RectangleNode({ shape: ShapeId.DEBUG_CHAR_HURTBOX, ...this.hurtbox, alpha: 0.5, layer: Layer.HUD }))

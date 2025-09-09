@@ -1,5 +1,6 @@
 import { checkCollision, IntervalNode, musicPlayer, PhysicsWorld } from '@hydraengine/logic-worker-lib'
 import { AssetId } from '../shared/assets'
+import { WorldId } from '../shared/worlds'
 import { Hero } from './objects/hero'
 import { Orc } from './objects/orc'
 import { Potion } from './objects/potion'
@@ -11,7 +12,6 @@ export class Stage extends PhysicsWorld {
   #orcs: Set<Orc> = new Set();
   #potions: Set<Potion> = new Set();
 
-  #time = 0
   #score = 0
   #isGameOver = false
 
@@ -19,7 +19,7 @@ export class Stage extends PhysicsWorld {
   #spawnPotionInterval: IntervalNode
 
   constructor() {
-    super()
+    super({ world: WorldId.Stage })
     musicPlayer.play(AssetId.BGM_BATTLE)
 
     this.add(this.#hero)

@@ -1,9 +1,13 @@
+import { RigidbodyType } from '@hydraengine/shared';
+import Matter from 'matter-js';
 import { PhysicsNode } from './physics-node';
 export class PhysicsObject extends PhysicsNode {
-    //#matterBody: Matter.Body
+    #matterBody;
     #world;
-    constructor(width, height, fixedRotation, isStatic) {
+    isStatic;
+    constructor(x, y, rigidbody, fixedRotation, isStatic) {
         super();
+        this.isStatic = isStatic ?? false;
         const bodyOptions = {
             isStatic: isStatic ?? false
         };
@@ -11,20 +15,35 @@ export class PhysicsObject extends PhysicsNode {
             bodyOptions.inertia = Infinity;
             bodyOptions.angularVelocity = 0;
         }
-        /*if (r.type === RigidbodyType.Rectangle) {
-          this.#matterBody = Matter.Bodies.rectangle(x, y, r.width, r.height, bodyOptions)
-        } else if (r.type === RigidbodyType.Circle) {
-          this.#matterBody = Matter.Bodies.circle(x, y, r.radius, bodyOptions)
-        } else if (r.type === RigidbodyType.Polygon) {
-          this.#matterBody = Matter.Bodies.fromVertices(x, y, [r.vertices], bodyOptions)
-        } else {
-          throw new Error('Invalid rigidbody type')
-        }*/
+        if (rigidbody.type === RigidbodyType.Rectangle) {
+            this.#matterBody = Matter.Bodies.rectangle(x, y, rigidbody.width, rigidbody.height, bodyOptions);
+        }
+        else if (rigidbody.type === RigidbodyType.Circle) {
+            this.#matterBody = Matter.Bodies.circle(x, y, rigidbody.radius, bodyOptions);
+        }
+        else if (rigidbody.type === RigidbodyType.Polygon) {
+            this.#matterBody = Matter.Bodies.fromVertices(x, y, [rigidbody.vertices], bodyOptions);
+        }
+        else {
+            throw new Error('Invalid rigidbody type');
+        }
     }
     set world(world) {
-        this.#world = world;
-        console.log(world);
+        if (this.#world !== world) {
+            this.#world?.removeBody(this.#matterBody);
+            this.#world = world;
+            world?.addBody(this.#matterBody);
+        }
     }
     get world() { return this.#world; }
+    get x() { return this.#matterBody.position.x; }
+    get y() { return this.#matterBody.position.y; }
+    set velocityX(v) { Matter.Body.setVelocity(this.#matterBody, { x: v, y: this.#matterBody.velocity.y }); }
+    get velocityX() { return this.#matterBody.velocity.x; }
+    set velocityY(v) { Matter.Body.setVelocity(this.#matterBody, { x: this.#matterBody.velocity.x, y: v }); }
+    get velocityY() { return this.#matterBody.velocity.y; }
+    remove() {
+        this.#world?.removeBody(this.#matterBody);
+    }
 }
 //# sourceMappingURL=physics-object.js.map

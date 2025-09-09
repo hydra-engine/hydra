@@ -168,7 +168,7 @@ export class Renderer {
         });
         for (const [id, node] of this.#nodes) {
             if (node.seenPass !== pass) {
-                this.#root.removeChild(node.pixiContainer);
+                node.remove();
                 this.#nodes.delete(id);
             }
         }

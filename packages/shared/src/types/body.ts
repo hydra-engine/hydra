@@ -1,6 +1,7 @@
+import { Rigidbody } from './rigidbodies'
+
 export type BodyDescriptor = {
-  width: number
-  height: number
+  rigidbody: Rigidbody
   fixedRotation?: boolean
   isStatic?: boolean
 }

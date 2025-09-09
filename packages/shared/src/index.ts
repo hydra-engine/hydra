@@ -10,5 +10,7 @@ export { Ticker } from './ticker'
 export { AssetSource } from './types/asset'
 export { Atlas } from './types/atlas'
 export { BodyDescriptor } from './types/body'
+export { CircleRigidbody, PolygonRigidbody, RectangleRigidbody, Rigidbody, RigidbodyType } from './types/rigidbodies'
 export { ShapeDescriptor } from './types/shape'
 export { WorldDescriptor } from './types/world'
+

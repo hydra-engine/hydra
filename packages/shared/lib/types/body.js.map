@@ -1,1 +1,1 @@
-{"version":3,"file":"body.js","sourceRoot":"","sources":["../../src/types/body.ts"],"names":[],"mappings":"","sourcesContent":["export type BodyDescriptor = {\n  width: number\n  height: number\n  fixedRotation?: boolean\n  isStatic?: boolean\n}\n"]}
+{"version":3,"file":"body.js","sourceRoot":"","sources":["../../src/types/body.ts"],"names":[],"mappings":"","sourcesContent":["import { Rigidbody } from './rigidbodies'\n\nexport type BodyDescriptor = {\n  rigidbody: Rigidbody\n  fixedRotation?: boolean\n  isStatic?: boolean\n}\n"]}
