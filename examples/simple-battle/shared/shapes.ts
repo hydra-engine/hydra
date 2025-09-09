@@ -5,6 +5,10 @@ export enum ShapeId {
   DEBUG_HERO_BODY,
   DEBUG_HERO_HITBOX,
   DEBUG_HERO_HURTBOX,
+
+  DEBUG_ORC_BODY,
+  DEBUG_ORC_HITBOX,
+  DEBUG_ORC_HURTBOX,
 }
 
 export interface ShapeDescriptor {

@@ -71,7 +71,11 @@ export class Hero extends Character<{
 
     this.add(new DelayNode(0.3, () => this.emit('hit', HERO_ATTACK_DAMAGE)))
 
-    sfxPlayer.playRandom(AssetId.SFX_HERO_MISS_1, AssetId.SFX_HERO_MISS_2, AssetId.SFX_HERO_MISS_3)
+    sfxPlayer.playRandom(
+      AssetId.SFX_HERO_MISS_1,
+      AssetId.SFX_HERO_MISS_2,
+      AssetId.SFX_HERO_MISS_3
+    )
   }
 
   override update(dt: number) {
@@ -90,7 +94,11 @@ export class Hero extends Character<{
 
   override takeDamage(damage: number) {
     super.takeDamage(damage)
-    sfxPlayer.playRandom(AssetId.SFX_HERO_HIT_1, AssetId.SFX_HERO_HIT_2, AssetId.SFX_HERO_HIT_3)
+    sfxPlayer.playRandom(
+      AssetId.SFX_HERO_HIT_1,
+      AssetId.SFX_HERO_HIT_2,
+      AssetId.SFX_HERO_HIT_3
+    )
   }
 
   override heal(amount: number) {
