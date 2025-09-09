@@ -9,7 +9,7 @@ export type HpBarOptions = {
 } & GameObjectOptions
 
 export class HpBar extends GameObject {
-  #bg = new RectangleNode({ shape: ShapeId.HP_BAR_BG, width: HP_BAR_WIDTH, height: 4 })
+  #bg = new RectangleNode({ shape: ShapeId.HP_BAR_BG, alpha: 0.4, width: HP_BAR_WIDTH, height: 4 })
   #fg = new RectangleNode({ shape: ShapeId.HP_BAR_FG, width: HP_BAR_WIDTH, height: 4 })
 
   #maxHp: number

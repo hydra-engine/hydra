@@ -3,7 +3,6 @@ import { NONE } from '@hydraengine/shared'
 import { AnimationState } from '../../shared/animations'
 import { AssetId } from '../../shared/assets'
 import { BodyId } from '../../shared/bodies'
-import { ShapeId } from '../../shared/shapes'
 import { Character } from './character'
 
 const ORC_MOVE_VELOCITY = 3 as const
@@ -28,10 +27,6 @@ export class Orc extends Character<{
       body: BodyId.ORC_BODY,
       hitbox: { type: ColliderType.Rectangle, width: 32, height: 52, x: ORC_HITBOX_X, y: -8 },
       hurtbox: { type: ColliderType.Rectangle, width: 24, height: 32, x: 0, y: 0 },
-
-      debugBodyShape: ShapeId.DEBUG_ORC_BODY,
-      debugHitboxShape: ShapeId.DEBUG_ORC_HITBOX,
-      debugHurtboxShape: ShapeId.DEBUG_ORC_HURTBOX,
     })
 
     this._sprite = new AnimatedSpriteNode({

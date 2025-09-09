@@ -3,6 +3,7 @@ import { debugMode } from '@hydraengine/shared'
 import { EventMap } from '@webtaku/event-emitter'
 import { bodyDescriptors } from '../../shared/bodies'
 import { Layer } from '../../shared/layers'
+import { ShapeId } from '../../shared/shapes'
 import { DamageText } from '../hud/damage-text'
 import { HealText } from '../hud/heal-text'
 import { HpBar } from '../hud/hp-bar'
@@ -13,10 +14,6 @@ export type CharacterOptions = {
   body: number
   hitbox: RectangleCollider
   hurtbox: RectangleCollider
-
-  debugBodyShape: number
-  debugHitboxShape: number
-  debugHurtboxShape: number
 } & PhysicsObjectOptions
 
 export abstract class Character<E extends EventMap = EventMap> extends PhysicsObject<E & {
@@ -46,10 +43,10 @@ export abstract class Character<E extends EventMap = EventMap> extends PhysicsOb
     this.add(this.#hpBar)
 
     if (debugMode) {
-      this.add(new RectangleNode({ shape: options.debugBodyShape, ...bodyDescriptors[options.body], layer: Layer.HUD }))
-      this.#hitboxDebugNode = new RectangleNode({ shape: options.debugHitboxShape, ...this.hitbox, layer: Layer.HUD })
+      this.add(new RectangleNode({ shape: ShapeId.DEBUG_CHAR_BODY, ...bodyDescriptors[options.body], alpha: 0.5, layer: Layer.HUD }))
+      this.#hitboxDebugNode = new RectangleNode({ shape: ShapeId.DEBUG_CHAR_HITBOX, ...this.hitbox, alpha: 0.5, layer: Layer.HUD })
       this.add(this.#hitboxDebugNode)
-      this.add(new RectangleNode({ shape: options.debugHitboxShape, ...this.hurtbox, layer: Layer.HUD }))
+      this.add(new RectangleNode({ shape: ShapeId.DEBUG_CHAR_HURTBOX, ...this.hurtbox, alpha: 0.5, layer: Layer.HUD }))
     }
   }
 

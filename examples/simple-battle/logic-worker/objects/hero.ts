@@ -4,7 +4,6 @@ import { AnimationState } from '../../shared/animations'
 import { AssetId } from '../../shared/assets'
 import { BodyId } from '../../shared/bodies'
 import { HERO_MAX_HP } from '../../shared/constants'
-import { ShapeId } from '../../shared/shapes'
 import { Character } from './character'
 
 const HERO_MOVE_SPEED = 200 as const
@@ -30,10 +29,6 @@ export class Hero extends Character<{
       body: BodyId.HERO_BODY,
       hitbox: { type: ColliderType.Rectangle, width: 32, height: 52, x: HERO_HITBOX_X, y: -8 },
       hurtbox: { type: ColliderType.Rectangle, width: 24, height: 40, x: 0, y: -4 },
-
-      debugBodyShape: ShapeId.DEBUG_HERO_BODY,
-      debugHitboxShape: ShapeId.DEBUG_HERO_HITBOX,
-      debugHurtboxShape: ShapeId.DEBUG_HERO_HURTBOX,
     })
 
     this._sprite = new AnimatedSpriteNode({

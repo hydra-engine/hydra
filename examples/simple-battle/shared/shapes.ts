@@ -2,21 +2,23 @@ export enum ShapeId {
   HP_BAR_BG,
   HP_BAR_FG,
 
-  DEBUG_HERO_BODY,
-  DEBUG_HERO_HITBOX,
-  DEBUG_HERO_HURTBOX,
-
-  DEBUG_ORC_BODY,
-  DEBUG_ORC_HITBOX,
-  DEBUG_ORC_HURTBOX,
+  DEBUG_CHAR_BODY,
+  DEBUG_CHAR_HITBOX,
+  DEBUG_CHAR_HURTBOX,
+  DEBUG_POTION_TRIGGER,
 }
 
 export interface ShapeDescriptor {
-  fill: string
-  alpha?: number
+  fill?: string
+  stroke?: string
 }
 
 export const shapeDescriptors: Record<number, ShapeDescriptor> = {
-  [ShapeId.HP_BAR_BG]: { fill: '#000000', alpha: 0.4 },
+  [ShapeId.HP_BAR_BG]: { fill: '#000000' },
   [ShapeId.HP_BAR_FG]: { fill: '#ff3b30' },
+
+  [ShapeId.DEBUG_CHAR_BODY]: { stroke: 'yellow' },
+  [ShapeId.DEBUG_CHAR_HITBOX]: { stroke: 'red' },
+  [ShapeId.DEBUG_CHAR_HURTBOX]: { stroke: 'green' },
+  [ShapeId.DEBUG_POTION_TRIGGER]: { stroke: 'green' },
 }
