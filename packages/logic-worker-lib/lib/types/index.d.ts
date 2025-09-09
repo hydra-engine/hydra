@@ -1,3 +1,4 @@
+export { musicPlayer, sfxPlayer } from './audio';
 export { checkCollision } from './collision/check-collision';
 export { CircleCollider, Collider, ColliderType, EllipseCollider, PolygonCollider, RectangleCollider } from './collision/colliders';
 export { GameObject, GameObjectOptions } from './logic-node/core/game-object';

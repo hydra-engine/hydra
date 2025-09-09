@@ -1,4 +1,5 @@
-import { AnimatedSpriteNode, ColliderType, DelayNode, GameObjectOptions } from '@hydraengine/logic-worker-lib'
+import { AnimatedSpriteNode, ColliderType, DelayNode, GameObjectOptions, sfxPlayer } from '@hydraengine/logic-worker-lib'
+import { NONE } from '@hydraengine/shared'
 import { AnimationState } from '../../shared/animations'
 import { AssetId } from '../../shared/assets'
 import { BodyId } from '../../shared/bodies'
@@ -70,11 +71,7 @@ export class Hero extends Character<{
 
     this.add(new DelayNode(0.3, () => this.emit('hit', HERO_ATTACK_DAMAGE)))
 
-    sfxPlayer.playRandom(
-      'assets/sfx/hero/miss/miss1.wav',
-      'assets/sfx/hero/miss/miss2.wav',
-      'assets/sfx/hero/miss/miss3.wav',
-    )
+    sfxPlayer.playRandom(AssetId.SFX_HERO_MISS_1, AssetId.SFX_HERO_MISS_2, AssetId.SFX_HERO_MISS_3)
   }
 
   override update(dt: number) {
@@ -93,24 +90,20 @@ export class Hero extends Character<{
 
   override takeDamage(damage: number) {
     super.takeDamage(damage)
-    sfxPlayer.playRandom(
-      'assets/sfx/hero/hit/hit1.wav',
-      'assets/sfx/hero/hit/hit2.wav',
-      'assets/sfx/hero/hit/hit3.wav'
-    )
+    sfxPlayer.playRandom(AssetId.SFX_HERO_HIT_1, AssetId.SFX_HERO_HIT_2, AssetId.SFX_HERO_HIT_3)
   }
 
   override heal(amount: number) {
     super.heal(amount)
-    sfxPlayer.play('assets/sfx/hero/heal/heal.wav')
+    sfxPlayer.play(AssetId.SFX_HERO_HEAL)
   }
 
   protected override onDie() {
     this._sprite.animation = AnimationState.Die
     this.#cachedVelX = 0
     this.#cachedVelY = 0
-    this.body = undefined
+    this.body = NONE
 
-    sfxPlayer.play('assets/sfx/hero/die/die.wav')
+    sfxPlayer.play(AssetId.SFX_HERO_DIE)
   }
 }
