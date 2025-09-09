@@ -28,11 +28,7 @@ export abstract class Loader<T> {
 
   release(id: number) {
     const refCount = this.#refCount.get(id)
-    if (refCount === undefined) {
-      console.error(`Asset not found: ${id}`)
-      return
-    }
-
+    if (refCount === undefined) throw new Error(`Asset not found: ${id}`)
     if (refCount === 1) {
       this.#refCount.delete(id)
       const asset = this.cachedAssets.get(id)
