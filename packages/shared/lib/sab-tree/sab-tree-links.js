@@ -1,5 +1,4 @@
-export const ROOT_ID = 0;
-export const NONE = 0xFFFFFFFF;
+import { NONE, ROOT } from '../constants';
 export const TREE_LINK_V_COUNT = 5;
 const PARENT_IDX = 0;
 const FIRST_IDX = 1;
@@ -99,7 +98,7 @@ export class SabTreeLinks {
             this.#insertBeforeSibling(p, cur, c);
     }
     forEach(visitor) {
-        let u = ROOT_ID;
+        let u = ROOT;
         while (true) {
             visitor(u);
             const f = this.#first(u);
@@ -108,7 +107,7 @@ export class SabTreeLinks {
                 continue;
             }
             while (true) {
-                if (u === ROOT_ID)
+                if (u === ROOT)
                     return;
                 const n = this.#next(u);
                 if (n !== NONE) {

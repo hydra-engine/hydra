@@ -3,10 +3,10 @@ import { SabTree } from './sab-tree/sab-tree'
 export const CAPACITY = 1_000_000 as const
 
 // ===== Boolean Indices =============================================================================
-const BOOLEAN_COUNT = 0 as const
+export const BOOLEAN_COUNT = 0 as const
 
 // ===== Uint32 Indices =============================================================================
-const UINT32_COUNT = 5 as const
+export const UINT32_COUNT = 5 as const
 const OBJECT_TYPE_IDX = 0 as const
 const LAYER_IDX = 1 as const
 const TINT_IDX = 2 as const

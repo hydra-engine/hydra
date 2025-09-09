@@ -1,4 +1,4 @@
-import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT_ID } from '@hydraengine/shared'
+import { AssetSource, Atlas, ObjectStateTree, ObjectType, ROOT } from '@hydraengine/shared'
 import { AutoDetectOptions, ColorSource, Container, DOMAdapter, Renderer as PixiRenderer, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js'
 import { Camera } from './camera'
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite'
@@ -123,7 +123,7 @@ export class Renderer {
 
     const tree = this.#stateTree
     tree.forEach((id) => {
-      if (id === ROOT_ID) return
+      if (id === ROOT) return
 
       const objectType = tree.getObjectType(id)
 

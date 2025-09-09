@@ -1,7 +1,10 @@
+export { NONE, ROOT } from './constants';
 export { debugMode, enableDebug } from './debug';
-export { CAPACITY, ObjectStateTree } from './object-state-tree';
+export { BOOLEAN_COUNT, CAPACITY, ObjectStateTree, UINT32_COUNT } from './object-state-tree';
 export { ObjectType } from './object-type';
+export { SabBooleanPool } from './sab-data-structure/sab-boolean-pool';
 export { SabUint32Queue } from './sab-data-structure/sab-uint32-queue';
-export { NONE, ROOT_ID, TREE_LINK_V_COUNT } from './sab-tree/sab-tree-links';
+export { SabTreeLinks, TREE_LINK_V_COUNT } from './sab-tree/sab-tree-links';
+export { SabTreeNodeIdPool } from './sab-tree/sab-tree-node-id-pool';
 export { Ticker } from './ticker';
 //# sourceMappingURL=index.js.map

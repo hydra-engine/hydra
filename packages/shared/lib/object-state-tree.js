@@ -1,9 +1,9 @@
 import { SabTree } from './sab-tree/sab-tree';
 export const CAPACITY = 1_000_000;
 // ===== Boolean Indices =============================================================================
-const BOOLEAN_COUNT = 0;
+export const BOOLEAN_COUNT = 0;
 // ===== Uint32 Indices =============================================================================
-const UINT32_COUNT = 5;
+export const UINT32_COUNT = 5;
 const OBJECT_TYPE_IDX = 0;
 const LAYER_IDX = 1;
 const TINT_IDX = 2;

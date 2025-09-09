@@ -1,0 +1,1 @@
+{"version":3,"file":"constants.js","sourceRoot":"","sources":["../src/constants.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,IAAI,GAAG,CAAU,CAAA;AAC9B,MAAM,CAAC,MAAM,IAAI,GAAG,UAAmB,CAAA","sourcesContent":["export const ROOT = 0 as const\nexport const NONE = 0xFFFFFFFF as const\n"]}

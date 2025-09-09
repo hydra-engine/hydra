@@ -1,5 +1,3 @@
-export declare const ROOT_ID: 0;
-export declare const NONE: 4294967295;
 export declare const TREE_LINK_V_COUNT: 5;
 export declare class SabTreeLinks {
     #private;

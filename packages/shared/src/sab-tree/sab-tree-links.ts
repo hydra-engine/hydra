@@ -1,5 +1,5 @@
-export const ROOT_ID = 0 as const
-export const NONE = 0xFFFFFFFF as const
+import { NONE, ROOT } from '../constants'
+
 export const TREE_LINK_V_COUNT = 5 as const
 
 const PARENT_IDX = 0 as const
@@ -98,7 +98,7 @@ export class SabTreeLinks {
   }
 
   forEach(visitor: (id: number) => void): void {
-    let u: number = ROOT_ID
+    let u: number = ROOT
     while (true) {
       visitor(u)
 
@@ -106,7 +106,7 @@ export class SabTreeLinks {
       if (f !== NONE) { u = f; continue }
 
       while (true) {
-        if (u === ROOT_ID) return
+        if (u === ROOT) return
         const n = this.#next(u)
         if (n !== NONE) { u = n; break }
         u = this.parent(u)

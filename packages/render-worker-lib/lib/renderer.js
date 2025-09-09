@@ -1,4 +1,4 @@
-import { ObjectType, ROOT_ID } from '@hydraengine/shared';
+import { ObjectType, ROOT } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
 import { Camera } from './camera';
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
@@ -101,7 +101,7 @@ export class Renderer {
         let zIndex = 0;
         const tree = this.#stateTree;
         tree.forEach((id) => {
-            if (id === ROOT_ID)
+            if (id === ROOT)
                 return;
             const objectType = tree.getObjectType(id);
             let node = this.#nodes.get(id);
