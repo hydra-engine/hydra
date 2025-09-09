@@ -19,23 +19,26 @@ function getLoaderForPath(path: string): Loader<any> | typeof EXTERNAL_LOADER | 
 
 const idToLoaderMap = new Map<number, Loader<any> | typeof EXTERNAL_LOADER>()
 
-async function loadAsset(id: number, asset: AssetSource): Promise<void> {
+async function loadAsset(id: number, asset: AssetSource): Promise<boolean> {
   if (typeof asset === 'string') {
     const loader = getLoaderForPath(asset)
     if (!loader) {
       console.warn(`No loader found for asset: ${asset}`)
-      return
+      return true
     }
     idToLoaderMap.set(id, loader)
-    if (loader !== EXTERNAL_LOADER) {
-      await loader.load(id, asset)
-    }
+    if (loader === EXTERNAL_LOADER) return false
+    await loader.load(id, asset)
+    return true
   } else if ('atlas' in asset) {
     idToLoaderMap.set(id, EXTERNAL_LOADER)
+    return false
   } else if ('fnt' in asset) {
     idToLoaderMap.set(id, EXTERNAL_LOADER)
+    return false
   } else {
     console.warn(`Unknown asset type: ${asset}`)
+    return true
   }
 }
 
@@ -63,7 +66,9 @@ export class Preloader {
     this.#progressCallback = progressCallback
 
     for (const id of this.#assetIds) {
-      loadAsset(id, assetSources[id]).then(() => this.markLoaded(id))
+      loadAsset(id, assetSources[id]).then((internal) => {
+        if (internal) this.markLoaded(id)
+      })
     }
   }
 

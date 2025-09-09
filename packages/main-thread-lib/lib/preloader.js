@@ -17,21 +17,25 @@ async function loadAsset(id, asset) {
         const loader = getLoaderForPath(asset);
         if (!loader) {
             console.warn(`No loader found for asset: ${asset}`);
-            return;
+            return true;
         }
         idToLoaderMap.set(id, loader);
-        if (loader !== EXTERNAL_LOADER) {
-            await loader.load(id, asset);
-        }
+        if (loader === EXTERNAL_LOADER)
+            return false;
+        await loader.load(id, asset);
+        return true;
     }
     else if ('atlas' in asset) {
         idToLoaderMap.set(id, EXTERNAL_LOADER);
+        return false;
     }
     else if ('fnt' in asset) {
         idToLoaderMap.set(id, EXTERNAL_LOADER);
+        return false;
     }
     else {
         console.warn(`Unknown asset type: ${asset}`);
+        return true;
     }
 }
 function releaseAsset(id) {
@@ -51,7 +55,10 @@ export class Preloader {
         this.#assetIds = new Set(assetIds);
         this.#progressCallback = progressCallback;
         for (const id of this.#assetIds) {
-            loadAsset(id, assetSources[id]).then(() => this.markLoaded(id));
+            loadAsset(id, assetSources[id]).then((internal) => {
+                if (internal)
+                    this.markLoaded(id);
+            });
         }
     }
     async preload() {

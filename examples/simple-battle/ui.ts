@@ -31,3 +31,12 @@ export function changeHP(hp: number) {
 export function changeScore(score: number) {
   scoreText.textContent = `Score: ${score}`
 }
+
+export function showGameOver() {
+  const gameOverText = createTextElement()
+  gameOverText.textContent = 'Game Over'
+  gameOverText.style.left = '50%'
+  gameOverText.style.top = '50%'
+  gameOverText.style.transform = 'translate(-50%, -50%)'
+  document.body.append(gameOverText)
+}
