@@ -4,16 +4,19 @@ import { GameObject, GameObjectOptions } from '../core/game-object'
 
 export type BitmapTextNodeOptions = {
   asset: number
+  text: string
 } & GameObjectOptions
 
 export class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E> {
   type = ObjectType.BitmapText
 
   #asset: number
+  #text: string
 
   constructor(options: BitmapTextNodeOptions) {
     super(options)
     this.#asset = options.asset
+    this.#text = options.text
   }
 
   get asset() { return this.#asset }

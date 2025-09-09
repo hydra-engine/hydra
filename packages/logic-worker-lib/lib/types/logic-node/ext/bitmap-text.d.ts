@@ -3,6 +3,7 @@ import { EventMap } from '@webtaku/event-emitter';
 import { GameObject, GameObjectOptions } from '../core/game-object';
 export type BitmapTextNodeOptions = {
     asset: number;
+    text: string;
 } & GameObjectOptions;
 export declare class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E> {
     #private;

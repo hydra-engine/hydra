@@ -18,6 +18,7 @@ export class HealText extends BitmapTextNode {
     super({
       ...options,
       asset: AssetId.FONT_WHITE_PEABERRY,
+      text: `+${options.hp}`,
     })
   }
 
