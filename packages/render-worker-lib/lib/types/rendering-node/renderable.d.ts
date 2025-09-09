@@ -1,5 +1,5 @@
 import { Container } from 'pixi.js';
-export declare class RenderableNode<T extends Container = Container> {
+export declare abstract class RenderableNode<T extends Container = Container> {
     pixiContainer: T;
     seenPass?: number;
     constructor(pixiContainer: T);

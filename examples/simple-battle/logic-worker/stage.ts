@@ -29,9 +29,9 @@ export class Stage extends PhysicsWorld<{
     this.add(this.#spawnOrcInterval = new IntervalNode(1, () => this.#spawnOrc()))
     this.add(this.#spawnPotionInterval = new IntervalNode(3, () => this.#spawnPotion()))
 
-    //for (let i = 0; i < 1000; i++) {
-    //  this.#spawnOrc()
-    //}
+    for (let i = 0; i < 1000; i++) {
+      this.#spawnOrc()
+    }
 
     this.#hero.on('hit', (damage) => {
       for (const o of this.#orcs) {

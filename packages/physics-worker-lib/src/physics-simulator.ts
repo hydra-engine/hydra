@@ -64,8 +64,8 @@ export class PhysicsSimulator {
             object.velocityX = tree.getVelocityX(id)
             object.velocityY = tree.getVelocityY(id)
 
-            tree.setLocalX(id, object.x)
-            tree.setLocalY(id, object.y)
+            tree.setTargetX(id, object.x)
+            tree.setTargetY(id, object.y)
           }
 
           object.processedStep = step

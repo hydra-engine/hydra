@@ -1,2 +1,2 @@
-export { updateWorldTransforms } from './update-world-transforms';
+export { updateTransforms } from './update-transforms';
 //# sourceMappingURL=index.js.map

@@ -37,4 +37,4 @@ export function updateTransforms(tree) {
         tree.setWorldAlpha(id, tree.getWorldAlpha(parent) * tree.getLocalAlpha(id));
     });
 }
-//# sourceMappingURL=update-world-transforms.js.map
+//# sourceMappingURL=update-transforms.js.map

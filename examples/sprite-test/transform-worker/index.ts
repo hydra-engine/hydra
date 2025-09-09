@@ -1,5 +1,5 @@
 import { debugMode, enableDebug, ObjectStateTree, Ticker } from '@hydraengine/shared'
-import { updateWorldTransforms } from '@hydraengine/transform-worker-lib'
+import { updateTransforms } from '@hydraengine/transform-worker-lib'
 
 enableDebug()
 
@@ -9,7 +9,7 @@ let lastFps = 0
 function init(stateTree: ObjectStateTree) {
   ticker = new Ticker((dt) => {
     lastFps = 1 / dt
-    updateWorldTransforms(stateTree)
+    updateTransforms(stateTree)
   })
 
   if (debugMode) setInterval(() => {

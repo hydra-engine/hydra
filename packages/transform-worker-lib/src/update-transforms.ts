@@ -1,6 +1,6 @@
 import { NONE, ObjectStateTree } from '@hydraengine/shared'
 
-export function updateWorldTransforms(tree: ObjectStateTree) {
+export function updateTransforms(tree: ObjectStateTree) {
   tree.forEach((id) => {
     const parent = tree.getParent(id)
     if (parent === NONE) return

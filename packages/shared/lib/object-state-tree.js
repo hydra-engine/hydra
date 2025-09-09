@@ -16,7 +16,7 @@ const SHAPE_ID_IDX = 3;
 const WORLD_ID_IDX = 3;
 const BODY_ID_IDX = 3;
 // ===== Float32 Indices =============================================================================
-export const FLOAT32_COUNT = 20;
+export const FLOAT32_COUNT = 22;
 // Local Transform
 const LOCAL_X_IDX = 0;
 const LOCAL_Y_IDX = 1;
@@ -44,6 +44,8 @@ const RADIUS_IDX = 18;
 // Physics
 const VELOCITY_X_IDX = 18;
 const VELOCITY_Y_IDX = 19;
+const TARGET_X_IDX = 20;
+const TARGET_Y_IDX = 21;
 export class ObjectStateTree extends SabTree {
     constructor(sab) {
         super(sab, BOOLEAN_COUNT, UINT32_COUNT, FLOAT32_COUNT, CAPACITY);
@@ -114,5 +116,9 @@ export class ObjectStateTree extends SabTree {
     getVelocityX(id) { return this.getFloat32(id, VELOCITY_X_IDX); }
     setVelocityY(id, v) { this.setFloat32(id, VELOCITY_Y_IDX, v); }
     getVelocityY(id) { return this.getFloat32(id, VELOCITY_Y_IDX); }
+    setTargetX(id, v) { this.setFloat32(id, TARGET_X_IDX, v); }
+    getTargetX(id) { return this.getFloat32(id, TARGET_X_IDX); }
+    setTargetY(id, v) { this.setFloat32(id, TARGET_Y_IDX, v); }
+    getTargetY(id) { return this.getFloat32(id, TARGET_Y_IDX); }
 }
 //# sourceMappingURL=object-state-tree.js.map

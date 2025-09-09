@@ -1,11 +1,10 @@
-import { ObjectType, ROOT } from '@hydraengine/shared';
+import { NONE, ObjectType, ROOT } from '@hydraengine/shared';
 import { Container, DOMAdapter, WebWorkerAdapter, autoDetectRenderer } from 'pixi.js';
 import { Camera } from './camera';
 import { AnimatedSpriteNode } from './rendering-node/animated-sprite';
 import { BitmapTextNode } from './rendering-node/bitmap-text';
 import { CircleNode } from './rendering-node/circle';
 import { RectangleNode } from './rendering-node/rectangle';
-import { RenderableNode } from './rendering-node/renderable';
 import { SpriteNode } from './rendering-node/sprite';
 DOMAdapter.set(WebWorkerAdapter);
 export class Renderer {
@@ -124,66 +123,68 @@ export class Renderer {
             const objectType = tree.getObjectType(id);
             let node = this.#nodes.get(id);
             if (!node) {
-                if (objectType === ObjectType.GameObject) {
-                    node = new RenderableNode(new Container());
-                }
-                else if (objectType === ObjectType.Sprite) {
+                if (objectType === ObjectType.Sprite) {
                     const assetId = tree.getAssetId(id);
-                    node = new SpriteNode(assetId, this.#assetSources[assetId]);
+                    if (assetId !== NONE) {
+                        node = new SpriteNode(assetId, this.#assetSources[assetId]);
+                    }
                 }
                 else if (objectType === ObjectType.AnimatedSprite) {
                     const assetId = tree.getAssetId(id);
                     const animation = this.#animationNames[tree.getAnimationId(id)];
                     const source = this.#assetSources[assetId];
-                    node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation);
+                    if (assetId !== NONE && animation && source) {
+                        node = new AnimatedSpriteNode(assetId, source.src, source.atlas, animation);
+                    }
                 }
                 else if (objectType === ObjectType.Rectangle) {
                     const width = tree.getWidth(id);
                     const height = tree.getHeight(id);
                     const shapeId = tree.getShapeId(id);
                     const shapeDescriptor = this.#shapeDescriptors[shapeId];
-                    node = new RectangleNode(width, height, shapeDescriptor.fill, shapeDescriptor.stroke);
+                    if (width !== NONE && height !== NONE && shapeDescriptor) {
+                        node = new RectangleNode(width, height, shapeDescriptor.fill, shapeDescriptor.stroke);
+                    }
                 }
                 else if (objectType === ObjectType.Circle) {
                     const radius = tree.getRadius(id);
                     const shapeId = tree.getShapeId(id);
                     const shapeDescriptor = this.#shapeDescriptors[shapeId];
-                    node = new CircleNode(radius, shapeDescriptor.fill, shapeDescriptor.stroke);
+                    if (radius !== NONE && shapeDescriptor) {
+                        node = new CircleNode(radius, shapeDescriptor.fill, shapeDescriptor.stroke);
+                    }
                 }
                 else if (objectType === ObjectType.BitmapText) {
                     const assetId = tree.getAssetId(id);
                     const source = this.#assetSources[assetId];
-                    node = new BitmapTextNode(assetId, source.fnt, source.src);
+                    if (assetId !== NONE && source) {
+                        node = new BitmapTextNode(assetId, source.fnt, source.src);
+                    }
                 }
-                else if (objectType === ObjectType.PhysicsWorld) {
-                    //TODO
-                    node = new RenderableNode(new Container());
+                if (node) {
+                    this.#nodes.set(id, node);
+                    this.#root.addChild(node.pixiContainer);
                 }
-                else if (objectType === ObjectType.PhysicsObject) {
-                    //TODO
-                    node = new RenderableNode(new Container());
-                }
-                else {
-                    throw new Error(`Unknown object type: ${objectType}`);
-                }
-                this.#nodes.set(id, node);
-                this.#root.addChild(node.pixiContainer);
             }
-            const pc = node.pixiContainer;
-            pc.position.set(tree.getWorldX(id), tree.getWorldY(id));
-            pc.scale.set(tree.getWorldScaleX(id), tree.getWorldScaleY(id));
-            pc.rotation = tree.getWorldRotation(id);
-            pc.alpha = tree.getWorldAlpha(id);
-            const tint = tree.getTint(id);
-            pc.tint = tint === 0 ? 0xffffff : tint - 1;
-            pc.zIndex = zIndex++;
-            if (objectType === ObjectType.AnimatedSprite) {
-                node.animation = this.#animationNames[tree.getAnimationId(id)];
+            if (node) {
+                const pc = node.pixiContainer;
+                pc.position.set(tree.getWorldX(id), tree.getWorldY(id));
+                pc.scale.set(tree.getWorldScaleX(id), tree.getWorldScaleY(id));
+                pc.rotation = tree.getWorldRotation(id);
+                pc.alpha = tree.getWorldAlpha(id);
+                const tint = tree.getTint(id);
+                pc.tint = tint === 0 ? 0xffffff : tint - 1;
+                pc.zIndex = zIndex++;
+                if (objectType === ObjectType.AnimatedSprite) {
+                    const animation = this.#animationNames[tree.getAnimationId(id)];
+                    if (animation)
+                        node.animation = animation;
+                }
+                if (objectType === ObjectType.BitmapText) {
+                    node.text = this.#messageBridge.getText(id);
+                }
+                node.seenPass = pass;
             }
-            if (objectType === ObjectType.BitmapText) {
-                node.text = this.#messageBridge.getText(id);
-            }
-            node.seenPass = pass;
         });
         for (const [id, node] of this.#nodes) {
             if (node.seenPass !== pass) {

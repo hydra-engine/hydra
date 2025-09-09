@@ -23,7 +23,7 @@ const WORLD_ID_IDX = 3 as const
 const BODY_ID_IDX = 3 as const
 
 // ===== Float32 Indices =============================================================================
-export const FLOAT32_COUNT = 20 as const
+export const FLOAT32_COUNT = 22 as const
 
 // Local Transform
 const LOCAL_X_IDX = 0 as const
@@ -55,6 +55,8 @@ const RADIUS_IDX = 18 as const
 // Physics
 const VELOCITY_X_IDX = 18 as const
 const VELOCITY_Y_IDX = 19 as const
+const TARGET_X_IDX = 20 as const
+const TARGET_Y_IDX = 21 as const
 
 export class ObjectStateTree extends SabTree {
   constructor(sab: SharedArrayBuffer) {
@@ -158,4 +160,10 @@ export class ObjectStateTree extends SabTree {
 
   setVelocityY(id: number, v: number) { this.setFloat32(id, VELOCITY_Y_IDX, v) }
   getVelocityY(id: number) { return this.getFloat32(id, VELOCITY_Y_IDX) }
+
+  setTargetX(id: number, v: number) { this.setFloat32(id, TARGET_X_IDX, v) }
+  getTargetX(id: number) { return this.getFloat32(id, TARGET_X_IDX) }
+
+  setTargetY(id: number, v: number) { this.setFloat32(id, TARGET_Y_IDX, v) }
+  getTargetY(id: number) { return this.getFloat32(id, TARGET_Y_IDX) }
 }
