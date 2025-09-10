@@ -3,8 +3,6 @@ import { PhysicsNode } from './physics-node';
 import { PhysicsWorld } from './physics-world';
 export declare class PhysicsObject extends PhysicsNode {
     #private;
-    initialX: number;
-    initialY: number;
     bodyId: number;
     isStatic: boolean;
     constructor(initialX: number, initialY: number, bodyId: number, rigidbody: Rigidbody, fixedRotation: boolean | undefined, isStatic: boolean | undefined);
@@ -16,7 +14,7 @@ export declare class PhysicsObject extends PhysicsNode {
     get velocityX(): number;
     set velocityY(v: number);
     get velocityY(): number;
-    changeRigidbody(rigidbody: Rigidbody): void;
+    changeBody(bodyId: number, rigidbody: Rigidbody): void;
     remove(): void;
 }
 //# sourceMappingURL=physics-object.d.ts.map

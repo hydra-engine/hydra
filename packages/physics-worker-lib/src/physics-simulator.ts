@@ -77,10 +77,7 @@ export class PhysicsSimulator {
               this.#objects.delete(id)
             } else {
               const bd = this.#bodyDescriptors[bodyId]
-              if (bd) {
-                object.bodyId = bodyId
-                object.changeRigidbody(bd.rigidbody)
-              }
+              if (bd) object.changeBody(bodyId, bd.rigidbody)
             }
           }
         }

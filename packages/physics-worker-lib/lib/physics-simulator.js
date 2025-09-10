@@ -69,10 +69,8 @@ export class PhysicsSimulator {
                         }
                         else {
                             const bd = this.#bodyDescriptors[bodyId];
-                            if (bd) {
-                                object.bodyId = bodyId;
-                                object.changeRigidbody(bd.rigidbody);
-                            }
+                            if (bd)
+                                object.changeBody(bodyId, bd.rigidbody);
                         }
                     }
                 }

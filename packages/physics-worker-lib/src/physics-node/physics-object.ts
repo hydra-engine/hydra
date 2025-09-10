@@ -7,27 +7,30 @@ export class PhysicsObject extends PhysicsNode {
   #matterBody!: Matter.Body
   #world?: PhysicsWorld
 
-  initialX: number
-  initialY: number
-  bodyId: number
+  #initialX: number
+  #initialY: number
+  bodyId!: number
   #fixedRotation: boolean
   isStatic: boolean
 
   constructor(
     initialX: number,
     initialY: number,
+
     bodyId: number,
     rigidbody: Rigidbody,
+
     fixedRotation: boolean | undefined,
     isStatic: boolean | undefined,
   ) {
     super()
-    this.initialX = initialX
-    this.initialY = initialY
-    this.bodyId = bodyId
+
+    this.#initialX = initialX
+    this.#initialY = initialY
     this.#fixedRotation = fixedRotation ?? false
     this.isStatic = isStatic ?? false
-    this.changeRigidbody(rigidbody)
+
+    this.changeBody(bodyId, rigidbody)
   }
 
   set world(world) {
@@ -48,9 +51,11 @@ export class PhysicsObject extends PhysicsNode {
   set velocityY(v) { Matter.Body.setVelocity(this.#matterBody, { x: this.#matterBody.velocity.x, y: v }) }
   get velocityY() { return this.#matterBody.velocity.y }
 
-  changeRigidbody(rigidbody: Rigidbody) {
-    let x = this.initialX
-    let y = this.initialY
+  changeBody(bodyId: number, rigidbody: Rigidbody) {
+    this.bodyId = bodyId
+
+    let x = this.#initialX
+    let y = this.#initialY
 
     if (this.#matterBody) {
       x = this.#matterBody.position.x
