@@ -19,7 +19,7 @@ export class PhysicsObject extends GameObject {
         return id;
     }
     set body(v) {
-        if (!isNaN(v) && this.#bodyId !== v) {
+        if (this.#bodyId !== v) {
             this.#bodyId = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setBodyId(this.id, v);
@@ -28,7 +28,7 @@ export class PhysicsObject extends GameObject {
     }
     get body() { return this.#bodyId; }
     set velocityX(v) {
-        if (!isNaN(v) && this.#velocityX !== v) {
+        if (this.#velocityX !== v) {
             this.#velocityX = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setVelocityX(this.id, v);
@@ -37,7 +37,7 @@ export class PhysicsObject extends GameObject {
     }
     get velocityX() { return this.#velocityX; }
     set velocityY(v) {
-        if (!isNaN(v) && this.#velocityY !== v) {
+        if (this.#velocityY !== v) {
             this.#velocityY = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setVelocityY(this.id, v);

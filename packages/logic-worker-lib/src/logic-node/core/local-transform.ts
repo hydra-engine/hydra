@@ -24,7 +24,7 @@ export class LocalTransform {
   }
 
   set x(v) {
-    if (!isNaN(v) && this.x !== v) {
+    if (this.x !== v) {
       this.#cachedX = v
 
       const id = this.#id
@@ -45,7 +45,7 @@ export class LocalTransform {
   }
 
   set y(v) {
-    if (!isNaN(v) && this.y !== v) {
+    if (this.y !== v) {
       this.#cachedY = v
 
       const id = this.#id
@@ -66,7 +66,7 @@ export class LocalTransform {
   }
 
   set scaleX(v) {
-    if (!isNaN(v) && this.scaleX !== v) {
+    if (this.scaleX !== v) {
       this.#cachedScaleX = v
 
       const id = this.#id
@@ -87,7 +87,7 @@ export class LocalTransform {
   }
 
   set scaleY(v) {
-    if (!isNaN(v) && this.scaleY !== v) {
+    if (this.scaleY !== v) {
       this.#cachedScaleY = v
 
       const id = this.#id
@@ -108,7 +108,7 @@ export class LocalTransform {
   }
 
   set pivotX(v) {
-    if (!isNaN(v) && this.pivotX !== v) {
+    if (this.pivotX !== v) {
       this.#cachedPivotX = v
 
       const id = this.#id
@@ -129,7 +129,7 @@ export class LocalTransform {
   }
 
   set pivotY(v) {
-    if (!isNaN(v) && this.pivotY !== v) {
+    if (this.pivotY !== v) {
       this.#cachedPivotY = v
 
       const id = this.#id
@@ -150,7 +150,7 @@ export class LocalTransform {
   }
 
   set rotation(v) {
-    if (!isNaN(v) && this.rotation !== v) {
+    if (this.rotation !== v) {
       this.#cachedRotation = v
 
       const cos = Math.cos(v)

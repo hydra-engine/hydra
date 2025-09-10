@@ -107,4 +107,8 @@ export class Stage extends PhysicsWorld<{
       }
     }
   }
+
+  heroMove(r: number, d: number) { this.#hero.move(r, d) }
+  heroRelease() { this.#hero.stop() }
+  heroAttack() { this.#hero.attack() }
 }

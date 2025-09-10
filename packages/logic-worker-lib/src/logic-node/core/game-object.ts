@@ -154,7 +154,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   get rotation() { return this.#localTransform.rotation }
 
   set layer(v) {
-    if (!isNaN(v) && this.#layer !== v) {
+    if (this.#layer !== v) {
       this.#layer = v
 
       if (this.id !== undefined && this.stateTree) {
@@ -165,7 +165,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   get layer() { return this.#layer }
 
   set tint(v) {
-    if (!isNaN(v) && this.#tint !== v) {
+    if (this.#tint !== v) {
       this.#tint = v
 
       if (this.id !== undefined && this.stateTree) {
@@ -176,7 +176,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   get tint() { return this.#tint }
 
   set drawOrder(v) {
-    if (!isNaN(v) && this.#drawOrder !== v) {
+    if (this.#drawOrder !== v) {
       this.#drawOrder = v
       this.#drawOrderDirty = true
 

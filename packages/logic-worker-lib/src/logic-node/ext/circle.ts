@@ -21,7 +21,7 @@ export class CircleNode extends GameObject {
 
   get radius() { return this.#radius }
   set radius(v) {
-    if (!isNaN(v) && this.#radius !== v) {
+    if (this.#radius !== v) {
       this.#radius = v
 
       if (this.id !== undefined && this.stateTree) {

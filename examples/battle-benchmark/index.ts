@@ -10,7 +10,22 @@ const canvas = document.createElement('canvas')
 document.body.appendChild(canvas)
 const offscreenCanvas = canvas.transferControlToOffscreen()
 
-const joystick = new Joystick(document.body)
+const joystickImage = new Image()
+joystickImage.src = 'assets/joystick/joystick.png'
+
+const knobImage = new Image()
+knobImage.src = 'assets/joystick/knob.png'
+
+new Joystick(document.body, {
+  onMove: (r, d) => logicWorker.postMessage({ type: 'heroMove', r, d }),
+  onRelease: () => logicWorker.postMessage({ type: 'heroRelease' }),
+  onKeyDown: (code) => {
+    if (code === 'KeyA') logicWorker.postMessage({ type: 'heroAttack' })
+  },
+  joystickImage,
+  knobImage,
+  maxKnobDistance: 70,
+})
 
 const fpsDisplayContainer = document.createElement('div')
 setStyle(fpsDisplayContainer, { position: 'absolute', top: '0', left: '0', display: 'flex', flexDirection: 'column' })

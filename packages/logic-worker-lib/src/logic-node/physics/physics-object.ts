@@ -32,7 +32,7 @@ export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> 
   }
 
   set body(v: number) {
-    if (!isNaN(v) && this.#bodyId !== v) {
+    if (this.#bodyId !== v) {
       this.#bodyId = v
 
       if (this.id !== undefined && this.stateTree) {
@@ -44,7 +44,7 @@ export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> 
   get body() { return this.#bodyId }
 
   set velocityX(v: number) {
-    if (!isNaN(v) && this.#velocityX !== v) {
+    if (this.#velocityX !== v) {
       this.#velocityX = v
 
       if (this.id !== undefined && this.stateTree) {
@@ -56,7 +56,7 @@ export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> 
   get velocityX() { return this.#velocityX }
 
   set velocityY(v: number) {
-    if (!isNaN(v) && this.#velocityY !== v) {
+    if (this.#velocityY !== v) {
       this.#velocityY = v
 
       if (this.id !== undefined && this.stateTree) {

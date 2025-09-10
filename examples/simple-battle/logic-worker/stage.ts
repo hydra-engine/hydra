@@ -18,7 +18,7 @@ export class Stage extends PhysicsWorld<{
   #score = 0
   #isGameOver = false
 
-  //#spawnOrcInterval: IntervalNode
+  #spawnOrcInterval: IntervalNode
   #spawnPotionInterval: IntervalNode
 
   constructor() {
@@ -26,9 +26,8 @@ export class Stage extends PhysicsWorld<{
     musicPlayer.play(AssetId.BGM_BATTLE)
 
     this.add(this.#hero)
-    //this.add(this.#spawnOrcInterval = new IntervalNode(1, () => this.#spawnOrc()))
+    this.add(this.#spawnOrcInterval = new IntervalNode(1, () => this.#spawnOrc()))
     this.add(this.#spawnPotionInterval = new IntervalNode(3, () => this.#spawnPotion()))
-    this.#spawnOrc()
 
     this.#hero.on('hit', (damage) => {
       for (const o of this.#orcs) {
@@ -45,7 +44,7 @@ export class Stage extends PhysicsWorld<{
 
   #gameOver() {
     this.#isGameOver = true
-    //this.#spawnOrcInterval.remove()
+    this.#spawnOrcInterval.remove()
     this.#spawnPotionInterval.remove()
     for (const o of this.#orcs) {
       o.stop()
@@ -105,15 +104,7 @@ export class Stage extends PhysicsWorld<{
     }
   }
 
-  heroMove(r: number, d: number) {
-    this.#hero.move(r, d)
-  }
-
-  heroRelease() {
-    this.#hero.stop()
-  }
-
-  heroAttack() {
-    this.#hero.attack()
-  }
+  heroMove(r: number, d: number) { this.#hero.move(r, d) }
+  heroRelease() { this.#hero.stop() }
+  heroAttack() { this.#hero.attack() }
 }

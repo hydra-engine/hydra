@@ -121,7 +121,7 @@ export class GameObject extends GameNode {
     set rotation(v) { this.#localTransform.rotation = v; }
     get rotation() { return this.#localTransform.rotation; }
     set layer(v) {
-        if (!isNaN(v) && this.#layer !== v) {
+        if (this.#layer !== v) {
             this.#layer = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setLayer(this.id, v);
@@ -130,7 +130,7 @@ export class GameObject extends GameNode {
     }
     get layer() { return this.#layer; }
     set tint(v) {
-        if (!isNaN(v) && this.#tint !== v) {
+        if (this.#tint !== v) {
             this.#tint = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setTint(this.id, v + 1);
@@ -139,7 +139,7 @@ export class GameObject extends GameNode {
     }
     get tint() { return this.#tint; }
     set drawOrder(v) {
-        if (!isNaN(v) && this.#drawOrder !== v) {
+        if (this.#drawOrder !== v) {
             this.#drawOrder = v;
             this.#drawOrderDirty = true;
             if (this.id !== undefined && this.stateTree) {

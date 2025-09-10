@@ -11,7 +11,7 @@ export class BitmapTextNode extends GameObject {
     }
     get asset() { return this.#asset; }
     set asset(v) {
-        if (!isNaN(v) && this.#asset !== v) {
+        if (this.#asset !== v) {
             this.#asset = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setAssetId(this.id, v);

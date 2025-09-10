@@ -1,5 +1,5 @@
 import { NONE } from '@hydraengine/shared';
-const APPROACH = 10; // 목표로 붙는 속도(값이 클수록 빠르게 수렴)
+const APPROACH = 100; // 목표로 붙는 속도(값이 클수록 빠르게 수렴)
 const EPS = 1e-3; // 목표 스냅 임계값
 export function updateTransforms(tree, dt) {
     tree.forEach((id) => {

@@ -16,7 +16,7 @@ export class AnimatedSpriteNode extends GameObject {
         return id;
     }
     set animation(v) {
-        if (!isNaN(v) && this.#animationId !== v) {
+        if (this.#animationId !== v) {
             this.#animationId = v;
             if (this.id !== undefined && this.stateTree) {
                 this.stateTree.setAnimationId(this.id, v);

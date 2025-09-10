@@ -1,4 +1,4 @@
-import { ObjectType } from '@hydraengine/shared';
+import { NONE, ObjectType } from '@hydraengine/shared';
 import { PhysicsObject } from './physics-node/physics-object';
 import { PhysicsWorld } from './physics-node/physics-world';
 export class PhysicsSimulator {
@@ -46,7 +46,7 @@ export class PhysicsSimulator {
                     const bodyId = tree.getBodyId(id);
                     const bd = this.#bodyDescriptors[bodyId];
                     if (bd) {
-                        object = new PhysicsObject(tree.getLocalX(id), tree.getLocalY(id), bd.rigidbody, bd.fixedRotation, bd.isStatic);
+                        object = new PhysicsObject(tree.getLocalX(id), tree.getLocalY(id), bodyId, bd.rigidbody, bd.fixedRotation, bd.isStatic);
                         this.#objects.set(id, object);
                     }
                 }
@@ -61,6 +61,20 @@ export class PhysicsSimulator {
                         tree.setTargetY(id, object.y);
                     }
                     object.processedStep = step;
+                    const bodyId = tree.getBodyId(id);
+                    if (object.bodyId !== bodyId) {
+                        if (bodyId === NONE) {
+                            object.remove();
+                            this.#objects.delete(id);
+                        }
+                        else {
+                            const bd = this.#bodyDescriptors[bodyId];
+                            if (bd) {
+                                object.bodyId = bodyId;
+                                object.changeRigidbody(bd.rigidbody);
+                            }
+                        }
+                    }
                 }
             }
         });
