@@ -23,13 +23,13 @@ function validTransform(t: WorldTransform): boolean {
   return allFinite(t.x, t.y, t.cos, t.sin, t.scaleX, t.scaleY, t.rotation)
 }
 function validRect(r: RectangleCollider): boolean {
-  return allFinite(r.width, r.height, (r as any).x ?? 0, (r as any).y ?? 0)
+  return allFinite(r.width, r.height, r.x ?? 0, r.y ?? 0)
 }
 function validCircle(c: CircleCollider): boolean {
-  return allFinite(c.radius, (c as any).x ?? 0, (c as any).y ?? 0)
+  return allFinite(c.radius, c.x ?? 0, c.y ?? 0)
 }
 function validEllipse(e: EllipseCollider): boolean {
-  return allFinite(e.width, e.height, (e as any).x ?? 0, (e as any).y ?? 0)
+  return allFinite(e.width, e.height, e.x ?? 0, e.y ?? 0)
 }
 function validPoly(p: PolygonCollider): boolean {
   if (!Array.isArray(p.vertices) || p.vertices.length === 0) return false
@@ -37,7 +37,7 @@ function validPoly(p: PolygonCollider): boolean {
     const v = p.vertices[i]
     if (!allFinite(v?.x, v?.y)) return false
   }
-  return allFinite((p as any).x ?? 0, (p as any).y ?? 0)
+  return allFinite(p.x ?? 0, p.y ?? 0)
 }
 
 // =====================================================================================

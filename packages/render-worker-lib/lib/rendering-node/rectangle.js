@@ -20,13 +20,33 @@ export class RectangleNode extends RenderableNode {
         if (this.#stroke)
             this.pixiContainer.stroke(this.#stroke);
     }
+    set width(v) {
+        if (v !== this.#width) {
+            this.#width = v;
+            this.#draw();
+        }
+    }
     get width() { return this.#width; }
-    set width(v) { this.#width = v; this.#draw(); }
+    set height(v) {
+        if (v !== this.#height) {
+            this.#height = v;
+            this.#draw();
+        }
+    }
     get height() { return this.#height; }
-    set height(v) { this.#height = v; this.#draw(); }
+    set fill(v) {
+        if (v !== this.#fill) {
+            this.#fill = v;
+            this.#draw();
+        }
+    }
     get fill() { return this.#fill; }
-    set fill(v) { this.#fill = v; this.#draw(); }
+    set stroke(v) {
+        if (v !== this.#stroke) {
+            this.#stroke = v;
+            this.#draw();
+        }
+    }
     get stroke() { return this.#stroke; }
-    set stroke(v) { this.#stroke = v; this.#draw(); }
 }
 //# sourceMappingURL=rectangle.js.map

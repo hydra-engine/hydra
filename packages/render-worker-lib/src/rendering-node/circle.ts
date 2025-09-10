@@ -22,12 +22,27 @@ export class CircleNode extends RenderableNode<Graphics> {
     if (this.#stroke) this.pixiContainer.stroke(this.#stroke)
   }
 
+  set radius(v) {
+    if (v !== this.#radius) {
+      this.#radius = v
+      this.#draw()
+    }
+  }
   get radius() { return this.#radius }
-  set radius(v) { this.#radius = v; this.#draw() }
 
+  set fill(v) {
+    if (v !== this.#fill) {
+      this.#fill = v
+      this.#draw()
+    }
+  }
   get fill() { return this.#fill }
-  set fill(v) { this.#fill = v; this.#draw() }
 
+  set stroke(v) {
+    if (v !== this.#stroke) {
+      this.#stroke = v
+      this.#draw()
+    }
+  }
   get stroke() { return this.#stroke }
-  set stroke(v) { this.#stroke = v; this.#draw() }
 }
