@@ -36,7 +36,7 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
   #layer = 0
   #tint = 0xffffff
 
-  #drawOrder = 0
+  #drawOrder?: number
   #drawOrderDirty = false
   #useYSort = false
 
@@ -113,13 +113,9 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
 
     let childOrderDirty = false
     for (const child of this.children) {
-      if (!child.paused) {
-        child.update(dt)
-
-        if (this.id !== undefined && this.stateTree && isGameObject(child) && child.#drawOrderDirty) {
-          childOrderDirty = true
-          child.#drawOrderDirty = false
-        }
+      if (this.id !== undefined && this.stateTree && isGameObject(child) && child.#drawOrderDirty) {
+        childOrderDirty = true
+        child.#drawOrderDirty = false
       }
     }
 
@@ -189,5 +185,5 @@ export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
       }
     }
   }
-  get drawOrder() { return this.#drawOrder }
+  get drawOrder() { return this.#drawOrder ?? 0 }
 }

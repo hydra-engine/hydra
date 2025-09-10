@@ -18,7 +18,7 @@ export class LocalTransform {
     const id = this.#id
     const tree = this.#stateTree
     if (tree && id !== undefined) {
-      return tree.getWorldX(id)
+      return tree.getLocalX(id)
     }
     return this.#cachedX
   }
@@ -39,7 +39,7 @@ export class LocalTransform {
     const id = this.#id
     const tree = this.#stateTree
     if (tree && id !== undefined) {
-      return tree.getWorldY(id)
+      return tree.getLocalY(id)
     }
     return this.#cachedY
   }
@@ -60,7 +60,7 @@ export class LocalTransform {
     const id = this.#id
     const tree = this.#stateTree
     if (tree && id !== undefined) {
-      return tree.getWorldScaleX(id)
+      return tree.getLocalScaleX(id)
     }
     return this.#cachedScaleX
   }
@@ -81,7 +81,7 @@ export class LocalTransform {
     const id = this.#id
     const tree = this.#stateTree
     if (tree && id !== undefined) {
-      return tree.getWorldScaleY(id)
+      return tree.getLocalScaleY(id)
     }
     return this.#cachedScaleY
   }

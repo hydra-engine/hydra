@@ -213,6 +213,15 @@ export class Renderer {
           if (animation) (node as AnimatedSpriteNode).animation = animation
         }
 
+        if (objectType === ObjectType.Rectangle) {
+          (node as RectangleNode).width = tree.getWidth(id);
+          (node as RectangleNode).height = tree.getHeight(id)
+        }
+
+        if (objectType === ObjectType.Circle) {
+          (node as CircleNode).radius = tree.getRadius(id)
+        }
+
         if (objectType === ObjectType.BitmapText) {
           (node as BitmapTextNode).text = this.#messageBridge.getText(id)
         }

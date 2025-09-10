@@ -5,16 +5,15 @@ import { Stage } from './stage'
 enableDebug()
 
 let ticker: Ticker
-let root: RootObject
+let stage: Stage
 let lastFps = 0
 
 function init(sab: SharedArrayBuffer, port: MessagePort) {
   const stateTree = new ObjectStateTree(sab)
   const messageBridge = new MessageBridge(port)
+  const root = new RootObject(stateTree, messageBridge)
 
-  root = new RootObject(stateTree, messageBridge)
-
-  const stage = new Stage()
+  stage = new Stage()
   stage.on('changeHp', (hp) => postMessage({ type: 'changeHp', hp }))
   stage.on('changeScore', (score) => postMessage({ type: 'changeScore', score }))
 
@@ -35,6 +34,9 @@ onmessage = (event) => {
 
   if (type === 'init') init(event.data.sab, event.data.port)
   if (type === 'setFpsCap') ticker.setFpsCap(event.data.fps)
+  if (type === 'heroMove') stage.heroMove(event.data.r, event.data.d)
+  if (type === 'heroRelease') stage.heroRelease()
+  if (type === 'heroAttack') stage.heroAttack()
 }
 
 export { }

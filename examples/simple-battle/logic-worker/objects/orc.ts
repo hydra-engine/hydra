@@ -76,7 +76,7 @@ export class Orc extends Character<{
 
     this.add(new DelayNode(0.5, () => {
       this.#attacking = false
-      this._sprite.animation = AnimationState.Idle
+      if (!this.dead) this._sprite.animation = AnimationState.Idle
     }))
   }
 

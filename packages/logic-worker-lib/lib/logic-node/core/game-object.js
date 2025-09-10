@@ -15,7 +15,7 @@ export class GameObject extends GameNode {
     alpha = 1;
     #layer = 0;
     #tint = 0xffffff;
-    #drawOrder = 0;
+    #drawOrder;
     #drawOrderDirty = false;
     #useYSort = false;
     constructor(options) {
@@ -91,12 +91,9 @@ export class GameObject extends GameNode {
         }
         let childOrderDirty = false;
         for (const child of this.children) {
-            if (!child.paused) {
-                child.update(dt);
-                if (this.id !== undefined && this.stateTree && isGameObject(child) && child.#drawOrderDirty) {
-                    childOrderDirty = true;
-                    child.#drawOrderDirty = false;
-                }
+            if (this.id !== undefined && this.stateTree && isGameObject(child) && child.#drawOrderDirty) {
+                childOrderDirty = true;
+                child.#drawOrderDirty = false;
             }
         }
         if (childOrderDirty && this.id !== undefined && this.stateTree) {
@@ -150,6 +147,6 @@ export class GameObject extends GameNode {
             }
         }
     }
-    get drawOrder() { return this.#drawOrder; }
+    get drawOrder() { return this.#drawOrder ?? 0; }
 }
 //# sourceMappingURL=game-object.js.map

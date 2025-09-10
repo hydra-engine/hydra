@@ -180,6 +180,13 @@ export class Renderer {
                     if (animation)
                         node.animation = animation;
                 }
+                if (objectType === ObjectType.Rectangle) {
+                    node.width = tree.getWidth(id);
+                    node.height = tree.getHeight(id);
+                }
+                if (objectType === ObjectType.Circle) {
+                    node.radius = tree.getRadius(id);
+                }
                 if (objectType === ObjectType.BitmapText) {
                     node.text = this.#messageBridge.getText(id);
                 }
