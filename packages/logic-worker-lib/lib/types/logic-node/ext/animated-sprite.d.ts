@@ -6,7 +6,7 @@ export type AnimatedSpriteNodeOptions = {
     asset: number;
     animation: number;
 } & GameObjectOptions;
-export declare class AnimatedSpriteNode<E extends EventMap = EventMap> extends GameObject<E> {
+export declare class AnimatedSpriteNode<E extends EventMap = {}> extends GameObject<E> {
     #private;
     type: ObjectType;
     constructor(options: AnimatedSpriteNodeOptions);

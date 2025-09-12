@@ -7,7 +7,7 @@ export type PhysicsObjectOptions = {
     velocityX?: number;
     velocityY?: number;
 } & GameObjectOptions;
-export declare class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> {
+export declare class PhysicsObject<E extends EventMap = {}> extends GameObject<E> {
     #private;
     type: ObjectType;
     constructor(options: PhysicsObjectOptions);

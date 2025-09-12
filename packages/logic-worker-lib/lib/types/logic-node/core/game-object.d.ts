@@ -17,7 +17,7 @@ export type GameObjectOptions = {
     layer?: number;
     useYSort?: boolean;
 };
-export declare class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
+export declare class GameObject<E extends EventMap = {}> extends GameNode<E> {
     #private;
     protected id?: number;
     protected stateTree?: ObjectStateTree;

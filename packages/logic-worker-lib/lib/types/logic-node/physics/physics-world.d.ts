@@ -5,7 +5,7 @@ import { GameObject, GameObjectOptions } from '../core/game-object';
 export type PhysicsObjectOptions = {
     world: number;
 } & GameObjectOptions;
-export declare class PhysicsWorld<E extends EventMap = EventMap> extends GameObject<E> {
+export declare class PhysicsWorld<E extends EventMap = {}> extends GameObject<E> {
     #private;
     type: ObjectType;
     constructor(options: PhysicsObjectOptions);

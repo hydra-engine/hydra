@@ -6,7 +6,7 @@ export type BitmapTextNodeOptions = {
     asset: number;
     text: string;
 } & GameObjectOptions;
-export declare class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E> {
+export declare class BitmapTextNode<E extends EventMap = {}> extends GameObject<E> {
     #private;
     type: ObjectType;
     constructor(options: BitmapTextNodeOptions);

@@ -7,7 +7,7 @@ export type PhysicsObjectOptions = {
   world: number
 } & GameObjectOptions
 
-export class PhysicsWorld<E extends EventMap = EventMap> extends GameObject<E> {
+export class PhysicsWorld<E extends EventMap = {}> extends GameObject<E> {
   type = ObjectType.PhysicsWorld
 
   #worldId: number

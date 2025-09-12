@@ -24,7 +24,7 @@ export type GameObjectOptions = {
   useYSort?: boolean
 }
 
-export class GameObject<E extends EventMap = EventMap> extends GameNode<E> {
+export class GameObject<E extends EventMap = {}> extends GameNode<E> {
   protected id?: number
   protected stateTree?: ObjectStateTree
   protected messageBridge?: MessageBridge

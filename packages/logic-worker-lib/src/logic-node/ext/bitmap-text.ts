@@ -8,7 +8,7 @@ export type BitmapTextNodeOptions = {
   text: string
 } & GameObjectOptions
 
-export class BitmapTextNode<E extends EventMap = EventMap> extends GameObject<E> {
+export class BitmapTextNode<E extends EventMap = {}> extends GameObject<E> {
   type = ObjectType.BitmapText
 
   #asset: number

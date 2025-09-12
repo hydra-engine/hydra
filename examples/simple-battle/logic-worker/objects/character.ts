@@ -16,7 +16,7 @@ export type CharacterOptions = {
   hurtbox: RectangleCollider
 } & PhysicsObjectOptions
 
-export abstract class Character<E extends EventMap = EventMap> extends PhysicsObject<E & {
+export abstract class Character<E extends EventMap = {}> extends PhysicsObject<E & {
   changeHp: (damage: number) => void
   dead: () => void
 }> {

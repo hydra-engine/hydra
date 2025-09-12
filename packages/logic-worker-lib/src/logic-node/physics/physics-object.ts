@@ -9,7 +9,7 @@ export type PhysicsObjectOptions = {
   velocityY?: number
 } & GameObjectOptions
 
-export class PhysicsObject<E extends EventMap = EventMap> extends GameObject<E> {
+export class PhysicsObject<E extends EventMap = {}> extends GameObject<E> {
   type = ObjectType.PhysicsObject
 
   #bodyId: number

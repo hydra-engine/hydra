@@ -5,7 +5,7 @@ import { GameObject, GameObjectOptions } from '../core/game-object';
 export type SpriteNodeOptions = {
     asset: number;
 } & GameObjectOptions;
-export declare class SpriteNode<E extends EventMap = EventMap> extends GameObject<E> {
+export declare class SpriteNode<E extends EventMap = {}> extends GameObject<E> {
     #private;
     type: ObjectType;
     constructor(options: SpriteNodeOptions);

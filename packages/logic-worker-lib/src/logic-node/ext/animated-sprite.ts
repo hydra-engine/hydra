@@ -8,7 +8,7 @@ export type AnimatedSpriteNodeOptions = {
   animation: number,
 } & GameObjectOptions
 
-export class AnimatedSpriteNode<E extends EventMap = EventMap> extends GameObject<E> {
+export class AnimatedSpriteNode<E extends EventMap = {}> extends GameObject<E> {
   type = ObjectType.AnimatedSprite
 
   #assetId: number
